@@ -1,12 +1,10 @@
-﻿#region
+#region
 
 using System;
-using System.Linq;
-using System.Linq.Expressions;
 
 #endregion
 
-namespace MsbwTest
+namespace MsBw.MsBwUtility
 {
     /*
      * Copyright 2007-2012 JetBrains s.r.o.
@@ -23,10 +21,6 @@ namespace MsbwTest
      * See the License for the specific language governing permissions and
      * limitations under the License.
      */
-
-    using System;
-    using System.ComponentModel;
-
     namespace JetBrains.Annotations
     {
         /// <summary>

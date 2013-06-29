@@ -5,8 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
-using MsbwTest.JetBrains.Annotations;
-using Newtonsoft.Json;
+using MsBw.MsBwUtility.JetBrains.Annotations;
 using TechTalk.SpecFlow;
 
 #endregion

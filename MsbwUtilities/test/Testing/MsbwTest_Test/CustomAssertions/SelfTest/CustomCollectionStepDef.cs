@@ -1,17 +1,17 @@
-﻿#region
+#region
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using MsbwTest.JetBrains.Annotations;
+using MsBw.MsBwUtility.JetBrains.Annotations;
+using MsbwTest;
 using NUnit.Framework;
-using Newtonsoft.Json;
 using TechTalk.SpecFlow;
 
 #endregion
 
-namespace MsbwTest.SelfTest
+namespace MsbwTest_Test.CustomAssertions.SelfTest
 {
     [Binding]
     public class CustomCollectionStepDef

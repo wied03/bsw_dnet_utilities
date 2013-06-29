@@ -1,4 +1,4 @@
-﻿Feature: CustomCollectionAssertions
+Feature: CustomCollectionAssertions
 	Making sure these work OK
 
 Scenario: 2 empty collections of strings
