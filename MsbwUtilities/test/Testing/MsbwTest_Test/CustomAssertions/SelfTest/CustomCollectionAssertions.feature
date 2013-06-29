@@ -6,7 +6,7 @@ Scenario: 2 empty collections of strings
 	And Expected collection having strings []
 	When I test ContainEquivalent
 	Then the test should pass
-
+	
 Scenario: Expected string exists in larger actual collection
 	Given Actual collection having strings ['foo','bar']
 	And Expected collection having strings ['foo']
