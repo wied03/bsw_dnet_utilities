@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MsbwUtility</id>
+    <version>$version$</version>
+    <title>Msbw Utility Assembly</title>
+    <authors>BSW Technology Consulting</authors>
+    <owners>BSW Technology Consulting</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Used as a utility assembly for implementations</description>
+    <copyright>Copyright 2013</copyright>    
+  </metadata>
+</package>
