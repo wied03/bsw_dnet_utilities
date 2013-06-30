@@ -37,7 +37,7 @@ task :cleanpackages do
 	rm_rf FileList['**/*.nupkg']
 end
 
-with (ENV['version_number']) as |ver| do
+with (ENV['version_number']) do |ver|
 	with ('src/Implementation/MsBwUtility') do |util|
 		with ("#{util}/Properties/AssemblyInfo.cs") do |asminfo|		
 			assemblyinfo :versionmsbswutil do |asm|
