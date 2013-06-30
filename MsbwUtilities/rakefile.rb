@@ -34,27 +34,38 @@ with ('test') do |t|
 end
 
 task :cleanpackages do
-	rm_rf FileList['**/*/*.nupkg']
+	rm_rf FileList['**/*.nupkg']
 end
 
-with ('src/Implementation/MsBwUtility') do |util|
-	with ("#{util}/Properties/AssemblyInfo.cs") do |asminfo|
-		assemblyinfo :versionmsbswutil do |asm|
-			asm.version = "1.0.5"
-			asm.file_version = "1.0.5"
-			asm.company_name = "BSW Technology Consulting"
-			asm.product_name = "MSBW Utility Assembly"
-			asm.output_file = asminfo
-			asm.input_file = asminfo
+with (ENV['version_number']) as |ver| do
+	with ('src/Implementation/MsBwUtility') do |util|
+		with ("#{util}/Properties/AssemblyInfo.cs") do |asminfo|		
+			assemblyinfo :versionmsbswutil do |asm|
+				asm.version = ver
+				asm.file_version = ver
+				asm.company_name = "BSW Technology Consulting"
+				asm.product_name = "MSBW Utility Assembly"
+				asm.output_file = asminfo
+				asm.input_file = asminfo
+			end
 		end
-	end
 
-	nugetpack :packmsbwutil do |n|
-		n.command = ".nuget/nuget.exe"
-		n.nuspec = "#{util}/MsBwUtility.csproj"
-		n.base_folder = util		
-	end
-	
-	nugetpush :publishmsbwutil do |n|
+		with (".nuget/nuget.exe") do |ngetpath|
+			nugetpack :packmsbwutil do |n|
+				n.command = ngetpath
+				n.nuspec = "#{util}/MsBwUtility.csproj"
+				n.base_folder = util
+				n.output = util
+			end
+			
+			nugetpush :publishmsbwutil do |n|		
+				n.command = ngetpath
+				n.log_level = :verbose
+				n.package = FileList["#{util}/*.nupkg"]
+				# TODO: Set these values from configuration
+				n.source = "http://weez.weez.wied.us:8111/httpAuth/app/nuget/v1/FeedService.svc/"
+				n.apikey = "3a1cf7ec-788b-44bf-8e52-8d2d18217e56"
+			end
+		end
 	end
 end
