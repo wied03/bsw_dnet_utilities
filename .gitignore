@@ -28,7 +28,6 @@ _ReSharper*/
 *.ADR
 *.ADR.old
 ._*
-NuGet.exe
 # it's ok to hide nuget.config, but not NuGet.config
 nuget.config
 !**/.nuget/NuGet.Config
