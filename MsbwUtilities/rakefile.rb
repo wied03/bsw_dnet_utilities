@@ -35,8 +35,8 @@ task :cleanpackages do
 end
 
 with (ENV['version_number']) do |ver|
-	with ('src/Testing/MsbwTest') do |bswtst|
-		with ("#{bswtst}/Properties/AssemblyInfo.cs") do |asminfo|			
+	with ('src/Testing/MsbwTest') do |projpath|
+		with ("#{projpath}/Properties/AssemblyInfo.cs") do |asminfo|			
 			assemblyinfo :versionbswtest do |asm|
 				puts "Putting version number #{ver} on assembly"
 				asm.version = ver
@@ -51,15 +51,15 @@ with (ENV['version_number']) do |ver|
 		with (".nuget/nuget.exe") do |ngetpath|
 			nugetpack :packbswtest do |n|
 				n.command = ngetpath
-				n.nuspec = "#{util}/MsbwTest.csproj"
-				n.base_folder = util
-				n.output = util
+				n.nuspec = "#{projpath}/MsbwTest.csproj"
+				n.base_folder = projpath
+				n.output = projpath
 			end		
 		end
 	end
 
-	with ('src/Implementation/MsBwUtility') do |util|
-		with ("#{util}/Properties/AssemblyInfo.cs") do |asminfo|			
+	with ('src/Implementation/MsBwUtility') do |projpath|
+		with ("#{projpath}/Properties/AssemblyInfo.cs") do |asminfo|			
 			assemblyinfo :versionbswutil do |asm|
 				puts "Putting version number #{ver} on assembly"
 				asm.version = ver
@@ -74,9 +74,9 @@ with (ENV['version_number']) do |ver|
 		with (".nuget/nuget.exe") do |ngetpath|
 			nugetpack :packbswutil do |n|
 				n.command = ngetpath
-				n.nuspec = "#{util}/MsBwUtility.csproj"
-				n.base_folder = util
-				n.output = util
+				n.nuspec = "#{projpath}/MsBwUtility.csproj"
+				n.base_folder = projpath
+				n.output = projpath
 			end		
 		end
 	end
