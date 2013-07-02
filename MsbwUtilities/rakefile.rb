@@ -21,9 +21,8 @@ task :clean => [:cleandnet, :cleanpackages]
 task :test => [:codetest]
 task :package => [:clean, :version, :build, :pack]
 
-task :version => [:versionmsbswutil]
-task :pack => [:packmsbwutil]
-task :publish => [:publishmsbwutil]
+task :version => [:versionbswutil]
+task :pack => [:packbswutil]
 
 with ('test') do |t|	
 	BradyW::Nunit.new :codetest => :build do |test|
@@ -37,9 +36,9 @@ end
 
 with (ENV['version_number']) do |ver|
 	with ('src/Implementation/MsBwUtility') do |util|
-		with ("#{util}/Properties/AssemblyInfo.cs") do |asminfo|
-			puts "Putting version number #{ver} on assembly"
-			assemblyinfo :versionmsbswutil do |asm|
+		with ("#{util}/Properties/AssemblyInfo.cs") do |asminfo|			
+			assemblyinfo :versionbswutil do |asm|
+				puts "Putting version number #{ver} on assembly"
 				asm.version = ver
 				asm.file_version = ver
 				asm.company_name = "BSW Technology Consulting"
@@ -50,21 +49,12 @@ with (ENV['version_number']) do |ver|
 		end
 
 		with (".nuget/nuget.exe") do |ngetpath|
-			nugetpack :packmsbwutil do |n|
+			nugetpack :packbswutil do |n|
 				n.command = ngetpath
 				n.nuspec = "#{util}/MsBwUtility.csproj"
 				n.base_folder = util
 				n.output = util
-			end
-			
-			nugetpush :publishmsbwutil do |n|		
-				n.command = ngetpath
-				n.log_level = :verbose
-				n.package = FileList["#{util}/*.nupkg"]
-				# TODO: Set these values from configuration
-				n.source = "http://weez.weez.wied.us:8111/httpAuth/app/nuget/v1/FeedService.svc/"
-				n.apikey = "3a1cf7ec-788b-44bf-8e52-8d2d18217e56"
-			end
+			end		
 		end
 	end
 end
