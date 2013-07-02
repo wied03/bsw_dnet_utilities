@@ -28,8 +28,6 @@ task :publish => [:publishmsbwutil]
 with ('test') do |t|	
 	BradyW::Nunit.new :codetest => :build do |test|
 		test.files = FileList["#{t}/**/bin/Debug/*Test.dll"]
-		# Since we have some expensive tests and our box is slow, let's do a timeout of 60 seconds
-		test.timeout = 60000
 	end	
 end
 
