@@ -21,8 +21,8 @@ task :clean => [:cleandnet, :cleanpackages]
 task :test => [:codetest]
 task :package => [:clean, :version, :build, :pack]
 
-task :version => [:versionbswutil]
-task :pack => [:packbswutil]
+task :version => [:versionbswutil, :versionbswtest]
+task :pack => [:packbswutil, :packbswtest]
 
 with ('test') do |t|	
 	BradyW::Nunit.new :codetest => :build do |test|
@@ -35,6 +35,29 @@ task :cleanpackages do
 end
 
 with (ENV['version_number']) do |ver|
+	with ('src/Testing/MsbwTest') do |bswtst|
+		with ("#{bswtst}/Properties/AssemblyInfo.cs") do |asminfo|			
+			assemblyinfo :versionbswtest do |asm|
+				puts "Putting version number #{ver} on assembly"
+				asm.version = ver
+				asm.file_version = ver
+				asm.company_name = "BSW Technology Consulting"
+				asm.product_name = "MSBW Test Assembly"
+				asm.output_file = asminfo
+				asm.input_file = asminfo
+			end
+		end
+
+		with (".nuget/nuget.exe") do |ngetpath|
+			nugetpack :packbswtest do |n|
+				n.command = ngetpath
+				n.nuspec = "#{util}/MsbwTest.csproj"
+				n.base_folder = util
+				n.output = util
+			end		
+		end
+	end
+
 	with ('src/Implementation/MsBwUtility') do |util|
 		with ("#{util}/Properties/AssemblyInfo.cs") do |asminfo|			
 			assemblyinfo :versionbswutil do |asm|
