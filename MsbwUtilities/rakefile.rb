@@ -37,7 +37,8 @@ end
 
 with (ENV['version_number']) do |ver|
 	with ('src/Implementation/MsBwUtility') do |util|
-		with ("#{util}/Properties/AssemblyInfo.cs") do |asminfo|		
+		with ("#{util}/Properties/AssemblyInfo.cs") do |asminfo|
+			puts "Putting version number #{ver} on assembly"
 			assemblyinfo :versionmsbswutil do |asm|
 				asm.version = ver
 				asm.file_version = ver
