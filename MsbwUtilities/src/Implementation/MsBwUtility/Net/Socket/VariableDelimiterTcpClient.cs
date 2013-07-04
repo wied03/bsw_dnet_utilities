@@ -139,6 +139,9 @@ namespace MsBw.MsBwUtility.Net.Socket
                             case SocketError.Shutdown:
                                 Logger.Debug("Socket is already shutdown, halting response loop");
                                 return;
+                            case SocketError.NotSocket:
+                                Logger.Debug("Socket no longer exists, halting response loop");
+                                return;
                         }
                     }
                     throw;
