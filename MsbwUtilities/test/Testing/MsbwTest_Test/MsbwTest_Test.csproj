@@ -55,6 +55,12 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="CustomAssertions\SelfTest\CustomCollectionStepDef.cs" />
+    <Compile Include="ExtensionMethods.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExtensionMethods.feature</DependentUpon>
+    </Compile>
+    <Compile Include="ExtensionMethodsSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +68,10 @@
     <None Include="CustomAssertions\SelfTest\CustomCollectionAssertions.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CustomCollectionAssertions.feature.cs</LastGenOutput>
+    </None>
+    <None Include="ExtensionMethods.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ExtensionMethods.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>

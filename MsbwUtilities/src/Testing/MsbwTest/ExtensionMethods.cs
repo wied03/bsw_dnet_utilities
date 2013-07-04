@@ -19,5 +19,13 @@ namespace MsbwTest
         {
             return new CustomCollectionAssertions<T>(assertions).ContainEquivalent(expectedItemsList);
         }
+
+        public static string ToStringWithCount(this char character,
+                                               int count)
+        {
+            var str = new string(Enumerable.Repeat(character,
+                                                   count).ToArray());
+            return str;
+        }
     }
 }
