@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Collections;
 using MsbwTest.CustomAssertions;
@@ -26,6 +27,19 @@ namespace MsbwTest
             var str = new string(Enumerable.Repeat(character,
                                                    count).ToArray());
             return str;
+        }
+
+        public static AsyncActionAssertions InvokingAsync<T>(this T subject,
+                                                             Func<T, Task> asyncAction)
+        {
+            return new AsyncActionAssertions(() => asyncAction(subject));
+        }
+
+        public static async Task Exception<TException>(this Task<TException> task,
+                                                       Action<TException> passPredicate)
+        {
+            var excep = await task;
+            passPredicate(excep);
         }
     }
 }

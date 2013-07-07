@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomAssertions\AsyncActionAssertions.cs" />
     <Compile Include="CustomAssertions\CustomCollectionAssertions.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
