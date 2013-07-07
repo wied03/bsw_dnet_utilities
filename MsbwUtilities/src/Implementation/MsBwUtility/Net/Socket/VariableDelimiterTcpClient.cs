@@ -127,7 +127,8 @@ namespace MsBw.MsBwUtility.Net.Socket
                     var socketException = e.InnerException as SocketException;
                     if (socketException != null)
                     {
-                        switch (socketException.SocketErrorCode)
+                        var socketErrorCode = socketException.SocketErrorCode;
+                        switch (socketErrorCode)
                         {
                             case SocketError.Interrupted:
                                 // We're being closed, just exit
@@ -139,9 +140,10 @@ namespace MsBw.MsBwUtility.Net.Socket
                             case SocketError.Shutdown:
                                 Logger.Debug("Socket is already shutdown, halting response loop");
                                 return;
-                            case SocketError.NotSocket:
-                                Logger.Debug("Socket no longer exists, halting response loop");
-                                return;
+                            default:
+                                Logger.Debug("Got an unknown socket error code '{0}', allowing rethrow",
+                                             socketErrorCode.ToString());
+                                break;
                         }
                     }
                     throw;
