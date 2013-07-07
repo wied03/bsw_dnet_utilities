@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\EnumNotFoundException.cs" />
     <Compile Include="Enum\StringValueAttribute.cs" />
+    <Compile Include="Enum\StringValueExtensions.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Net\Socket\ResponseReceivedEvent.cs" />
     <Compile Include="Net\Socket\IAmARequest.cs" />

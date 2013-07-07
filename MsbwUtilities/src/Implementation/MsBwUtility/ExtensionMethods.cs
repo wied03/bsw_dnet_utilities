@@ -72,54 +72,5 @@ namespace MsBw.MsBwUtility
                   index => arr[index] = index);
             return arr;
         }
-
-        private static readonly IDictionary<string,object> EnumValues = new Dictionary<string, object>();
-        public static TEnum EnumValue<TEnum>(this string theStringVal)
-        {
-            var type = typeof (TEnum);
-            var key = String.Format("{0}_{1}",
-                                    type.Name,
-                                    theStringVal);
-            if (EnumValues.ContainsKey(key))
-            {
-                return (TEnum) EnumValues[key];
-            }
-            
-            var stringVals =
-                type.GetFields()
-                .Where(f => f.StringValAttr() != null)
-                    .ToDictionary(field => field.StringValAttr().Value,
-                                  field => field);
-            var enumIndex = (int) stringVals[theStringVal].GetValue(type);
-            var enumValue = (TEnum) System.Enum.ToObject(type,
-                                                         enumIndex);
-            EnumValues[key] = enumValue;
-            return enumValue;
-        }
-
-        private static StringValueAttribute StringValAttr(this FieldInfo field)
-        {
-            var attrs = field.GetCustomAttributes(typeof (StringValueAttribute),
-                                                  true);
-            return attrs
-                       .Any()
-                       ? (StringValueAttribute) attrs[0]
-                       : null;
-        }
-
-        private static readonly IDictionary<System.Enum,string> StringValues = new Dictionary<System.Enum, string>();
-
-        public static string StringValue(this System.Enum theEnum)
-
-        {
-            if (StringValues.ContainsKey(theEnum))
-            {
-                return StringValues[theEnum];
-            }
-            var field = theEnum.GetType().GetField(theEnum.ToString());
-            var stringValue = field.StringValAttr().Value;
-            StringValues[theEnum] = stringValue;
-            return stringValue;
-        }
     }
 }
