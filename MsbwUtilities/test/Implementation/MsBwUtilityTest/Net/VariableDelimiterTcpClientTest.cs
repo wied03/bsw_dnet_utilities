@@ -81,7 +81,7 @@ namespace MsBwUtilityTest.Net
                                port: DUMMY_LOCAL_PORT);
         }
 
-        protected void StartWritableSocket()
+        private void StartWritableSocket()
         {
             const int portWeCanWriteStuffTo = DUMMY_LOCAL_PORT + 1;
             _process = StartSocat("TCP4-LISTEN:{0} TCP4-LISTEN:{1}",
@@ -132,8 +132,7 @@ namespace MsBwUtilityTest.Net
         {
             _client = new VariableDelimiterTcpClient(client: _tcpClient,
                                                      defaultTerminator: TERMINATOR,
-                                                     haltResponseWaitOnKeyword: ERROR,
-                                                     scrubThisFromLogs: SCRUB);
+                                                     haltResponseWaitOnKeyword: ERROR) {ScrubThisFromLogs = SCRUB};
         }
 
         private static IEnumerable<string> LogMessages

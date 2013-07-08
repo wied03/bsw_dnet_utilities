@@ -21,7 +21,6 @@ namespace MsBw.MsBwUtility.Net.Socket
         private string _expectedSuccessfulTerminator;
         private string _expectedErrorTerminator;
         private readonly string _haltResponseWaitOnKeyword;
-        private readonly string _scrubThisFromLogs;
         private readonly string _defaultTerminator;
         private readonly StreamWriter _writer;
         public event ResponseReceivedEvent ResponseReceived;
@@ -31,8 +30,7 @@ namespace MsBw.MsBwUtility.Net.Socket
 
         public VariableDelimiterTcpClient(TcpClient client,
                                           string defaultTerminator,
-                                          string haltResponseWaitOnKeyword,
-                                          string scrubThisFromLogs)
+                                          string haltResponseWaitOnKeyword)
         {
             _client = client;
             _stream = _client.GetStream();
@@ -40,7 +38,6 @@ namespace MsBw.MsBwUtility.Net.Socket
             _receivedBuffer = new StringBuilder();
             _defaultTerminator = defaultTerminator;
             _haltResponseWaitOnKeyword = haltResponseWaitOnKeyword;
-            _scrubThisFromLogs = scrubThisFromLogs;
             _expectedSuccessfulTerminator = defaultTerminator;
             _expectedErrorTerminator = defaultTerminator;
             _closed = false;
@@ -62,9 +59,11 @@ namespace MsBw.MsBwUtility.Net.Socket
             _expectedErrorTerminator = terminator;
         }
 
+        public string ScrubThisFromLogs { get; set; }
+
         private string ScrubMessage(string message)
         {
-            return message.Replace(_scrubThisFromLogs,
+            return message.Replace(ScrubThisFromLogs,
                                    SCRUB_PLACEHOLDER);
         }
 
