@@ -26,18 +26,25 @@ namespace MsBw.MsBwUtility.Enum
 
             var stringVals =
                 type.GetFields()
-                .Where(f => f.StringValAttr() != null)
-                    .ToDictionary(field => field.StringValAttr().Value,
+                    .ToDictionary(GetStringValForField,
                                   field => field);
             if (!stringVals.ContainsKey(theStringVal))
             {
-                // TODO: Check for a field name matching this, if we don't find one, THEN throw an exception
+                throw new EnumNotFoundException(theStringVal,
+                                                type,
+                                                stringVals);
             }
             var enumIndex = (int)stringVals[theStringVal].GetValue(type);
             var enumValue = (TEnum)System.Enum.ToObject(type,
                                                          enumIndex);
             CachedEnumValues[key] = enumValue;
             return enumValue;
+        }
+
+        private static string GetStringValForField(FieldInfo field)
+        {
+            var stringValueAttribute = field.StringValAttr();
+            return stringValueAttribute != null ? stringValueAttribute.Value : field.Name;
         }
 
         private static StringValueAttribute StringValAttr(this FieldInfo field)

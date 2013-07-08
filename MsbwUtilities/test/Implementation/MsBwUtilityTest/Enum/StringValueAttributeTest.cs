@@ -66,7 +66,6 @@ namespace MsBwUtilityTest.Enum
             // act + assert
             test.Invoking(t => t.EnumValue<TestEnum>())
                 .ShouldThrow<EnumNotFoundException>()
-                .WithMessage("foo")
                 ;
         }
 
