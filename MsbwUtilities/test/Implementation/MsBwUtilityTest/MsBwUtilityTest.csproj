@@ -68,6 +68,7 @@
     <Compile Include="BaseTest.cs" />
     <Compile Include="Enum\StringValueAttributeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\TaskExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
