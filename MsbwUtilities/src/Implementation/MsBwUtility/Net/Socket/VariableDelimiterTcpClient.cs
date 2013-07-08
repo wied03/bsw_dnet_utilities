@@ -63,8 +63,10 @@ namespace MsBw.MsBwUtility.Net.Socket
 
         private string ScrubMessage(string message)
         {
-            return message.Replace(ScrubThisFromLogs,
-                                   SCRUB_PLACEHOLDER);
+            return string.IsNullOrEmpty(ScrubThisFromLogs)
+                       ? message
+                       : message.Replace(ScrubThisFromLogs,
+                                         SCRUB_PLACEHOLDER);
         }
 
         public void Send(IAmARequest request)

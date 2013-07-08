@@ -121,18 +121,18 @@ namespace MsBwUtilityTest.Net
             _taskCompleted = new TaskCompletionSource<string>();
         }
 
-        private void SetupClient()
+        private void SetupResponseLoop()
         {
             _client.ResponseReceived += ClientResponseReceived;
             Task.Factory.StartNew(() => _client.ResponseLoop(_cts.Token));
         }
 
 
-        private void SetupVariableDelimiterClient()
+        private void SetupVariableDelimiterClient(string scrubFromLogs = SCRUB)
         {
             _client = new VariableDelimiterTcpClient(client: _tcpClient,
                                                      defaultTerminator: TERMINATOR,
-                                                     haltResponseWaitOnKeyword: ERROR) {ScrubThisFromLogs = SCRUB};
+                                                     haltResponseWaitOnKeyword: ERROR) { ScrubThisFromLogs = scrubFromLogs };
         }
 
         private static IEnumerable<string> LogMessages
@@ -155,13 +155,39 @@ namespace MsBwUtilityTest.Net
         #region Tests
 
         [Test]
+        public void No_scrub_configured()
+        {
+            // arrange
+            StartWritableSocket();
+            ConnectTcpClient();
+            SetupVariableDelimiterClient(scrubFromLogs: null);
+            SetupResponseLoop();
+            const string textToSend = "Hello";
+
+            // act
+            _client.Send(new DummyRequest { Flat = textToSend });
+
+            // assert
+            var text = _dummyReader.ReadLine();
+            text
+                .Should()
+                .Be(textToSend);
+
+            Disconnect();
+            LogMessages
+                .Should()
+                .Contain(logMsg => logMsg.Contains("Hello"));
+        }
+
+
+        [Test]
         public void Log_scrub_works_properly_on_send()
         {
             // arrange
             StartWritableSocket();
             ConnectTcpClient();
             SetupVariableDelimiterClient();
-            SetupClient();
+            SetupResponseLoop();
             const string textToSend = "Login with " + SCRUB + " password";
 
             // act
@@ -187,7 +213,7 @@ namespace MsBwUtilityTest.Net
             StartWritableSocket();
             ConnectTcpClient();
             SetupVariableDelimiterClient();
-            SetupClient();
+            SetupResponseLoop();
             const string textToReceive = "Login with " + SCRUB + " password " + TERMINATOR;
 
             // act
