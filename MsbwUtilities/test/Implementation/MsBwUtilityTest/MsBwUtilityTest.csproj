@@ -68,7 +68,10 @@
     <Compile Include="BaseTest.cs" />
     <Compile Include="Enum\StringValueAttributeTest.cs" />
     <Compile Include="ExtensionMethodsTest.cs" />
+    <Compile Include="Net\DummyRequest.cs" />
+    <Compile Include="Net\VariableDelimiterTcpClientTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TargetForTesting.cs" />
     <Compile Include="Tasks\TaskExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -76,12 +79,31 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="Utility\socat-1.7.2.1\BUGREPORTS" />
+    <None Include="Utility\socat-1.7.2.1\CHANGES" />
+    <None Include="Utility\socat-1.7.2.1\COPYING" />
+    <None Include="Utility\socat-1.7.2.1\EXAMPLES" />
+    <None Include="Utility\socat-1.7.2.1\FAQ" />
+    <None Include="Utility\socat-1.7.2.1\README" />
+    <None Include="Utility\socat-1.7.2.1\SECURITY" />
+    <None Include="Utility\socat-1.7.2.1\VERSION" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Implementation\MsBwUtility\MsBwUtility.csproj">
       <Project>{d5b2f116-23a5-40ad-8d6e-d52f68304569}</Project>
       <Name>MsBwUtility</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Utility\socat-1.7.2.1\cygcrypto-1.0.0.dll" />
+    <Content Include="Utility\socat-1.7.2.1\cyggcc_s-1.dll" />
+    <Content Include="Utility\socat-1.7.2.1\cygncursesw-10.dll" />
+    <Content Include="Utility\socat-1.7.2.1\cygreadline7.dll" />
+    <Content Include="Utility\socat-1.7.2.1\cygssl-1.0.0.dll" />
+    <Content Include="Utility\socat-1.7.2.1\cygwin1.dll" />
+    <Content Include="Utility\socat-1.7.2.1\cygwrap-0.dll" />
+    <Content Include="Utility\socat-1.7.2.1\cygz.dll" />
+    <Content Include="Utility\socat-1.7.2.1\socat.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
