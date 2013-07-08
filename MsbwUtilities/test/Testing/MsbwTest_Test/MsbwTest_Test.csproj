@@ -49,6 +49,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseTest.cs" />
+    <Compile Include="CustomAssertions\AsyncActionAssertionsTest.cs" />
     <Compile Include="CustomAssertions\SelfTest\CustomCollectionAssertions.feature.cs">
       <DependentUpon>CustomCollectionAssertions.feature</DependentUpon>
       <AutoGen>True</AutoGen>
