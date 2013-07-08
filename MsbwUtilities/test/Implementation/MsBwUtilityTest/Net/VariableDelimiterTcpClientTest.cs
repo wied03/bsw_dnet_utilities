@@ -31,6 +31,7 @@ namespace MsBwUtilityTest.Net
         private StreamWriter _dummyWriter;
         private StreamReader _dummyReader;
         private TaskCompletionSource<string> _taskCompleted;
+        private Process _process;
 
         #endregion
 
@@ -48,6 +49,7 @@ namespace MsBwUtilityTest.Net
         public override void SetUp()
         {
             base.SetUp();
+            TargetForTesting.ClearLogMessages();
             _tcpClient = new TcpClient();
             _client = null;
             _dummyClient = null;
@@ -65,6 +67,7 @@ namespace MsBwUtilityTest.Net
             {
                 _client.Close();
             }
+            _process.Kill();
             base.TearDown();
         }
 
@@ -81,9 +84,9 @@ namespace MsBwUtilityTest.Net
         protected void StartWritableSocket()
         {
             const int portWeCanWriteStuffTo = DUMMY_LOCAL_PORT + 1;
-            StartSocat("TCP4-LISTEN:{0} TCP4-LISTEN:{1}",
-                       portWeCanWriteStuffTo,
-                       DUMMY_LOCAL_PORT);
+            _process = StartSocat("TCP4-LISTEN:{0} TCP4-LISTEN:{1}",
+                                  portWeCanWriteStuffTo,
+                                  DUMMY_LOCAL_PORT);
             _dummyClient = new TcpClient("localhost",
                                          portWeCanWriteStuffTo);
             _dummyStream = _dummyClient.GetStream();
@@ -138,8 +141,14 @@ namespace MsBwUtilityTest.Net
             get
             {
                 return TargetForTesting
-                    .LogMessages;
+                    .LogMessageSnapshot;
             }
+        }
+
+        private void Disconnect()
+        {
+            _cts.Cancel();
+            _client.Close();
         }
 
         #endregion
@@ -157,7 +166,6 @@ namespace MsBwUtilityTest.Net
             const string textToSend = "Login with " + SCRUB + " password";
 
             // act
-
             _client.Send(new DummyRequest {Flat = textToSend});
 
             // assert
@@ -167,6 +175,7 @@ namespace MsBwUtilityTest.Net
                 .Should()
                 .Be(textToSend);
 
+            Disconnect();
             LogMessages
                 .Should()
                 .NotContain(logMsg => logMsg.Contains(SCRUB));
@@ -192,6 +201,7 @@ namespace MsBwUtilityTest.Net
             response
                 .Should()
                 .Be(textToReceive);
+            Disconnect();
             LogMessages
                 .Should()
                 .NotContain(logMsg => logMsg.Contains(SCRUB));

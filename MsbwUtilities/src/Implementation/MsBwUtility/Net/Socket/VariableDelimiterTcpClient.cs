@@ -15,6 +15,7 @@ namespace MsBw.MsBwUtility.Net.Socket
     public class VariableDelimiterTcpClient
     {
         private const int BUFFER_SIZE = 256;
+        internal const string SCRUB_PLACEHOLDER = "***";
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly TcpClient _client;
         private string _expectedSuccessfulTerminator;
@@ -61,12 +62,21 @@ namespace MsBw.MsBwUtility.Net.Socket
             _expectedErrorTerminator = terminator;
         }
 
+        private string ScrubMessage(string message)
+        {
+            return message.Replace(_scrubThisFromLogs,
+                                   SCRUB_PLACEHOLDER);
+        }
+
         public void Send(IAmARequest request)
         {
             try
             {
-                Logger.Trace("Sending {0}",
-                             request.Flat);
+                if (Logger.IsTraceEnabled)
+                {
+                    Logger.Trace("Sending {0}",
+                                 ScrubMessage(request.Flat));
+                }
 
                 _writer.WriteLine(request.Flat);
             }
@@ -90,14 +100,18 @@ namespace MsBw.MsBwUtility.Net.Socket
             _receivedBuffer.Append(received);
             if (Logger.IsTraceEnabled)
             {
+                var receivedStr = _receivedBuffer.ToString();
                 Logger.Trace("Got characters from socket {0}",
-                             _receivedBuffer.ToString());
+                             ScrubMessage(receivedStr));
             }
             var completeResponse = AnalyzeCharactersForTerminators(_receivedBuffer.ToString());
             if (completeResponse == null) return;
 
-            Logger.Debug("Got complete string '{0}' from other side, invoking ResponseReceived event",
-                         completeResponse);
+            if (Logger.IsDebugEnabled)
+            {
+                Logger.Debug("Got complete string '{0}' from other side, invoking ResponseReceived event",
+                             ScrubMessage(completeResponse));
+            }
 
             ResponseReceived(completeResponse);
             _receivedBuffer.Clear();
