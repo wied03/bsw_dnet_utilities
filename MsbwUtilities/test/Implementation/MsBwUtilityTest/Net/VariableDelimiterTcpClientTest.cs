@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -19,10 +20,9 @@ namespace MsBwUtilityTest.Net
     [TestFixture]
     public class VariableDelimiterTcpClientTest : BaseTest
     {
+        #region Fields for test objects
+
         private const int DUMMY_LOCAL_PORT = 5000;
-        private const string TERMINATOR = "THE_END";
-        private const string ERROR = "BIG_ERROR";
-        private const string SCRUB = "NSA";
         private TcpClient _tcpClient;
         private VariableDelimiterTcpClient _client;
         private CancellationTokenSource _cts;
@@ -31,6 +31,16 @@ namespace MsBwUtilityTest.Net
         private StreamWriter _dummyWriter;
         private StreamReader _dummyReader;
         private TaskCompletionSource<string> _taskCompleted;
+
+        #endregion
+
+        #region Test Data
+
+        private const string TERMINATOR = "THE_END";
+        private const string ERROR = "BIG_ERROR";
+        private const string SCRUB = "NSA";
+
+        #endregion
 
         #region Setup/Teardown
 
@@ -123,6 +133,15 @@ namespace MsBwUtilityTest.Net
                                                      scrubThisFromLogs: SCRUB);
         }
 
+        private static IEnumerable<string> LogMessages
+        {
+            get
+            {
+                return TargetForTesting
+                    .LogMessages;
+            }
+        }
+
         #endregion
 
         #region Tests
@@ -138,7 +157,7 @@ namespace MsBwUtilityTest.Net
             const string textToSend = "Login with " + SCRUB + " password";
 
             // act
-            
+
             _client.Send(new DummyRequest {Flat = textToSend});
 
             // assert
@@ -148,8 +167,7 @@ namespace MsBwUtilityTest.Net
                 .Should()
                 .Be(textToSend);
 
-            TargetForTesting
-                .LogMessages
+            LogMessages
                 .Should()
                 .NotContain(logMsg => logMsg.Contains(SCRUB));
         }
@@ -174,9 +192,7 @@ namespace MsBwUtilityTest.Net
             response
                 .Should()
                 .Be(textToReceive);
-
-            TargetForTesting
-                .LogMessages
+            LogMessages
                 .Should()
                 .NotContain(logMsg => logMsg.Contains(SCRUB));
         }
