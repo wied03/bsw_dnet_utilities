@@ -149,14 +149,11 @@ namespace MsBw.MsBwUtility.Net.Socket
                         switch (socketErrorCode)
                         {
                             case SocketError.Interrupted:
-                                // We're being closed, just exit
-                                Logger.Debug("Socket interrupted due to closure of client, halting response loop");
-                                return;
                             case SocketError.ConnectionReset:
-                                Logger.Debug("Other side disconnected us, halting response loop");
-                                return;
                             case SocketError.Shutdown:
-                                Logger.Debug("Socket is already shutdown, halting response loop");
+                            case SocketError.NotSocket:
+                                Logger.Debug("Normal socket error '{0}', halting response loop",
+                                             socketErrorCode.ToString());
                                 return;
                             default:
                                 Logger.Debug("Got an unknown socket error code '{0}', allowing rethrow",
