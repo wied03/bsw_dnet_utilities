@@ -12,7 +12,7 @@ using NLog;
 
 namespace MsBw.MsBwUtility.Net.Socket
 {
-    public class VariableDelimiterTcpClient
+    public abstract class VariableDelimiterTcpClientBase
     {
         private const int BUFFER_SIZE = 256;
         internal const string SCRUB_PLACEHOLDER = "***";
@@ -22,19 +22,17 @@ namespace MsBw.MsBwUtility.Net.Socket
         private string _expectedErrorTerminator;
         private readonly string _haltResponseWaitOnKeyword;
         private readonly string _defaultTerminator;
-        private readonly StreamWriter _writer;
         public event ResponseReceivedEvent ResponseReceived;
         private readonly StringBuilder _receivedBuffer;
         private bool _closed;
-        private readonly NetworkStream _stream;
+        protected readonly NetworkStream Stream;
 
-        public VariableDelimiterTcpClient(TcpClient client,
-                                          string defaultTerminator,
-                                          string haltResponseWaitOnKeyword)
+        protected VariableDelimiterTcpClientBase(TcpClient client,
+                                                 string defaultTerminator,
+                                                 string haltResponseWaitOnKeyword)
         {
             _client = client;
-            _stream = _client.GetStream();
-            _writer = new StreamWriter(_stream) {AutoFlush = true};
+            Stream = _client.GetStream();
             _receivedBuffer = new StringBuilder();
             _defaultTerminator = defaultTerminator;
             _haltResponseWaitOnKeyword = haltResponseWaitOnKeyword;
@@ -79,7 +77,7 @@ namespace MsBw.MsBwUtility.Net.Socket
                                  ScrubMessage(request.Flat));
                 }
 
-                _writer.WriteLine(request.Flat);
+                DoSend(request.Flat);
             }
             catch (IOException e)
             {
@@ -92,12 +90,10 @@ namespace MsBw.MsBwUtility.Net.Socket
             }
         }
 
-        private void ProcessReceivedChars(byte[] receivedDataBuffer,
-                                          int bytesRead)
+        protected abstract void DoSend(string message);
+
+        private void ProcessReceivedChars(string received)
         {
-            var received = Encoding.Default.GetString(receivedDataBuffer,
-                                                      0,
-                                                      bytesRead);
             _receivedBuffer.Append(received);
             if (Logger.IsTraceEnabled)
             {
@@ -118,6 +114,18 @@ namespace MsBw.MsBwUtility.Net.Socket
             _receivedBuffer.Clear();
         }
 
+        protected virtual string DoRead()
+        {
+            var buffer = new byte[BUFFER_SIZE];
+            var actualRead = Stream.Read(buffer,
+                                         0,
+                                         BUFFER_SIZE);
+            var received = Encoding.Default.GetString(buffer,
+                                                      0,
+                                                      actualRead);
+            return received;
+        }
+
         public void ResponseLoop(CancellationToken token)
         {
             Logger.Trace("Beginning response wait");
@@ -125,15 +133,11 @@ namespace MsBw.MsBwUtility.Net.Socket
             while (!token.IsCancellationRequested && IsConnected)
             {
                 Logger.Trace("Calling stream read");
-                var buffer = new byte[BUFFER_SIZE];
                 try
                 {
-                    var actualRead = _stream.Read(buffer,
-                                                  0,
-                                                  BUFFER_SIZE);
+                    var readStuff = DoRead();
                     Logger.Trace("Stream read complete");
-                    ProcessReceivedChars(buffer,
-                                         actualRead);
+                    ProcessReceivedChars(readStuff);
                 }
                 catch (ObjectDisposedException)
                 {

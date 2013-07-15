@@ -54,7 +54,7 @@
     <Compile Include="Enum\StringValueAttributeTest.cs" />
     <Compile Include="ExtensionMethodsTest.cs" />
     <Compile Include="Net\DummyRequest.cs" />
-    <Compile Include="Net\VariableDelimiterTcpClientTest.cs" />
+    <Compile Include="Net\VariableDelimiterTcpClientPlaintextTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TargetForTesting.cs" />
     <Compile Include="Tasks\TaskExtensionsTest.cs" />

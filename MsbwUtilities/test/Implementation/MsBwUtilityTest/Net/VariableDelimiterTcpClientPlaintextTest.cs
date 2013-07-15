@@ -18,13 +18,13 @@ using NUnit.Framework;
 namespace MsBwUtilityTest.Net
 {
     [TestFixture]
-    public class VariableDelimiterTcpClientTest : BaseTest
+    public class VariableDelimiterTcpClientPlaintextTest : BaseTest
     {
         #region Fields for test objects
 
         private const int DUMMY_LOCAL_PORT = 5000;
         private TcpClient _tcpClient;
-        private VariableDelimiterTcpClient _client;
+        private VariableDelimiterTcpClientBase _client;
         private CancellationTokenSource _cts;
         private TcpClient _dummyClient;
         private NetworkStream _dummyStream;
@@ -130,9 +130,12 @@ namespace MsBwUtilityTest.Net
 
         private void SetupVariableDelimiterClient(string scrubFromLogs = SCRUB)
         {
-            _client = new VariableDelimiterTcpClient(client: _tcpClient,
-                                                     defaultTerminator: TERMINATOR,
-                                                     haltResponseWaitOnKeyword: ERROR) { ScrubThisFromLogs = scrubFromLogs };
+            _client = new VariableDelimiterTcpClientPlaintext(client: _tcpClient,
+                                                              defaultTerminator: TERMINATOR,
+                                                              haltResponseWaitOnKeyword: ERROR)
+                {
+                    ScrubThisFromLogs = scrubFromLogs
+                };
         }
 
         private static IEnumerable<string> LogMessages
@@ -165,7 +168,7 @@ namespace MsBwUtilityTest.Net
             const string textToSend = "Hello";
 
             // act
-            _client.Send(new DummyRequest { Flat = textToSend });
+            _client.Send(new DummyRequest {Flat = textToSend});
 
             // assert
             var text = _dummyReader.ReadLine();
