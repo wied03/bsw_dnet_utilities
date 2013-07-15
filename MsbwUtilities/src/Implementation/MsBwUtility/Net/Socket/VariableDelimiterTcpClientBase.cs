@@ -14,7 +14,7 @@ namespace MsBw.MsBwUtility.Net.Socket
 {
     public abstract class VariableDelimiterTcpClientBase
     {
-        private const int BUFFER_SIZE = 256;
+        protected const int BUFFER_SIZE = 256;
         internal const string SCRUB_PLACEHOLDER = "***";
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly TcpClient _client;
