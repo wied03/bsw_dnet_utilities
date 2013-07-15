@@ -62,5 +62,48 @@ namespace MsBwUtilityTest
             numbers
                 .ShouldBeEquivalentTo(new[] {0, 1, 2, 3, 4});
         }
+
+        [Test]
+        public void To_byte_array_from_hex_lowercase()
+        {
+            // arrange
+            const string hex = "5a4c";
+
+            // act
+            var result = hex.ToByteArrayFromHex();
+
+            // assert
+            result
+                .ShouldBeEquivalentTo(new byte[] {0x5a, 0x4c});
+        }
+
+        [Test]
+        public void To_byte_array_from_hex_uppercase()
+        {
+            // arrange
+            const string hex = "5A4C";
+
+            // act
+            var result = hex.ToByteArrayFromHex();
+
+            // assert
+            result
+                .ShouldBeEquivalentTo(new byte[] { 0x5a, 0x4c });
+        }
+
+        [Test]
+        public void To_hex()
+        {
+            // arrange
+            var bytes = new byte[] {0x5a, 0x4c};
+
+            // act
+            var result = bytes.ToHex();
+
+            // assert
+            result
+                .Should()
+                .Be("5A4C");
+        }
     }
 }

@@ -33,5 +33,20 @@ namespace MsBw.MsBwUtility
                   index => arr[index] = index);
             return arr;
         }
+
+        public static byte[] ToByteArrayFromHex(this String hex)
+        {
+            var numberChars = hex.Length;
+            var bytes = new byte[numberChars / 2];
+            for (var i = 0; i < numberChars; i += 2)
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            return bytes;
+        }
+
+        public static string ToHex(this byte[] bytes)
+        {
+            return BitConverter.ToString(bytes).Replace("-",
+                                                        string.Empty);
+        }
     }
 }
