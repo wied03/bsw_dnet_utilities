@@ -207,7 +207,18 @@ namespace MsBw.MsBwUtility.Net.Socket
                                           SelectMode.SelectRead) && socket.Available == 0) ||
                              !socket.Connected);
                 }
-                    // could be in process of closing while we are checking this
+                catch (SocketException se)
+                {
+                    var socketErrorCode = se.SocketErrorCode;
+                    switch (socketErrorCode)
+                    {
+                        case SocketError.NotSocket:
+                            return false;
+                        default:
+                            throw;
+                    }
+                }
+                // could be in process of closing while we are checking this
                 catch (ObjectDisposedException)
                 {
                     return false;
