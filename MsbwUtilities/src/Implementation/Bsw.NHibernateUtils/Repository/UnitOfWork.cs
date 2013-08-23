@@ -13,16 +13,23 @@ namespace Bsw.NHibernateUtils.Repository
     {
         private Lazy<ISession> _lazySession;
         private ITransaction _transaction;
+        private readonly ISessionFactory _sessionFactory;
 
         public UnitOfWork(ISessionFactory sessionFactory)
         {
+            _sessionFactory = sessionFactory;
             _transaction = null;
+            CreateSessionAndTransaction();
+        }
+
+        private void CreateSessionAndTransaction()
+        {
             _lazySession = new Lazy<ISession>(() =>
-            {
-                var session = sessionFactory.OpenSession();
-                _transaction = session.BeginTransaction();
-                return session;
-            });
+                                              {
+                                                  var session = _sessionFactory.OpenSession();
+                                                  _transaction = session.BeginTransaction();
+                                                  return session;
+                                              });
         }
 
         public ISession CurrentSession
@@ -47,7 +54,17 @@ namespace Bsw.NHibernateUtils.Repository
 
         public void Commit(bool openNewTransactionAfterCommittingCurrent = true)
         {
-            _transaction.Commit();
+            try
+            {
+                _transaction.Commit();
+            }
+            catch (Exception)
+            {
+                // avoid NHibernate complaining
+                CurrentSession.Dispose();
+                CreateSessionAndTransaction();
+                throw;
+            }
             // deal with cases where we want to commit changes then read back those changes in a 
             // subsequent transaction
             if (!openNewTransactionAfterCommittingCurrent) return;
@@ -57,7 +74,10 @@ namespace Bsw.NHibernateUtils.Repository
 
         public void Rollback()
         {
-            _transaction.Rollback();
+            if (!_transaction.WasRolledBack && _transaction.IsActive)
+            {
+                _transaction.Rollback();
+            }
         }
     }
 }
