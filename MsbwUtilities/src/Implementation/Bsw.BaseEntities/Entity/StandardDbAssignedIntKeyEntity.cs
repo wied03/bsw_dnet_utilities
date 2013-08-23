@@ -38,8 +38,7 @@ namespace Bsw.BaseEntities.Entity
                 return false;
             }
 
-            var otherIsTransient = !other.Transient;
-            if (otherIsTransient && Transient)
+            if (other.Transient && Transient)
             {
                 return ReferenceEquals(other,
                                        this);

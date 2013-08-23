@@ -4,8 +4,8 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using Bsw.BaseEntities.Entity;
-using NUnit.Framework;
 using FluentAssertions;
+using NUnit.Framework;
 
 #endregion
 
@@ -13,17 +13,13 @@ namespace Bsw.BaseEntities.Test.Entity
 {
     public class TestEntityClass : StandardDbAssignedIntKeyEntity<TestEntityClass>
     {
-        private string _property1;
+    }
 
-        public TestEntityClass(string property1)
+    public sealed class NHibernateStyleProxy : TestEntityClass
+    {
+        public NHibernateStyleProxy(int id)
         {
-            _property1 = property1;
-        }
-
-        public virtual string Property1
-        {
-            get { return _property1; }
-            protected set { _property1 = value; }
+            Id = id;
         }
     }
 
@@ -50,66 +46,160 @@ namespace Bsw.BaseEntities.Test.Entity
         public void Two_transient_objects_equal()
         {
             // arrange
+            var entity1 = new TestEntityClass();
 
             // act
+            var result = entity1.Equals(entity1);
+            var result2 = entity1 == entity1;
+            var hashCode = entity1.GetHashCode();
 
             // assert
-            Assert.Fail("write test");
+            result
+                .Should()
+                .BeTrue();
+            result2
+                .Should()
+                .BeTrue();
+            hashCode
+                .Should()
+                .Be(6201975);
         }
 
         [Test]
         public void Two_transient_objects_not_equal()
         {
             // arrange
+            var entity1 = new TestEntityClass();
+            var entity2 = new TestEntityClass();
 
             // act
+            var result = entity1.Equals(entity2);
+            var result2 = entity1 == entity2;
+            var hashCode1 = entity1.GetHashCode();
+            var hashCode2 = entity2.GetHashCode();
 
             // assert
-            Assert.Fail("write test");
+            result
+                .Should()
+                .BeFalse();
+            result2
+                .Should()
+                .BeFalse();
+            hashCode1
+                .Should()
+                .NotBe(hashCode2);
         }
 
         [Test]
         public void First_is_transient_second_isnt()
         {
             // arrange
+            var entity1 = new TestEntityClass();
+            var entity2 = new NHibernateStyleProxy(id: 2);
 
             // act
+            var result = entity1.Equals(entity2);
+            var result2 = entity1 == entity2;
+            var hashCode1 = entity1.GetHashCode();
+            var hashCode2 = entity2.GetHashCode();
 
             // assert
-            Assert.Fail("write test");
+            result
+                .Should()
+                .BeFalse();
+            result2
+                .Should()
+                .BeFalse();
+            hashCode1
+                .Should()
+                .Be(54250359);
+            hashCode2
+                .Should()
+                .Be(2.GetHashCode());
         }
 
         [Test]
         public void First_isnt_transient_second_is()
         {
             // arrange
+            var entity2 = new TestEntityClass();
+            var entity1 = new NHibernateStyleProxy(id: 2);
 
             // act
+            var result = entity1.Equals(entity2);
+            var result2 = entity1 == entity2;
+            var hashCode1 = entity1.GetHashCode();
+            var hashCode2 = entity2.GetHashCode();
 
             // assert
-            Assert.Fail("write test");
+            result
+                .Should()
+                .BeFalse();
+            result2
+                .Should()
+                .BeFalse();
+            hashCode2
+                .Should()
+                .Be(50047277);
+            hashCode1
+                .Should()
+                .Be(2.GetHashCode());
         }
 
         [Test]
         public void Both_not_transient_not_equal()
         {
             // arrange
+            var entity1 = new NHibernateStyleProxy(id: 2);
+            var entity2 = new NHibernateStyleProxy(id: 3);
 
             // act
+            var result = entity1.Equals(entity2);
+            var result2 = entity1 == entity2;
+            var hashCode1 = entity1.GetHashCode();
+            var hashCode2 = entity2.GetHashCode();
 
             // assert
-            Assert.Fail("write test");
+            result
+                .Should()
+                .BeFalse();
+            result2
+                .Should()
+                .BeFalse();
+            hashCode2
+                .Should()
+                .Be(3.GetHashCode());
+            hashCode1
+                .Should()
+                .Be(2.GetHashCode());
         }
 
         [Test]
         public void Both_not_transient_equal()
         {
             // arrange
+            var entity1 = new NHibernateStyleProxy(id: 2);
+            var entity2 = new NHibernateStyleProxy(id: 2);
 
             // act
+            var result = entity1.Equals(entity2);
+            var result2 = entity1 == entity2;
+            var hashCode1 = entity1.GetHashCode();
+            var hashCode2 = entity2.GetHashCode();
 
             // assert
-            Assert.Fail("write test");
+            result
+                .Should()
+                .BeTrue();
+            result2
+                .Should()
+                .BeTrue();
+            hashCode2
+                .Should()
+                .Be(2.GetHashCode());
+            hashCode1
+                .Should()
+                .Be(2.GetHashCode());
         }
 
         #endregion
