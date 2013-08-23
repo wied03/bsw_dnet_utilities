@@ -57,6 +57,7 @@
     <Compile Include="Tasks\TaskExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MsBwUtility.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Bsw.NHibernateUtils</id>
+    <version>$version$</version>
+    <title>BSW NHibernate Utilities</title>
+    <authors>BSW Technology Consulting</authors>
+    <owners>BSW Technology Consulting</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides unit of work, StructureMap dependency injection base registry, and base repository for building a data layer</description>
+    <copyright>Copyright 2013</copyright>
+  </metadata>
+</package>

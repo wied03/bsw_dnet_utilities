@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Bsw.BaseEntities</id>
+    <version>$version$</version>
+    <title>BSW Base Entities</title>
+    <authors>BSW Technology Consulting</authors>
+    <owners>BSW Technology Consulting</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides base NHibernate entity classes that take care of equality, etc.</description>
+    <copyright>Copyright 2013</copyright>
+  </metadata>
+</package>

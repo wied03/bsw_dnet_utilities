@@ -21,8 +21,8 @@ task :clean => [:cleandnet, :cleanpackages]
 task :test => [:codetest]
 task :package => [:clean, :version, :build, :pack]
 
-task :version => [:versionbswutil, :versionbswtest]
-task :pack => [:packbswutil, :packbswtest]
+task :version => [:versionbswutil, :versionbswtest,:versionbaseentities,:versionnhibutils]
+task :pack => [:packbswutil, :packbswtest,:packbaseentities,:packnhibutils]
 
 with ('test') do |t|	
 	BradyW::Nunit.new :codetest => :build do |test|
@@ -34,50 +34,93 @@ task :cleanpackages do
 	rm_rf FileList['**/*.nupkg']
 end
 
-with (ENV['version_number']) do |ver|
-	with ('src/Testing/MsbwTest') do |projpath|
-		with ("#{projpath}/Properties/AssemblyInfo.cs") do |asminfo|			
-			assemblyinfo :versionbswtest do |asm|
-				puts "Putting version number #{ver} on assembly"
-				asm.version = ver
-				asm.file_version = ver
-				asm.company_name = "BSW Technology Consulting"
-				asm.product_name = "MSBW Test Assembly"
-				asm.output_file = asminfo
-				asm.input_file = asminfo
+with (".nuget/nuget.exe") do |ngetpath|
+	with (ENV['version_number']) do |ver|
+		with("BSW Technology Consulting") do |companyName|
+
+			with ('src/Implementation/Bsw.NHibernateUtils') do |projPath|
+				with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|
+					assemblyinfo :versionnhibutils do |asm|
+						puts "Putting version number #{ver} on assembly"
+						asm.version = ver
+						asm.file_version = ver
+						asm.company_name = companyName
+						asm.product_name = "BSW NHibernate Utilities"
+						asm.output_file = asminfo
+						asm.input_file = asminfo
+					end			
+				end
+				
+				nugetpack :packnhibutils do |n|
+						n.command = ngetpath
+						n.nuspec = "#{projPath}/Bsw.NHibernateUtils.csproj"
+						n.base_folder = projPath
+						n.output = projPath
+				end					
 			end
-		end
-
-		with (".nuget/nuget.exe") do |ngetpath|
-			nugetpack :packbswtest do |n|
-				n.command = ngetpath
-				n.nuspec = "#{projpath}/MsbwTest.csproj"
-				n.base_folder = projpath
-				n.output = projpath
-			end		
-		end
-	end
-
-	with ('src/Implementation/MsBwUtility') do |projpath|
-		with ("#{projpath}/Properties/AssemblyInfo.cs") do |asminfo|			
-			assemblyinfo :versionbswutil do |asm|
-				puts "Putting version number #{ver} on assembly"
-				asm.version = ver
-				asm.file_version = ver
-				asm.company_name = "BSW Technology Consulting"
-				asm.product_name = "MSBW Utility Assembly"
-				asm.output_file = asminfo
-				asm.input_file = asminfo
+		
+			with ('src/Implementation/Bsw.BaseEntities') do |projPath|
+				with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|
+					assemblyinfo :versionbaseentities do |asm|
+						puts "Putting version number #{ver} on assembly"
+						asm.version = ver
+						asm.file_version = ver
+						asm.company_name = companyName
+						asm.product_name = "BSW Base NHibernate Entities"
+						asm.output_file = asminfo
+						asm.input_file = asminfo
+					end			
+				end
+				
+				nugetpack :packbaseentities do |n|
+						n.command = ngetpath
+						n.nuspec = "#{projPath}/Bsw.BaseEntities.csproj"
+						n.base_folder = projPath
+						n.output = projPath
+				end					
 			end
-		end
+			
+			with ('src/Testing/MsbwTest') do |projPath|
+				with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|			
+					assemblyinfo :versionbswtest do |asm|
+						puts "Putting version number #{ver} on assembly"
+						asm.version = ver
+						asm.file_version = ver
+						asm.company_name = companyName
+						asm.product_name = "MSBW Test Assembly"
+						asm.output_file = asminfo
+						asm.input_file = asminfo
+					end
+				end
+				
+				nugetpack :packbswtest do |n|
+					n.command = ngetpath
+					n.nuspec = "#{projPath}/MsbwTest.csproj"
+					n.base_folder = projPath
+					n.output = projPath
+				end				
+			end
 
-		with (".nuget/nuget.exe") do |ngetpath|
-			nugetpack :packbswutil do |n|
-				n.command = ngetpath
-				n.nuspec = "#{projpath}/MsBwUtility.csproj"
-				n.base_folder = projpath
-				n.output = projpath
-			end		
+			with ('src/Implementation/MsBwUtility') do |projPath|
+				with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|			
+					assemblyinfo :versionbswutil do |asm|
+						puts "Putting version number #{ver} on assembly"
+						asm.version = ver
+						asm.file_version = ver
+						asm.company_name = companyName
+						asm.product_name = "MSBW Utility Assembly"
+						asm.output_file = asminfo
+						asm.input_file = asminfo
+					end
+				end
+				
+				nugetpack :packbswutil do |n|
+					n.command = ngetpath
+					n.nuspec = "#{projPath}/MsBwUtility.csproj"
+					n.base_folder = projPath
+					n.output = projPath
+				end				
+			end
 		end
 	end
 end

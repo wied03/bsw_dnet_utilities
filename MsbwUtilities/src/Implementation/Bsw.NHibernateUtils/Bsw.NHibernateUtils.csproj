@@ -71,6 +71,7 @@
     <Compile Include="Web\NHibernateModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Bsw.NHibernateUtils.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
