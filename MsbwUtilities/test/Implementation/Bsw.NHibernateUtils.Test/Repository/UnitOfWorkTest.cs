@@ -13,6 +13,26 @@ using NUnit.Framework;
 
 namespace Bsw.NHibernateUtils.Test.Repository
 {
+    public class SimulateCommitFailureUow : UnitOfWork
+    {
+        public SimulateCommitFailureUow(ISessionFactory sessionFactory)
+            : base(sessionFactory)
+        {
+            FailNextCommit = false;
+        }
+
+        public bool FailNextCommit { get; set; }
+
+        public override void Commit(bool openNewTransactionAfterCommittingCurrent = true)
+        {
+            if (FailNextCommit)
+            {
+                throw new Exception("simulated commit failure");
+            }
+            base.Commit(openNewTransactionAfterCommittingCurrent);
+        }
+    }
+
     [TestFixture]
     public class UnitOfWorkTest : BaseDbDrivenTest
     {
@@ -43,6 +63,56 @@ namespace Bsw.NHibernateUtils.Test.Repository
         #endregion
 
         #region Tests
+
+        [Test]
+        public void Successful_operation_followed_by_unsuccessful_with_no_auto_rollback()
+        {
+            // arrange
+            var uow = new SimulateCommitFailureUow(SessionFactory);
+            var repo = new StandardRepository<EntityClass1>(uow)
+                       {
+                           TransactionActionOnError = TransactionActionOnError.Nothing
+                       };
+            var obj1 = new EntityClass1 {Item3 = "foo"};
+            repo.SaveOrUpdate(obj1);
+            var obj2 = new EntityClass1 {Item3 = "bar"};
+            uow.FailNextCommit = true;
+           
+            // act + assert
+            try
+            {
+                repo.Invoking(r => r.Update(obj2))
+                    .ShouldThrow<TransientObjectException>(reason: "we haven't saved it first");
+            }
+            finally
+            {
+                uow.Invoking(u => u.Dispose())
+                   .ShouldThrow<Exception>("simulated commit failure");
+            }
+        }
+
+        [Test]
+        public void Successful_operation_followed_by_unsuccessful_with_auto_rollback()
+        {
+            // arrange
+            var uow = new SimulateCommitFailureUow(SessionFactory);
+            var repo = new StandardRepository<EntityClass1>(uow);
+            var obj1 = new EntityClass1 { Item3 = "foo" };
+            repo.SaveOrUpdate(obj1);
+            var obj2 = new EntityClass1 { Item3 = "bar" };
+            uow.FailNextCommit = true;
+
+            // act + assert
+            try
+            {
+                repo.Invoking(r => r.Update(obj2))
+                    .ShouldThrow<TransientObjectException>(reason: "we haven't saved it first");
+            }
+            finally
+            {
+                uow.Dispose();
+            }
+        }
 
         [Test]
         public void Session_never_utilized()

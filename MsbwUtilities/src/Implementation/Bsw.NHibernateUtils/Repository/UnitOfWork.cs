@@ -14,12 +14,14 @@ namespace Bsw.NHibernateUtils.Repository
         private Lazy<ISession> _lazySession;
         private ITransaction _transaction;
         private readonly ISessionFactory _sessionFactory;
+        private bool _disposed;
 
         public UnitOfWork(ISessionFactory sessionFactory)
         {
             _sessionFactory = sessionFactory;
             _transaction = null;
             CreateSessionAndTransaction();
+            _disposed = false;
         }
 
         private void CreateSessionAndTransaction()
@@ -40,7 +42,7 @@ namespace Bsw.NHibernateUtils.Repository
         public void Dispose()
         {
             // If we never actually opened a session, we don't need to do anything
-            if (!_lazySession.IsValueCreated || CurrentSession == null) return;
+            if (_disposed || !_lazySession.IsValueCreated || CurrentSession == null) return;
             if (_transaction.IsActive)
             {
                 // most of the time, this will be the last unit of work for the HTTP request (designed for
@@ -50,9 +52,10 @@ namespace Bsw.NHibernateUtils.Repository
 
             CurrentSession.Close();
             _lazySession = null;
+            _disposed = true;
         }
 
-        public void Commit(bool openNewTransactionAfterCommittingCurrent = true)
+        public virtual void Commit(bool openNewTransactionAfterCommittingCurrent = true)
         {
             try
             {
