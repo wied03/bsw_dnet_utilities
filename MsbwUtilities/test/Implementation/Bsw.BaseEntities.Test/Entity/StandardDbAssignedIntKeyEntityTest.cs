@@ -62,7 +62,7 @@ namespace Bsw.BaseEntities.Test.Entity
                 .BeTrue();
             hashCode
                 .Should()
-                .Be(6201975);
+                .BeGreaterThan(0);
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace Bsw.BaseEntities.Test.Entity
                 .BeFalse();
             hashCode1
                 .Should()
-                .Be(54250359);
+                .BeGreaterThan(0);
             hashCode2
                 .Should()
                 .Be(2.GetHashCode());
@@ -140,7 +140,7 @@ namespace Bsw.BaseEntities.Test.Entity
                 .BeFalse();
             hashCode2
                 .Should()
-                .Be(50047277);
+                .BeGreaterThan(0);
             hashCode1
                 .Should()
                 .Be(2.GetHashCode());
