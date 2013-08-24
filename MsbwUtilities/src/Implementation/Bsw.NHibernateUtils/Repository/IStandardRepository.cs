@@ -12,5 +12,7 @@ namespace Bsw.NHibernateUtils.Repository
         ICriteria CreateCriteria();
         ISQLQuery CreateSqlQuery(string query);
         IQuery CreateHqlQuery(string query);
+        void Save(TEntityType entity);
+        void Update(TEntityType entity);
     }
 }

@@ -39,6 +39,16 @@ namespace Bsw.NHibernateUtils.Repository
             Session.SaveOrUpdate(entity);
         }
 
+        public void Save(TEntityType entity)
+        {
+            Session.Save(entity);
+        }
+
+        public void Update(TEntityType entity)
+        {
+            Session.Update(entity);
+        }
+
         public void Delete(TEntityType entity)
         {
             Session.Delete(entity);
