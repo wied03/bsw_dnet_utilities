@@ -76,22 +76,35 @@ namespace Bsw.NHibernateUtils.Test.Repository
         public void Explicit_commit_do_not_open_new_transaction()
         {
             // arrange
+            var obj1 = new EntityClass1 { Item4 = "foobar" };
+            _repo.SaveOrUpdate(obj1);
 
             // act
+            _unitOfWork.Commit(openNewTransactionAfterCommittingCurrent: false);
 
             // assert
-            Assert.Fail("write test");
+            _unitOfWork.CurrentSession.Transaction
+                       .WasCommitted
+                       .Should()
+                       .BeTrue();
         }
 
         [Test]
         public void Using_based_commit_normal()
         {
-            // arrange
+            var obj1 = new EntityClass1 { Item4 = "foobar" };
+            using (var uow = new UnitOfWork(SessionFactory))
+            {
+                // arrange
+                var repo = new StandardRepository<EntityClass1>(uow);
 
-            // act
+                // act
+                repo.SaveOrUpdate(obj1);
+            }
 
             // assert
-            Assert.Fail("write test");
+            var entity = _repo.Query().First();
+            entity.ShouldBeEquivalentTo(obj1);
         }
 
         [Test]

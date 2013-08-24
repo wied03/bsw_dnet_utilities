@@ -9,9 +9,8 @@ using Bsw.BaseEntities.Entity;
 
 namespace Bsw.NHibernateUtils.Test.TestEntities
 {
-    public class EntityClass1
+    public class EntityClass1 : StandardDbAssignedIntKeyEntity<EntityClass1>
     {
-        public virtual int? Id { get; set; }
         public virtual string Item3 { get; set; }
         public virtual string Item4 { get; set; }
     }
