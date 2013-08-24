@@ -3,6 +3,9 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Bsw.NHibernateUtils.Repository;
+using Bsw.NHibernateUtils.Test.TestEntities;
+using NHibernate;
 using NUnit.Framework;
 using FluentAssertions;
 
@@ -11,14 +14,26 @@ using FluentAssertions;
 namespace Bsw.NHibernateUtils.Test.Repository
 {
     [TestFixture]
-    public class StandardRepositoryTest : BaseTest
+    public class StandardRepositoryTest : BaseDbDrivenTest
     {
+        private UnitOfWork _unitOfWork;
+        private StandardRepository<EntityClass1> _repo;
+
         #region Setup/Teardown
 
         [SetUp]
         public override void SetUp()
         {
             base.SetUp();
+            _unitOfWork = new UnitOfWork(SessionFactory);
+            _repo = new StandardRepository<EntityClass1>(_unitOfWork);
+        }
+
+        [TearDown]
+        public override void TearDown()
+        {
+            _unitOfWork.Dispose();
+            base.TearDown();
         }
 
         #endregion
@@ -30,14 +45,38 @@ namespace Bsw.NHibernateUtils.Test.Repository
         #region Tests
 
         [Test]
-        public void THETEST()
+        public void Default_transaction_rollback_on_error()
         {
             // arrange
+            var obj = new EntityClass1 {Item3 = "foobar"};
+            var transaction = _unitOfWork.CurrentSession.Transaction;
 
             // act
+            _repo.Invoking(r => r.Update(obj))
+                 .ShouldThrow<TransientObjectException>();
 
             // assert
-            Assert.Fail("write test, probably want to allow the user to control whether transactions are rolled back within the repo when an exception happens.  By default, roll them back");
+            transaction.WasRolledBack
+                       .Should()
+                       .BeTrue();
+        }
+
+        [Test]
+        public void Transaction_rollback_turned_off_on_error()
+        {
+            // arrange
+            var obj = new EntityClass1 { Item3 = "foobar" };
+            var transaction = _unitOfWork.CurrentSession.Transaction;
+            _repo.TransactionActionOnError = TransactionActionOnError.Nothing;
+
+            // act
+            _repo.Invoking(r => r.Update(obj))
+                 .ShouldThrow<TransientObjectException>();
+
+            // assert
+            transaction.WasRolledBack
+                       .Should()
+                       .BeFalse();
         }
 
         #endregion

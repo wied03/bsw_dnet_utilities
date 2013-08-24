@@ -17,6 +17,7 @@ namespace Bsw.NHibernateUtils.Repository
         public StandardRepository(IUnitOfWork uow)
         {
             Uow = uow;
+            TransactionActionOnError = TransactionActionOnError.Rollback;
         }
 
         protected ISession Session
@@ -24,49 +25,76 @@ namespace Bsw.NHibernateUtils.Repository
             get { return Uow.CurrentSession; }
         }
 
+        public TransactionActionOnError TransactionActionOnError { get; set; }
+
+        private TReturnType RollbackIfNecessary<TReturnType>(Func<ISession,TReturnType> action)
+        {
+            try
+            {
+                return action(Session);
+            }
+            catch (Exception)
+            {
+                if (TransactionActionOnError == TransactionActionOnError.Rollback)
+                {
+                    Session.Transaction.Rollback();
+                }
+                throw;
+            }
+        }
+
+        private void RollbackIfNecessary(Action<ISession> action)
+        {
+            RollbackIfNecessary(s =>
+                                {
+                                    action(s);
+                                    return true;
+                                });
+        }
+
         public IQueryable<TEntityType> Query()
         {
-            return Session.Query<TEntityType>();
+            return RollbackIfNecessary(s => s.Query<TEntityType>());
         }
 
         public TEntityType Get(object id)
         {
-            return Session.Get<TEntityType>(id);
+            return RollbackIfNecessary(s => s.Get<TEntityType>(id));
         }
 
         public void SaveOrUpdate(TEntityType entity)
         {
-            Session.SaveOrUpdate(entity);
+            RollbackIfNecessary(s => s.SaveOrUpdate(entity));
         }
 
         public void Save(TEntityType entity)
         {
-            Session.Save(entity);
+            RollbackIfNecessary(s => s.Save(entity));
         }
 
         public void Update(TEntityType entity)
         {
-            Session.Update(entity);
+            RollbackIfNecessary(s => s.Update(entity));
         }
 
         public void Delete(TEntityType entity)
         {
-            Session.Delete(entity);
+            RollbackIfNecessary(s => s.Delete(entity));
         }
 
         public ICriteria CreateCriteria()
         {
-            return Session.CreateCriteria<TEntityType>();
+            return RollbackIfNecessary(s => s.CreateCriteria<TEntityType>());
         }
 
         public ISQLQuery CreateSqlQuery(string query)
         {
-            return Session.CreateSQLQuery(query);
+            return RollbackIfNecessary(s => s.CreateSQLQuery(query));
         }
 
         public IQuery CreateHqlQuery(string query)
         {
-            return Session.CreateQuery(query);
+            return RollbackIfNecessary(s => s.CreateQuery(query));
         }
     }
 }
