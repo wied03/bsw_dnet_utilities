@@ -5,7 +5,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using Bsw.NHibernateUtils.Repository;
 using Bsw.NHibernateUtils.Test.TestEntities;
-using FluentNHibernate.Data;
 using NUnit.Framework;
 using FluentAssertions;
 
@@ -14,7 +13,7 @@ using FluentAssertions;
 namespace Bsw.NHibernateUtils.Test.Repository
 {
     [TestFixture]
-    public class UnitOfWorkTest : BaseTest
+    public class UnitOfWorkTest : BaseDbDrivenTest
     {
         private IUnitOfWork _unitOfWork;
         private IStandardRepository<EntityClass1> _repo;
@@ -62,6 +61,10 @@ namespace Bsw.NHibernateUtils.Test.Repository
             _unitOfWork.Commit();
 
             // assert
+            obj1.Id
+                .Should()
+                .Be(1);
+            
             _unitOfWork.CurrentSession.Transaction
                        .Should()
                        .NotBe(originalTransaction);
