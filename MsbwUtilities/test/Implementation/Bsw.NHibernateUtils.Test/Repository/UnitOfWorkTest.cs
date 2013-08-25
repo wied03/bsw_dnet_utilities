@@ -77,17 +77,23 @@ namespace Bsw.NHibernateUtils.Test.Repository
             repo.SaveOrUpdate(obj1);
             var obj2 = new EntityClass1 {Item3 = "bar"};
             uow.FailNextCommit = true;
-           
-            // act + assert
             try
             {
-                repo.Invoking(r => r.Update(obj2))
-                    .ShouldThrow<TransientObjectException>(reason: "we haven't saved it first");
+                // act + assert
+                try
+                {
+                    repo.Invoking(r => r.Update(obj2))
+                        .ShouldThrow<TransientObjectException>(reason: "we haven't saved it first");
+                }
+                finally
+                {
+                    uow.Invoking(u => u.Dispose())
+                       .ShouldThrow<Exception>("simulated commit failure");
+                }
             }
             finally
             {
-                uow.Invoking(u => u.Dispose())
-                   .ShouldThrow<Exception>("simulated commit failure");
+                uow.CurrentSession.Close();
             }
         }
 
