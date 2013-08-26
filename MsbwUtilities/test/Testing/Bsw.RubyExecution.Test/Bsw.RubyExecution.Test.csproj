@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EF2DA0B4-BC3D-4625-9ABE-E3AC66D7CD57}</ProjectGuid>
+    <ProjectGuid>{4CE86329-22AC-459E-B2F4-3888E1424858}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bsw.RubyExecution</RootNamespace>
-    <AssemblyName>Bsw.RubyExecution</AssemblyName>
+    <RootNamespace>Bsw.RubyExecution.Test</RootNamespace>
+    <AssemblyName>Bsw.RubyExecution.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,9 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="FluentAssertions">
       <HintPath>..\..\..\..\nuget_pkg_lnk\FluentAssertions.2.1.0.0\lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\..\nuget_pkg_lnk\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,26 +46,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="RubyProcess.cs" />
-    <Compile Include="ThinServerProcess.cs" />
+    <Compile Include="RubyProcessTest.cs" />
+    <Compile Include="ThinServerProcessTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Bsw.RubyExecution.nuspec" />
-    <None Include="bundle_install.bat" />
+    <ProjectReference Include="..\..\..\src\Testing\Bsw.RubyExecution\Bsw.RubyExecution.csproj">
+      <Project>{ef2da0b4-bc3d-4625-9abe-e3ac66d7cd57}</Project>
+      <Name>Bsw.RubyExecution</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Testing\MsbwTest\MsbwTest.csproj">
+      <Project>{e4a41539-3a82-4450-993c-0af590c28047}</Project>
+      <Name>MsbwTest</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bundle.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="irb.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
-    <None Include="run_ruby.bat" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <None Include="workingdir\irb.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
