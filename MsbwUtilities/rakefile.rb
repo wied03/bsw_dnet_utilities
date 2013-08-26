@@ -21,8 +21,8 @@ task :clean => [:cleandnet, :cleanpackages]
 task :test => [:codetest]
 task :package => [:clean, :version, :build, :pack]
 
-task :version => [:versionbswutil, :versionbswtest,:versionbaseentities,:versionnhibutils]
-task :pack => [:packbswutil, :packbswtest,:packbaseentities,:packnhibutils]
+task :version => [:versionbswutil, :versionbswtest,:versionbaseentities,:versionnhibutils,:versionrubyexecution]
+task :pack => [:packbswutil, :packbswtest,:packbaseentities,:packnhibutils,:packrubyexecution]
 
 with ('test') do |t|	
 	BradyW::Nunit.new :codetest => :build do |test|
@@ -75,6 +75,27 @@ with (".nuget/nuget.exe") do |ngetpath|
 				nugetpack :packbaseentities do |n|
 						n.command = ngetpath
 						n.nuspec = "#{projPath}/Bsw.BaseEntities.csproj"
+						n.base_folder = projPath
+						n.output = projPath
+				end					
+			end
+			
+			with ('src/Testing/Bsw.RubyExecution') do |projPath|
+				with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|
+					assemblyinfo :versionrubyexecution do |asm|
+						puts "Putting version number #{ver} on assembly"
+						asm.version = ver
+						asm.file_version = ver
+						asm.company_name = companyName
+						asm.product_name = "BSW Ruby Execution"
+						asm.output_file = asminfo
+						asm.input_file = asminfo
+					end			
+				end
+				
+				nugetpack :packrubyexecution do |n|
+						n.command = ngetpath
+						n.nuspec = "#{projPath}/Bsw.RubyExecution.csproj"
 						n.base_folder = projPath
 						n.output = projPath
 				end					
