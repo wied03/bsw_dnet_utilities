@@ -16,24 +16,14 @@ namespace Bsw.RubyExecution
 {
     public class RubyProcess
     {
-        private Process _rubyProcess;
+        protected Process RubyProc { get; private set; }
 
-        public int ThinPort { get; private set; }
-        public string ThinSslKeyFile { get; set; }
-        public string ThinSslCertFile { get; set; }
         public string WorkingDirectory { get; private set; }
         private static readonly string ThisBinPath = Path.GetFullPath(@".");
-        public string ShutdownTriggerPath { get; private set; }
-        public bool Started { get; private set; }
 
-        public RubyProcess(int thinPort,
-                           string workingDirectory)
+        public RubyProcess(string workingDirectory)
         {
-            ThinPort = thinPort;
             WorkingDirectory = workingDirectory;
-            Started = false;
-            ShutdownTriggerPath = Path.Combine(WorkingDirectory,
-                                               "shutdown.txt");
         }
 
         public static string RubyIrbPath
@@ -51,77 +41,12 @@ namespace Bsw.RubyExecution
             }
         }
 
-        private void WaitForServerToStart()
-        {
-            var up = false;
-            for (var i = 0; i < 10; i++)
-            {
-                try
-                {
-                    var tcpClient = new TcpClient();
-                    var result = tcpClient.ConnectAsync("localhost",
-                                                        ThinPort);
-                    var noTimeout = result.Wait(3.Seconds());
-                    if (!noTimeout) continue;
-                    tcpClient.Close();
-                    up = true;
-                    break;
-                }
-                catch (Exception)
-                {
-                    Thread.Sleep(50.Milliseconds());
-                }
-            }
-            if (!up)
-            {
-                throw new Exception("Tried 10 times to check server uptime and gave up!");
-            }
-        }
-
-        public void StartThinServer()
-        {
-            var thinPath = ThinPath;
-
-            var thinArgs = string.Format("{0} {1} start -R config.ru -p {2} -V",
-                                         ShutdownTriggerPath,
-                                         thinPath,
-                                         ThinPort);
-            var keyFile = ThinSslKeyFile;
-            var args = keyFile != null
-                           ? string.Format("{0} --ssl --ssl-key-file {1} --ssl-cert-file {2}",
-                                           thinArgs,
-                                           keyFile,
-                                           ThinSslCertFile)
-                           : thinArgs;
-            StartRubyProcess(args);
-        }
-
-        private static string ThinPath
-        {
-            get
-            {
-                var irbPath = RubyIrbPath;
-                var thinPath = Path.Combine(Path.GetDirectoryName(irbPath),
-                                            "thin");
-                return thinPath;
-            }
-        }
-
-        public void GracefulShutdown()
-        {
-            var file = File.Create(ShutdownTriggerPath);
-            _rubyProcess.WaitForExit();
-            _rubyProcess.Close();
-            file.Close();
-            File.Delete(ShutdownTriggerPath);
-        }
-
         public void KillRubyProcess()
         {
-            _rubyProcess.Kill();
+            RubyProc.Kill();
         }
 
-        public void StartRubyProcess(string args)
+        public virtual void StartRubyProcess(string args)
         {
             // don't want to run this inside of bin
             var executable = Path.GetFullPath(Path.Combine(ThisBinPath,
@@ -137,16 +62,14 @@ namespace Bsw.RubyExecution
                                 RedirectStandardInput = true,
                                 RedirectStandardError = true,
                             };
-            _rubyProcess = new Process {StartInfo = procStart};
-            _rubyProcess.OutputDataReceived += (sender,
+            RubyProc = new Process {StartInfo = procStart};
+            RubyProc.OutputDataReceived += (sender,
                                                 eventArgs) => Console.WriteLine(eventArgs.Data);
-            _rubyProcess.ErrorDataReceived += (sender,
+            RubyProc.ErrorDataReceived += (sender,
                                                eventArgs) => Console.WriteLine(eventArgs.Data);
-            _rubyProcess.Start();
-            _rubyProcess.BeginOutputReadLine();
-            _rubyProcess.BeginErrorReadLine();
-            WaitForServerToStart();
-            Started = true;
+            RubyProc.Start();
+            RubyProc.BeginOutputReadLine();
+            RubyProc.BeginErrorReadLine();
         }
 
         public static void InstallBundlerDependencies()
@@ -166,5 +89,6 @@ namespace Bsw.RubyExecution
             Console.WriteLine("Bundle install log:");
             Console.WriteLine(File.ReadAllText(bundleLogFile));
         }
+        
     }
 }
