@@ -1,11 +1,16 @@
+#region
+
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+
+#region
 
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentAssertions.Execution;
+
+#endregion
 
 #endregion
 
@@ -23,7 +28,7 @@ namespace MsbwTest.CustomAssertions
         public async Task<TException> ShouldThrow<TException>(string reason = "",
                                                               params object[] reasonArgs) where TException : Exception
         {
-            var exception = (Exception)null;
+            var exception = (Exception) null;
             try
             {
                 await _asyncAction();
@@ -32,19 +37,20 @@ namespace MsbwTest.CustomAssertions
             {
                 exception = ex;
             }
-            Execute.Verification.ForCondition(exception != null).BecauseOf(reason,
-                                                                           reasonArgs)
+
+            Execute.Assertion.ForCondition(exception != null).BecauseOf(reason,
+                                                                        reasonArgs)
                    .FailWith("Expected {0}{reason}, but no exception was thrown.",
                              new object[]
-                                 {
-                                     typeof (TException)
-                                 });
-            Execute.Verification.ForCondition(exception is TException).BecauseOf(reason,
-                                                                                 reasonArgs)
+                             {
+                                 typeof (TException)
+                             });
+            Execute.Assertion.ForCondition(exception is TException).BecauseOf(reason,
+                                                                              reasonArgs)
                    .FailWith("Expected {0}{reason}, but found {1}.",
-                             (object)typeof(TException),
-                             (object)exception);
-            return (TException)exception;
+                             (object) typeof (TException),
+                             (object) exception);
+            return (TException) exception;
         }
     }
 }

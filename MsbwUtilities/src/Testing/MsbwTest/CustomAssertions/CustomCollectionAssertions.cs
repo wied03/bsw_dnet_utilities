@@ -1,5 +1,8 @@
+#region
+
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+
+#region
 
 using System;
 using System.Collections.Generic;
@@ -8,8 +11,9 @@ using System.Linq.Expressions;
 using FluentAssertions;
 using FluentAssertions.Collections;
 using FluentAssertions.Execution;
-using NUnit.Framework;
 using Newtonsoft.Json;
+
+#endregion
 
 #endregion
 
@@ -42,13 +46,13 @@ namespace MsbwTest.CustomAssertions
             if (ReferenceEquals(actual,
                                 null))
             {
-                Execute.Verification.BecauseOf(reason,
-                                               reasonArgs)
+                Execute.Assertion.BecauseOf(reason,
+                                            reasonArgs)
                        .FailWith("Expected {context:collection} to contain {0}{reason}, but found <null>.",
                                  new object[]
-                                     {
-                                         expected
-                                     });
+                                 {
+                                     expected
+                                 });
                 // not needed but keep resharper happy
                 return continuation;
             }
@@ -60,7 +64,7 @@ namespace MsbwTest.CustomAssertions
             actualJson
                 .Should()
                 .Contain(expectedJson);
-            
+
             return continuation;
         }
     }
