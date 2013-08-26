@@ -16,20 +16,21 @@ namespace Bsw.RubyExecution
 {
     public class RubyProcess
     {
-        protected Process RubyProc { get; private set; }
+        public Process RubyProc { get; private set; }
         public string WorkingDirectory { get; private set; }
-
         private static readonly string ThisBinPath = Path.GetFullPath(@".");
 
         public RubyProcess(string workingDirectory)
         {
             WorkingDirectory = workingDirectory;
-            ExtractBatchFilesFromResources();
         }
 
-        private static void ExtractBatchFilesFromResources()
+        static RubyProcess()
         {
-            var bundleInstallBat = Properties.Resources.bundle_install;
+            File.WriteAllText("bundle_install.bat",
+                              Properties.Resources.bundle_install);
+            File.WriteAllText("run_ruby.bat",
+                              Properties.Resources.run_ruby);
         }
 
         protected static string RubyIrbPath
@@ -95,6 +96,5 @@ namespace Bsw.RubyExecution
             Console.WriteLine("Bundle install log:");
             Console.WriteLine(File.ReadAllText(bundleLogFile));
         }
-        
     }
 }
