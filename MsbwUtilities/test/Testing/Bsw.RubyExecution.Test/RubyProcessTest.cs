@@ -15,8 +15,6 @@ namespace Bsw.RubyExecution.Test
     public class RubyProcessTest : BaseTest
     {
         // populated in batch file
-        private const string COMMAND_EXECUTED_TXT = "command_executed.txt";
-        private string _fullPathToCommandExecuted;
 
         #region Setup/Teardown
 
@@ -24,27 +22,17 @@ namespace Bsw.RubyExecution.Test
         public override void SetUp()
         {
             base.SetUp();
-            _fullPathToCommandExecuted = null;
         }
 
         [TearDown]
         public override void TearDown()
         {
-            File.Delete(_fullPathToCommandExecuted);
             base.TearDown();
         }
 
         #endregion
 
         #region Utility Methods
-
-        private string CommandExecuted
-        {
-            get
-            {
-                return File.ReadAllText(_fullPathToCommandExecuted).Trim();
-            }
-        }
 
         #endregion
 
@@ -54,7 +42,7 @@ namespace Bsw.RubyExecution.Test
         public void Install_bundler_dependencies()
         {
             // arrange
-            _fullPathToCommandExecuted = Path.GetFullPath(Path.Combine(".",
+            FullPathToCommandExecuted = Path.GetFullPath(Path.Combine(".",
                                                                        COMMAND_EXECUTED_TXT));
 
             // act
@@ -71,7 +59,7 @@ namespace Bsw.RubyExecution.Test
         {
             // arrange
             const string workingDirectory = @"..\..\workingdir";
-            _fullPathToCommandExecuted = Path.GetFullPath(Path.Combine(workingDirectory,
+            FullPathToCommandExecuted = Path.GetFullPath(Path.Combine(workingDirectory,
                                                                        COMMAND_EXECUTED_TXT));
             var process = new RubyProcess(workingDirectory: workingDirectory);
 

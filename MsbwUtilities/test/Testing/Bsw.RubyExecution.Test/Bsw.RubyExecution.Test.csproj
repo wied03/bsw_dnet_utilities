@@ -49,6 +49,7 @@
     <Compile Include="BaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RubyProcessTest.cs" />
+    <Compile Include="ThinServerProcessTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Testing\Bsw.RubyExecution\Bsw.RubyExecution.csproj">

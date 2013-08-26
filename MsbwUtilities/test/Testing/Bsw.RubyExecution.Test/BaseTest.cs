@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
+using NUnit.Framework;
 
 #region
 
@@ -13,16 +14,27 @@ namespace Bsw.RubyExecution.Test
 {
     public class BaseTest
     {
+        protected const string COMMAND_EXECUTED_TXT = "command_executed.txt";
+        protected string FullPathToCommandExecuted;
+
         [SetUp]
         public virtual void SetUp()
         {
-            
+            FullPathToCommandExecuted = null;
         }
 
         [TearDown]
         public virtual void TearDown()
         {
-            
+            File.Delete(FullPathToCommandExecuted);
+        }
+
+        protected string CommandExecuted
+        {
+            get
+            {
+                return File.ReadAllText(FullPathToCommandExecuted).Trim();
+            }
         }
     }
 }

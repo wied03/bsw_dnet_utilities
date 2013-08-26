@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿#region
+
+using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using FluentAssertions;
@@ -12,6 +14,9 @@ using System.Linq.Expressions;
 #endregion
 
 // // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#endregion
+
 namespace Bsw.RubyExecution
 {
     public class ThinServerProcess : RubyProcess
@@ -22,7 +27,8 @@ namespace Bsw.RubyExecution
         public string ShutdownTriggerPath { get; private set; }
         public bool Started { get; private set; }
 
-        public ThinServerProcess(int thinPort, string workingDirectory) :base(workingDirectory)
+        public ThinServerProcess(int thinPort,
+                                 string workingDirectory) : base(workingDirectory)
         {
             ThinPort = thinPort;
             Started = false;
