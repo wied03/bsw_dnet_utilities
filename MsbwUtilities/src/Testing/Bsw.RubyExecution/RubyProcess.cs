@@ -17,16 +17,22 @@ namespace Bsw.RubyExecution
     public class RubyProcess
     {
         protected Process RubyProc { get; private set; }
-
         public string WorkingDirectory { get; private set; }
+
         private static readonly string ThisBinPath = Path.GetFullPath(@".");
 
         public RubyProcess(string workingDirectory)
         {
             WorkingDirectory = workingDirectory;
+            ExtractBatchFilesFromResources();
         }
 
-        public static string RubyIrbPath
+        private static void ExtractBatchFilesFromResources()
+        {
+            var bundleInstallBat = Properties.Resources.bundle_install;
+        }
+
+        protected static string RubyIrbPath
         {
             get
             {

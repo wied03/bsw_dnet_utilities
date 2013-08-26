@@ -81,7 +81,7 @@ namespace Bsw.RubyExecution
         {
             get
             {
-                var irbPath = RubyProcess.RubyIrbPath;
+                var irbPath = RubyIrbPath;
                 var thinPath = Path.Combine(Path.GetDirectoryName(irbPath),
                                             "thin");
                 return thinPath;
