@@ -59,6 +59,7 @@
     <Compile Include="SqlLite\SessionFactoryFetcher.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Bsw.NHibernate.Testing.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

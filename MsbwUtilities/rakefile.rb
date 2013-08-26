@@ -21,8 +21,19 @@ task :clean => [:cleandnet, :cleanpackages]
 task :test => [:codetest]
 task :package => [:clean, :version, :build, :pack]
 
-task :version => [:versionbswutil, :versionbswtest,:versionbaseentities,:versionnhibutils,:versionrubyexecution]
-task :pack => [:packbswutil, :packbswtest,:packbaseentities,:packnhibutils,:packrubyexecution]
+task :version => [:versionbswutil,
+				  :versionbswtest,
+				  :versionbaseentities,
+				  :versionnhibutils,
+				  :versionrubyexecution,
+				  :versionnhibtest]
+				  
+task :pack => [:packbswutil,
+			   :packbswtest,
+			   :packbaseentities,
+			   :packnhibutils,
+			   :packrubyexecution,
+			   :packnhibtest]
 
 with ('test') do |t|	
 	BradyW::Nunit.new :codetest => :build do |test|
@@ -54,6 +65,27 @@ with (".nuget/nuget.exe") do |ngetpath|
 				nugetpack :packnhibutils do |n|
 						n.command = ngetpath
 						n.nuspec = "#{projPath}/Bsw.NHibernateUtils.csproj"
+						n.base_folder = projPath
+						n.output = projPath
+				end					
+			end
+			
+			with ('src/Testing/Bsw.NHibernate.Testing') do |projPath|
+				with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|
+					assemblyinfo :versionnhibtest do |asm|
+						puts "Putting version number #{ver} on assembly"
+						asm.version = ver
+						asm.file_version = ver
+						asm.company_name = companyName
+						asm.product_name = "BSW NHibernate Testing"
+						asm.output_file = asminfo
+						asm.input_file = asminfo
+					end			
+				end
+				
+				nugetpack :packnhibtest do |n|
+						n.command = ngetpath
+						n.nuspec = "#{projPath}/Bsw.NHibernate.Testing.csproj"
 						n.base_folder = projPath
 						n.output = projPath
 				end					
