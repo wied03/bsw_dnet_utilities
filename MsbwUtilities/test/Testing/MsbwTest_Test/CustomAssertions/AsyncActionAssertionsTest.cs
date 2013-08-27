@@ -31,7 +31,7 @@ namespace MsbwTest_Test.CustomAssertions
         }
 
         [Test]
-        public void Should_throw_no_exception()
+        public void Expected_exception_does_not_happen()
         {
             // arrange
             var asyncAssertions = new AsyncActionAssertions(() => Tester(false));
@@ -39,18 +39,17 @@ namespace MsbwTest_Test.CustomAssertions
             // act + assert
             asyncAssertions
                 .Invoking(a => a.ShouldThrow<ArgumentException>().Wait())
-                .ShouldThrow<AggregateException>()
-                .WithInnerException<AssertionException>()
+                .ShouldThrow<AssertionException>()
                 ;
         }
 
         [Test]
-        public async Task Should_throw_exception()
+        public async Task Expected_exception_happens()
         {
             // arrange
             var asyncAssertions = new AsyncActionAssertions(() => Tester(true));
 
-            // act +assert (no exception = pass)
+            // act + assert (no exception = pass)
             await asyncAssertions.ShouldThrow<ArgumentException>();
         }
     }
