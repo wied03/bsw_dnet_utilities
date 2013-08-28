@@ -8,6 +8,7 @@
     <owners>BSW Technology Consulting</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Starts/stops a Ruby process (with bundler install support) for use in NUnit tests</description>
+    <projectUrl>https://github.com/wied03/bsw_dnet_utilities</projectUrl>
     <copyright>Copyright 2013</copyright>
   </metadata>
 </package>
