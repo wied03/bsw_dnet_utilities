@@ -8,6 +8,10 @@
     <owners>BSW Technology Consulting</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Used as a utility assembly for UNIT TESTING ONLY</description>
-    <copyright>Copyright 2013</copyright>    
+    <copyright>Copyright 2013</copyright>
+
+    <dependencies>
+      <dependency id="MsbwUtility" version="$version$" />
+    </dependencies>
   </metadata>
 </package>
