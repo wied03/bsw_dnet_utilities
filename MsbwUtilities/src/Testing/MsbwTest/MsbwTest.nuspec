@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MsbwTest</id>
+    <version>$version$</version>
+    <title>Msbw Test Assembly</title>
+    <authors>BSW Technology Consulting</authors>
+    <owners>BSW Technology Consulting</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Used as a utility assembly for UNIT TESTING ONLY</description>
+    <copyright>Copyright 2013</copyright>    
+  </metadata>
+</package>
