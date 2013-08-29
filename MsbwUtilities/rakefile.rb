@@ -30,6 +30,13 @@ task :version => [:versionbswutil,
 				  :versionnhibtest]
 
 
+task :push => [:pushbswutil,
+				  :pushbswtest,
+				  :pushbaseentities,
+				  :pushnhibutils,
+				  :pushrubyexecution,
+				  :pushnhibtest]				  
+				  
 # We might have already done this in this build cycle, but we update the source with versions
 # so need to do force a build
 task :forcebuildforpackages do
@@ -180,7 +187,7 @@ with (".nuget/nuget.exe") do |ngetpath|
 						end
 					end
 					
-					nugetpack :packbswtest do => [:versionbswtest,:forcebuildforpackages] |n|
+					nugetpack :packbswtest => [:versionbswtest,:forcebuildforpackages] do |n|
 						n.command = ngetpath
 						n.nuspec = "#{projPath}/MsbwTest.csproj"
 						n.base_folder = projPath
