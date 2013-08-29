@@ -1,5 +1,8 @@
+#region
+
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+
+#region
 
 using System;
 using System.Data;
@@ -14,10 +17,13 @@ using NHibernate.Tool.hbm2ddl;
 
 #endregion
 
+#endregion
+
 namespace Bsw.NHibernate.Testing.SqlLite
 {
     public class SessionFactoryFetcher
     {
+        private SchemaExport _schemaExport;
         private const string CONNECTION_STRING = "FullUri=file:memorydb.db?mode=memory&cache=shared";
 
         public IDbConnection Connection { get; private set; }
@@ -37,21 +43,22 @@ namespace Bsw.NHibernate.Testing.SqlLite
             configChanges(fluentConfig);
 
             Configuration savedConfig = null;
-            var sessionFactory = fluentConfig.ExposeConfiguration(c =>
-                                                                  {
-                                                                      savedConfig = c;
-                                                                  })
+            var sessionFactory = fluentConfig.ExposeConfiguration(c => { savedConfig = c; })
                                              .BuildSessionFactory();
 
-            var schemaExport = new SchemaExport(savedConfig);
+            _schemaExport = new SchemaExport(savedConfig);
             Connection = new SQLiteConnection(CONNECTION_STRING);
             Connection.Open();
-            schemaExport.Execute(true,
-                                 true,
-                                 false,
-                                 Connection,
-                                 null);
             return sessionFactory;
+        }
+
+        public void DropAndCreateSchema()
+        {
+            _schemaExport.Execute(true,
+                                  true,
+                                  false,
+                                  Connection,
+                                  null);
         }
     }
 }

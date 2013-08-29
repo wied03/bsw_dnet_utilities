@@ -24,6 +24,7 @@ namespace Bsw.NHibernateUtils.Test
         [SetUp]
         public override void SetUp()
         {
+            _sessionFactoryFetcher.DropAndCreateSchema();
         }
 
         [TearDown]
