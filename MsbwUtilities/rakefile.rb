@@ -19,7 +19,7 @@ end
 task :ci => [:clean, :build, :test]
 task :clean => [:cleandnet, :cleanpackages]
 task :test => [:codetest]
-# Version here because our re-build below with forcebuildforpackages will not execute for each version
+# Version here because our re-build below with forcebuildforpackages will not execute for each package
 task :package => [:clean, :version, :pack]
 
 task :version => [:versionbswutil,
@@ -29,8 +29,9 @@ task :version => [:versionbswutil,
 				  :versionrubyexecution,
 				  :versionnhibtest]
 
-
-task :push => [:pushbswutil,
+# Our re-build below with forcebuildforpackages will not execute for each package
+task :push => [:package,
+				:pushbswutil,
 				  :pushbswtest,
 				  :pushbaseentities,
 				  :pushnhibutils,
