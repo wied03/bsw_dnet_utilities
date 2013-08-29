@@ -22,3 +22,4 @@ DEPENDENCIES
   albacore
   rake
   rakedotnet
+  rubyzip (= 0.9.9)
