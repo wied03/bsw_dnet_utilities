@@ -1,5 +1,6 @@
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+
+#region
 
 using System;
 using System.Linq;
@@ -11,7 +12,7 @@ using NHibernate.Linq;
 
 namespace Bsw.NHibernateUtils.Repository
 {
-    public class StandardRepository<TEntityType> : IStandardRepository<TEntityType> where TEntityType : class
+    public class StandardRepository : IStandardRepository
     {
         protected IUnitOfWork Uow { get; private set; }
 
@@ -28,7 +29,7 @@ namespace Bsw.NHibernateUtils.Repository
 
         public TransactionActionOnError TransactionActionOnError { get; set; }
 
-        private TReturnType RollbackIfNecessary<TReturnType>(Func<ISession,TReturnType> action)
+        private TReturnType RollbackIfNecessary<TReturnType>(Func<ISession, TReturnType> action)
         {
             try
             {
@@ -53,37 +54,37 @@ namespace Bsw.NHibernateUtils.Repository
                                 });
         }
 
-        public IQueryable<TEntityType> Query()
+        public IQueryable<TEntityType> Query<TEntityType>()
         {
             return RollbackIfNecessary(s => s.Query<TEntityType>());
         }
 
-        public TEntityType Get(object id)
+        public TEntityType Get<TEntityType>(object id)
         {
             return RollbackIfNecessary(s => s.Get<TEntityType>(id));
         }
 
-        public void SaveOrUpdate(TEntityType entity)
+        public void SaveOrUpdate<TEntityType>(TEntityType entity)
         {
             RollbackIfNecessary(s => s.SaveOrUpdate(entity));
         }
 
-        public void Save(TEntityType entity)
+        public void Save<TEntityType>(TEntityType entity)
         {
             RollbackIfNecessary(s => s.Save(entity));
         }
 
-        public void Update(TEntityType entity)
+        public void Update<TEntityType>(TEntityType entity)
         {
             RollbackIfNecessary(s => s.Update(entity));
         }
 
-        public void Delete(TEntityType entity)
+        public void Delete<TEntityType>(TEntityType entity)
         {
             RollbackIfNecessary(s => s.Delete(entity));
         }
 
-        public ICriteria CreateCriteria()
+        public ICriteria CreateCriteria<TEntityType>() where TEntityType : class
         {
             return RollbackIfNecessary(s => s.CreateCriteria<TEntityType>());
         }

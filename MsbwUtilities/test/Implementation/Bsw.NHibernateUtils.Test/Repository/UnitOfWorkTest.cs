@@ -38,7 +38,7 @@ namespace Bsw.NHibernateUtils.Test.Repository
     public class UnitOfWorkTest : BaseDbDrivenTest
     {
         private IUnitOfWork _unitOfWork;
-        private IStandardRepository<EntityClass1> _repo;
+        private IStandardRepository _repo;
 
         #region Setup/Teardown
 
@@ -47,7 +47,7 @@ namespace Bsw.NHibernateUtils.Test.Repository
         {
             base.SetUp();
             _unitOfWork = new UnitOfWork(SessionFactory);
-            _repo = new StandardRepository<EntityClass1>(_unitOfWork);
+            _repo = new StandardRepository(_unitOfWork);
         }
 
         [TearDown]
@@ -70,7 +70,7 @@ namespace Bsw.NHibernateUtils.Test.Repository
         {
             // arrange
             var uow = new SimulateCommitFailureUow(SessionFactory);
-            var repo = new StandardRepository<EntityClass1>(uow)
+            var repo = new StandardRepository(uow)
                        {
                            TransactionActionOnError = TransactionActionOnError.Nothing
                        };
@@ -103,7 +103,7 @@ namespace Bsw.NHibernateUtils.Test.Repository
         {
             // arrange
             var uow = new SimulateCommitFailureUow(SessionFactory);
-            var repo = new StandardRepository<EntityClass1>(uow);
+            var repo = new StandardRepository(uow);
             var obj1 = new EntityClass1 { Item3 = "foo" };
             repo.SaveOrUpdate(obj1);
             var obj2 = new EntityClass1 { Item3 = "bar" };
@@ -153,7 +153,8 @@ namespace Bsw.NHibernateUtils.Test.Repository
             _unitOfWork.CurrentSession.Transaction
                        .Should()
                        .NotBe(originalTransaction);
-            var entity = _repo.Query().First(e => e.Item4 == "Explicit_commit_normal");
+            var entity = _repo.Query<EntityClass1>()
+                              .First(e => e.Item4 == "Explicit_commit_normal");
             entity.ShouldBeEquivalentTo(obj1);
         }
 
@@ -182,14 +183,15 @@ namespace Bsw.NHibernateUtils.Test.Repository
             using (var uow = new UnitOfWork(SessionFactory))
             {
                 // arrange
-                var repo = new StandardRepository<EntityClass1>(uow);
+                var repo = new StandardRepository(uow);
 
                 // act
                 repo.SaveOrUpdate(obj1);
             }
 
             // assert
-            var entity = _repo.Query().First(e => e.Item4 == "Using_based_commit_normal");
+            var entity = _repo.Query<EntityClass1>()
+                              .First(e => e.Item4 == "Using_based_commit_normal");
             entity.ShouldBeEquivalentTo(obj1);
         }
 
@@ -213,7 +215,7 @@ namespace Bsw.NHibernateUtils.Test.Repository
             // act + assert
             using (var uow = new UnitOfWork(SessionFactory))
             {
-                var repo = new StandardRepository<EntityClass1>(uow);
+                var repo = new StandardRepository(uow);
                 repo.Invoking(r => r.Update(obj1))
                     .ShouldThrow<TransientObjectException>();
             }
@@ -226,13 +228,13 @@ namespace Bsw.NHibernateUtils.Test.Repository
             var obj1 = new EntityClass1 {Item3 = "foo"};
             using (var uow = new UnitOfWork(SessionFactory))
             {
-                var repo = new StandardRepository<EntityClass1>(uow);
+                var repo = new StandardRepository(uow);
                 repo.SaveOrUpdate(obj1);
             }
 
             using (var uowForCommitConflict = new UnitOfWork(SessionFactory))
             {
-                var repoForCommitConflict = new StandardRepository<EntityClass1>(uowForCommitConflict);
+                var repoForCommitConflict = new StandardRepository(uowForCommitConflict);
                 obj1.Item3 = "modified";
                 _repo.SaveOrUpdate(obj1);
                 repoForCommitConflict.Invoking(r => r.SaveOrUpdate(obj1))
@@ -248,7 +250,7 @@ namespace Bsw.NHibernateUtils.Test.Repository
             var obj1 = new EntityClass1 { Item3 = "foo" };
             using (var uow = new UnitOfWork(SessionFactory))
             {
-                var repo = new StandardRepository<EntityClass1>(uow);
+                var repo = new StandardRepository(uow);
                 repo.SaveOrUpdate(obj1);
             }
 
@@ -260,8 +262,8 @@ namespace Bsw.NHibernateUtils.Test.Repository
             // assert
             using (var uow = new UnitOfWork(SessionFactory))
             {
-                var repo = new StandardRepository<EntityClass1>(uow);
-                var entity = repo.Get(obj1.Id);
+                var repo = new StandardRepository(uow);
+                var entity = repo.Get<EntityClass1>(obj1.Id);
                 entity.Item3
                       .Should()
                       .Be("foo");

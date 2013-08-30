@@ -18,7 +18,7 @@ namespace Bsw.NHibernateUtils.Test.Repository
     public class StandardRepositoryTest : BaseDbDrivenTest
     {
         private UnitOfWork _unitOfWork;
-        private StandardRepository<EntityClass1> _repo;
+        private IStandardRepository _repo;
 
         #region Setup/Teardown
 
@@ -27,7 +27,7 @@ namespace Bsw.NHibernateUtils.Test.Repository
         {
             base.SetUp();
             _unitOfWork = new UnitOfWork(SessionFactory);
-            _repo = new StandardRepository<EntityClass1>(_unitOfWork);
+            _repo = new StandardRepository(_unitOfWork);
         }
 
         [TearDown]
