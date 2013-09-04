@@ -9,5 +9,6 @@ namespace Bsw.NHibernateUtils.Repository
         ISession CurrentSession { get; }
         void Commit(bool openNewTransactionAfterCommittingCurrent = true);
         void Rollback();
+        bool Disposed { get; }
     }
 }

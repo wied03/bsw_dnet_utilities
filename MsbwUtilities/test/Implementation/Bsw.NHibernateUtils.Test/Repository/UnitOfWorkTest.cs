@@ -118,6 +118,9 @@ namespace Bsw.NHibernateUtils.Test.Repository
             finally
             {
                 uow.Dispose();
+                uow.Disposed
+                   .Should()
+                   .BeTrue();
             }
         }
 
