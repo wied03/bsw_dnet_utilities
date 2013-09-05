@@ -19,6 +19,12 @@ namespace MsBwUtilityTest.Enum
         Value3
     }
 
+    public enum TestEnum2
+    {
+        [StringValue("bar-2")]
+        Value2,
+    }
+
     [TestFixture]
     public class StringValueAttributeTest : BaseTest
     {
@@ -97,6 +103,32 @@ namespace MsBwUtilityTest.Enum
             result
                 .Should()
                 .Be("Value3");
+        }
+
+        [Test]
+        public void No_collision_between_types()
+        {
+            // arrange
+            const TestEnum test = TestEnum.Value2;
+            const TestEnum2 test2 = TestEnum2.Value2;
+
+            // act
+            var result1 = test.StringValue();
+            var result2 = test2.StringValue();
+
+            // assert
+            result1
+                .Should()
+                .Be("bar");
+            result2
+                .Should()
+                .Be("bar-2");
+            "bar".EnumValue<TestEnum>()
+                 .Should()
+                 .Be(TestEnum.Value2);
+            "bar-2".EnumValue<TestEnum2>()
+                 .Should()
+                 .Be(TestEnum2.Value2);
         }
     }
 }
