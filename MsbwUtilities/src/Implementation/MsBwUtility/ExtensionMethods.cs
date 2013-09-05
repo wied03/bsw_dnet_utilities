@@ -49,5 +49,12 @@ namespace MsBw.MsBwUtility
             return BitConverter.ToString(bytes).Replace("-",
                                                         string.Empty);
         }
+
+        public static int? ToNullableInt(this string str)
+        {
+            return string.IsNullOrEmpty(str)
+                       ? (int?) null
+                       : Convert.ToInt32(str);
+        }
     }
 }
