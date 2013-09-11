@@ -66,10 +66,8 @@
     <Compile Include="Mapping\ExtensionMethods.cs" />
     <Compile Include="Mapping\NullablePrimaryKeyConvention.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\IStandardRepository.cs" />
-    <Compile Include="Repository\IUnitofWork.cs" />
-    <Compile Include="Repository\StandardRepository.cs" />
-    <Compile Include="Repository\UnitOfWork.cs" />
+    <Compile Include="Repository\ILazySessionFetcher.cs" />
+    <Compile Include="Repository\LazySessionFetcher.cs" />
     <Compile Include="Web\NHibernateModule.cs" />
   </ItemGroup>
   <ItemGroup>
