@@ -31,6 +31,42 @@ namespace MsbwTest
             return str;
         }
 
+        public static async Task<TResult> ShouldCompleteWithin<TResult>(this TaskCompletionSource<TResult> tcs,
+                                                                        TimeSpan time,
+                                                                        string reason = "",
+                                                                        params object[] reasonArgs)
+        {
+            return await tcs.Task.ShouldCompleteWithin(time,
+                                                       reason,
+                                                       reasonArgs);
+        }
+
+        public static async Task<TResult> ShouldCompleteWithin<TResult>(this Task<TResult> task,
+                                                                        TimeSpan time,
+                                                                        string reason = "",
+                                                                        params object[] reasonArgs)
+        {
+            return await task.InvokingAsync(t => t)
+                             .ShouldCompleteWithin(time,
+                                                   reason,
+                                                   reasonArgs);
+        }
+
+        public static async Task ShouldCompleteWithin(this Task task,
+                                                      TimeSpan time,
+                                                      string reason = "",
+                                                      params object[] reasonArgs)
+        {
+            var assertions = new AsyncActionAssertions<bool>(async () =>
+                                                                   {
+                                                                       await task;
+                                                                       return true;
+                                                                   });
+            await assertions.ShouldCompleteWithin(time,
+                                                  reason,
+                                                  reasonArgs);
+        }
+
         public static AsyncActionAssertions<TResult> InvokingAsync<T, TResult>(this T subject,
                                                                                Func<T, Task<TResult>> asyncAction)
         {

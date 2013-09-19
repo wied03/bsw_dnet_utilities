@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using FluentAssertions;
 using MsbwTest;
 using NUnit.Framework;
 
@@ -34,6 +35,11 @@ namespace MsbwTest_Test
             throw new Exception("foobar");
         }
 
+        private async Task DoSomethingForTime(TimeSpan time)
+        {
+            await Task.Delay(time);
+        }
+
         #endregion
 
         #region Tests
@@ -52,6 +58,107 @@ namespace MsbwTest_Test
             // arrange + act + assert
             await this.InvokingAsync(t => t.DoOtherStuff())
                       .ShouldThrow<Exception>();
+        }
+
+        [Test]
+        public async Task Should_complete_within_tcs_pass()
+        {
+            // arrange
+            var tcs = new TaskCompletionSource<int>();
+            await Task.Factory.StartNew(() =>
+                                        {
+                                            Task.Delay(20.Milliseconds());
+                                            tcs.SetResult(5);
+                                        });
+
+            // act
+            var result = await tcs.ShouldCompleteWithin(100.Milliseconds());
+
+            // assert
+            result
+                .Should()
+                .Be(5);
+        }
+
+        [Test]
+        public async Task Should_complete_within_tcs_fail()
+        {
+            // arrange
+            var tcs = new TaskCompletionSource<int>();
+            await Task.Factory.StartNew(async () =>
+            {
+                await Task.Delay(3.Seconds());
+                tcs.SetResult(5);
+            });
+
+            // act + assert
+            await tcs.InvokingAsync(a => a.ShouldCompleteWithin(50.Milliseconds()))
+                     .ShouldThrow<AssertionException>();
+        }
+
+        [Test]
+        public async Task Should_complete_within_task_pass()
+        {
+            // arrange
+            var tcs = new TaskCompletionSource<int>();
+            await Task.Factory.StartNew(() =>
+                                        {
+                                            Task.Delay(20.Milliseconds());
+                                            tcs.SetResult(5);
+                                        });
+
+            // act
+            var result = await tcs.Task.ShouldCompleteWithin(100.Milliseconds());
+
+            // assert
+            result
+                .Should()
+                .Be(5);
+        }
+
+        [Test]
+        public async Task Should_complete_within_task_fail()
+        {
+            // arrange
+            var tcs = new TaskCompletionSource<int>();
+            await Task.Factory.StartNew(async () =>
+                                        {
+                                            await Task.Delay(3.Seconds());
+                                            tcs.SetResult(5);
+                                        });
+
+            // act + assert
+            await tcs.Task.InvokingAsync(a => a.ShouldCompleteWithin(20.Milliseconds()))
+                     .ShouldThrow<AssertionException>();
+        }
+
+        [Test]
+        public async Task Should_complete_within_task_void_pass()
+        {
+            // arrange
+            var task = DoSomethingForTime(50.Milliseconds());
+
+            // act + assert (quiet is good)
+            await task.ShouldCompleteWithin(80.Milliseconds());
+        }
+
+        [Test]
+        public async Task Should_complete_within_task_void_fail()
+        {
+            // arrange
+            var task = DoSomethingForTime(50.Milliseconds());
+
+            // act + assert
+            try
+            {
+                await task.ShouldCompleteWithin(20.Milliseconds(),
+                                                "i said so");
+                Assert.Fail("Expected exception");
+            }
+            catch (AssertionException)
+            {
+                Assert.Pass("Got our exception");
+            }
         }
 
         #endregion
