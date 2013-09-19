@@ -1,5 +1,6 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace MsBw.MsBwUtility
         {
             count.Times(i => action());
         }
-       
+
 
         public static void Times(this int count,
                                  Action<int> action)
@@ -38,9 +39,11 @@ namespace MsBw.MsBwUtility
         public static byte[] ToByteArrayFromHex(this String hex)
         {
             var numberChars = hex.Length;
-            var bytes = new byte[numberChars / 2];
+            var bytes = new byte[numberChars/2];
             for (var i = 0; i < numberChars; i += 2)
-                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+                bytes[i/2] = Convert.ToByte(hex.Substring(i,
+                                                          2),
+                                            16);
             return bytes;
         }
 

@@ -1,5 +1,6 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Collections.Generic;
@@ -102,12 +103,12 @@ namespace MsBwUtilityTest.Net
                                           args);
             var path = Path.GetFullPath("../../Utility/socat-1.7.2.1/socat.exe");
             var procStart = new ProcessStartInfo
-                {
-                    FileName = path,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    Arguments = arguments
-                };
+                            {
+                                FileName = path,
+                                CreateNoWindow = true,
+                                WindowStyle = ProcessWindowStyle.Hidden,
+                                Arguments = arguments
+                            };
             var process = Process.Start(procStart);
             return process;
         }
@@ -134,9 +135,9 @@ namespace MsBwUtilityTest.Net
             _client = new VariableDelimiterTcpClientPlaintext(client: _tcpClient,
                                                               defaultTerminator: TERMINATOR,
                                                               haltResponseWaitOnKeyword: ERROR)
-                {
-                    ScrubThisFromLogs = scrubFromLogs
-                };
+                      {
+                          ScrubThisFromLogs = scrubFromLogs
+                      };
         }
 
         private static IEnumerable<string> LogMessages

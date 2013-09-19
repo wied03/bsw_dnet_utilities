@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 #endregion
 
 // // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
 namespace Bsw.RubyExecution.Test
 {
     public class BaseTest
@@ -31,10 +32,7 @@ namespace Bsw.RubyExecution.Test
 
         protected string CommandExecuted
         {
-            get
-            {
-                return File.ReadAllText(FullPathToCommandExecuted).Trim();
-            }
+            get { return File.ReadAllText(FullPathToCommandExecuted).Trim(); }
         }
     }
 }

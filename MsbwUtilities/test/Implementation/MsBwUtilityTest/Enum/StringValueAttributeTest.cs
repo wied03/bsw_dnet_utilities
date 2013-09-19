@@ -1,5 +1,6 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Linq;
@@ -21,8 +22,7 @@ namespace MsBwUtilityTest.Enum
 
     public enum TestEnum2
     {
-        [StringValue("bar-2")]
-        Value2,
+        [StringValue("bar-2")] Value2,
     }
 
     [TestFixture]
@@ -127,8 +127,8 @@ namespace MsBwUtilityTest.Enum
                  .Should()
                  .Be(TestEnum.Value2);
             "bar-2".EnumValue<TestEnum2>()
-                 .Should()
-                 .Be(TestEnum2.Value2);
+                   .Should()
+                   .Be(TestEnum2.Value2);
         }
     }
 }

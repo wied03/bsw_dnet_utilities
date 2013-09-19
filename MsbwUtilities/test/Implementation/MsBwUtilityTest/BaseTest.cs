@@ -1,5 +1,6 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Linq;
@@ -16,7 +17,8 @@ namespace MsBwUtilityTest
         [SetUp]
         public virtual void SetUp()
         {
-            ConfigurationItemFactory.Default.Targets.RegisterDefinition("TargetForTesting",typeof(TargetForTesting));
+            ConfigurationItemFactory.Default.Targets.RegisterDefinition("TargetForTesting",
+                                                                        typeof (TargetForTesting));
         }
 
         [TearDown]

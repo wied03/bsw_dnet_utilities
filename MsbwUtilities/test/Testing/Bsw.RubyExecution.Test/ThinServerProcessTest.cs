@@ -8,8 +8,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
-using NUnit.Framework;
 using FluentAssertions;
+using NUnit.Framework;
 
 #endregion
 
@@ -27,9 +27,10 @@ namespace Bsw.RubyExecution.Test
         {
             base.SetUp();
             // avoid any real dependencies on environments
-            Environment.SetEnvironmentVariable("PATH",".");
+            Environment.SetEnvironmentVariable("PATH",
+                                               ".");
             FullPathToCommandExecuted = Path.GetFullPath(Path.Combine(".",
-                                                                       COMMAND_EXECUTED_TXT));
+                                                                      COMMAND_EXECUTED_TXT));
         }
 
         [TearDown]
@@ -51,12 +52,12 @@ namespace Bsw.RubyExecution.Test
         public void No_ssl_start()
         {
             // arrange
-            var thin = new ThinServerProcess(thinPort:1224,
-                                             workingDirectory:".");
+            var thin = new ThinServerProcess(thinPort: 1224,
+                                             workingDirectory: ".");
             _tcpListener = new TcpListener(IPAddress.Any,
                                            1224);
             _tcpListener.Start();
-            
+
             // act
             thin.StartThinServer();
             thin.RubyProc.WaitForExit();

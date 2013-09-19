@@ -1,5 +1,6 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.IO;
@@ -219,7 +220,7 @@ namespace MsBw.MsBwUtility.Net.Socket
                             throw;
                     }
                 }
-                // could be in process of closing while we are checking this
+                    // could be in process of closing while we are checking this
                 catch (ObjectDisposedException)
                 {
                     return false;
