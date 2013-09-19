@@ -28,6 +28,38 @@ namespace MsBw.MsBwUtility.Tasks
                                          timeout);
         }
 
+        public static async Task WithTimeout(this Task task,
+                                             TimeSpan timeout)
+        {
+            var timeoutTask = await Timeout(task,
+                                            timeout);
+            if (timeoutTask == Result.Normal)
+            {
+                return;
+            }
+
+            throw new TimeoutException(string.Format("Timed out at {0} milliseconds waiting for task to complete",
+                                                     timeout.TotalMilliseconds));
+        }
+
+
+        public static async Task WithTimeout(this Func<Task> action,
+                                             TimeSpan timeout)
+        {
+            var task = action();
+            var timeoutTask = await Timeout(task,
+                                            timeout);
+            if (timeoutTask != Result.Normal)
+            {
+                throw new TimeoutException(string.Format("Timed out at {0} milliseconds waiting for task to complete",
+                                                         timeout.TotalMilliseconds));
+            }
+            if (task.Exception != null)
+            {
+                throw task.Exception;
+            }
+        }
+
         public static async Task<TResult> WithTimeout<TResult, TObject>(this TObject obj,
                                                                         Func<TObject, Task<TResult>> action,
                                                                         TimeSpan timeout)

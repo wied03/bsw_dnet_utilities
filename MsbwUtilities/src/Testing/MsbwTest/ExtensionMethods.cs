@@ -57,26 +57,23 @@ namespace MsbwTest
                                                       string reason = "",
                                                       params object[] reasonArgs)
         {
-            var assertions = new AsyncActionAssertions<bool>(async () =>
-                                                                   {
-                                                                       await task;
-                                                                       return true;
-                                                                   });
+            var assertions = new AsyncActionAssertions(() => task);
             await assertions.ShouldCompleteWithin(time,
                                                   reason,
                                                   reasonArgs);
         }
 
-        public static AsyncActionAssertions<TResult> InvokingAsync<T, TResult>(this T subject,
-                                                                               Func<T, Task<TResult>> asyncAction)
+        public static AsyncActionAssertionsWithResult<TResult> InvokingAsync<T, TResult>(this T subject,
+                                                                                         Func<T, Task<TResult>>
+                                                                                             asyncAction)
         {
-            return new AsyncActionAssertions<TResult>(() => asyncAction(subject));
+            return new AsyncActionAssertionsWithResult<TResult>(() => asyncAction(subject));
         }
 
-        public static AsyncActionAssertions<object> InvokingAsync<T>(this T subject,
-                                                                     Func<T, Task> asyncAction)
+        public static AsyncActionAssertions InvokingAsync<T>(this T subject,
+                                                             Func<T, Task> asyncAction)
         {
-            return new AsyncActionAssertions<object>(() => (Task<object>) asyncAction(subject));
+            return new AsyncActionAssertions(() => asyncAction(subject));
         }
 
         public static async Task Exception<TException>(this Task<TException> task,

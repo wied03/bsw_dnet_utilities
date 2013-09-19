@@ -30,6 +30,11 @@ namespace MsBwUtilityTest.Tasks
             return 5;
         }
 
+        private static async Task DelayForVoid(TimeSpan time)
+        {
+            await Task.Delay(time);
+        }
+
         [Test]
         public async Task With_timeout_nolambda_finishes()
         {
@@ -134,6 +139,27 @@ namespace MsBwUtilityTest.Tasks
             result
                 .Should()
                 .Be(Result.Canceled);
+        }
+
+        [Test]
+        public async Task With_void_task_timeout_doesnt_timeout()
+        {
+            // arrange
+            var task = DelayForVoid(500.Milliseconds());
+
+            // act
+            await task.WithTimeout(5.Seconds());
+        }
+
+        [Test]
+        public async Task With_void_task_timeout_times_out()
+        {
+            var task = DelayForVoid(1.Seconds());
+
+            // act + assert
+            task.Invoking(t => t.WithTimeout(200.Milliseconds()).Wait())
+                .ShouldThrow<AggregateException>()
+                .WithInnerException<TimeoutException>();
         }
     }
 }

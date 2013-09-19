@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MsbwTest;
@@ -40,6 +41,29 @@ namespace MsbwTest_Test
             await Task.Delay(time);
         }
 
+        private Task NotAsyncTaskMethod()
+        {
+            return Task.Factory.StartNew(() =>
+                                         {
+                                             Thread.Sleep(50.Milliseconds());
+                                             throw new ArgumentException("foobar");
+                                         });
+        }
+
+        private interface ITest
+        {
+            Task NotAsyncTaskMethodImplementedAsAsync();
+        }
+
+        private class Test : ITest
+        {
+            public async Task NotAsyncTaskMethodImplementedAsAsync()
+            {
+                await Task.Delay(50.Milliseconds());
+                throw new ArgumentException("foobar");
+            }
+        }
+
         #endregion
 
         #region Tests
@@ -50,6 +74,25 @@ namespace MsbwTest_Test
             // arrange + act + assert
             await this.InvokingAsync(t => t.DoStuff())
                       .ShouldThrow<Exception>();
+        }
+
+        [Test]
+        public async Task Invoking_async_void_withnonasync_task_method()
+        {
+            // arrange + act + assert
+            await this.InvokingAsync(t => t.NotAsyncTaskMethod())
+                      .ShouldThrow<ArgumentException>();
+        }
+
+        [Test]
+        public async Task Invoking_async_void_withnonasync_interface_task_method_impl_as_async()
+        {
+            // arrange
+            ITest test = new Test();
+ 
+            // act + assert
+            await test.InvokingAsync(t => t.NotAsyncTaskMethodImplementedAsAsync())
+                      .ShouldThrow<ArgumentException>();
         }
 
         [Test]
