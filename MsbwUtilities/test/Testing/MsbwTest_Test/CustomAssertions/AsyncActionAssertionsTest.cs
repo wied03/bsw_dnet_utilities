@@ -41,7 +41,8 @@ namespace MsbwTest_Test.CustomAssertions
             // act + assert
             asyncAssertions
                 .Invoking(a => a.ShouldThrow<ArgumentException>().Wait())
-                .ShouldThrow<AssertionException>()
+                .ShouldThrow<AggregateException>()
+                .WithInnerException<AssertionException>()
                 ;
         }
 

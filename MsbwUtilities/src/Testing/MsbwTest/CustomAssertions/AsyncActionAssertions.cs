@@ -49,7 +49,7 @@ namespace MsbwTest.CustomAssertions
             }
 
             Execute
-                .Assertion
+                .Verification
                 .ForCondition(timeout == null)
                 .BecauseOf(reason,
                            reasonArgs)
@@ -71,14 +71,14 @@ namespace MsbwTest.CustomAssertions
                 exception = ex;
             }
 
-            Execute.Assertion.ForCondition(exception != null).BecauseOf(reason,
+            Execute.Verification.ForCondition(exception != null).BecauseOf(reason,
                                                                         reasonArgs)
                    .FailWith("Expected {0}{reason}, but no exception was thrown.",
                              new object[]
                              {
                                  typeof (TException)
                              });
-            Execute.Assertion.ForCondition(exception is TException).BecauseOf(reason,
+            Execute.Verification.ForCondition(exception is TException).BecauseOf(reason,
                                                                               reasonArgs)
                    .FailWith("Expected {0}{reason}, but found {1}.",
                              (object) typeof (TException),
