@@ -2,6 +2,9 @@
 
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
 
+using System.Runtime.ExceptionServices;
+using MsBw.MsBwUtility.Tasks;
+
 #region
 
 using System;
@@ -16,13 +19,43 @@ using FluentAssertions.Execution;
 
 namespace MsbwTest.CustomAssertions
 {
-    public class AsyncActionAssertions
+    public class AsyncActionAssertions<TResult>
     {
-        private readonly Func<Task> _asyncAction;
+        private readonly Func<Task<TResult>> _asyncAction;
 
-        public AsyncActionAssertions(Func<Task> asyncAction)
+        public AsyncActionAssertions(Func<Task<TResult>> asyncAction)
         {
             _asyncAction = asyncAction;
+        }
+
+        public async Task<TResult> ShouldCompleteWithin(TimeSpan time,
+                                                        string reason = "",
+                                                        params object[] reasonArgs)
+        {
+            TimeoutException timeout = null;
+            var task = _asyncAction();
+            var result = default(TResult);
+            try
+            {
+                result = await task.WithTimeout(time);
+            }
+            catch (TimeoutException t)
+            {
+                timeout = t;
+            }
+            catch (AggregateException aggregate)
+            {
+                ExceptionDispatchInfo.Capture(aggregate.InnerException).Throw();
+            }
+
+            Execute
+                .Assertion
+                .ForCondition(timeout == null)
+                .BecauseOf(reason,
+                           reasonArgs)
+                .FailWith("Expected task to complete within {0} milliseconds{reason}, but the task didn't complete",
+                          time.TotalMilliseconds);
+            return result;
         }
 
         public async Task<TException> ShouldThrow<TException>(string reason = "",

@@ -1,5 +1,6 @@
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+
+#region
 
 using System;
 using System.Collections.Generic;
@@ -30,10 +31,16 @@ namespace MsbwTest
             return str;
         }
 
-        public static AsyncActionAssertions InvokingAsync<T>(this T subject,
-                                                             Func<T, Task> asyncAction)
+        public static AsyncActionAssertions<TResult> InvokingAsync<T, TResult>(this T subject,
+                                                                               Func<T, Task<TResult>> asyncAction)
         {
-            return new AsyncActionAssertions(() => asyncAction(subject));
+            return new AsyncActionAssertions<TResult>(() => asyncAction(subject));
+        }
+
+        public static AsyncActionAssertions<object> InvokingAsync<T>(this T subject,
+                                                                     Func<T, Task> asyncAction)
+        {
+            return new AsyncActionAssertions<object>(() => (Task<object>) asyncAction(subject));
         }
 
         public static async Task Exception<TException>(this Task<TException> task,

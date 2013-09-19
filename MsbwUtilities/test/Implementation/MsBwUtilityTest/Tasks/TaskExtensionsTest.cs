@@ -23,10 +23,37 @@ namespace MsBwUtilityTest.Tasks
             base.SetUp();
         }
 
-        private async Task<int> DelayFor(TimeSpan time)
+        private static async Task<int> DelayFor(TimeSpan time)
         {
             await Task.Delay(time);
             return 5;
+        }
+
+        [Test]
+        public async Task With_timeout_nolambda_finishes()
+        {
+            // arrange
+            var task = DelayFor(500.Milliseconds());
+
+            // act
+            var result = await task.WithTimeout(5.Seconds());
+
+            // assert
+            result
+                .Should()
+                .Be(5);
+        }
+
+        [Test]
+        public void With_timeout_nolambda_timesout()
+        {
+            // arrange
+            var task = DelayFor(1.Seconds());
+
+            // act + assert
+            task.Invoking(t => t.WithTimeout(200.Milliseconds()).Wait())
+                .ShouldThrow<AggregateException>()
+                .WithInnerException<TimeoutException>();
         }
 
         [Test]
@@ -44,7 +71,7 @@ namespace MsBwUtilityTest.Tasks
         public void With_timeout_task_times_out()
         {
             // arrange + act + assert
-            this.Invoking(t => t.WithTimeout(ta => ta.DelayFor(1.Seconds()),
+            this.Invoking(t => t.WithTimeout(ta => DelayFor(1.Seconds()),
                                              200.Milliseconds()).Wait())
                 .ShouldThrow<AggregateException>()
                 .WithInnerException<TimeoutException>()
