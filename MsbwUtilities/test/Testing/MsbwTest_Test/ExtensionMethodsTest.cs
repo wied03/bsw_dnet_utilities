@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MsbwTest;
+using Nito.AsyncEx;
 using NUnit.Framework;
 
 namespace MsbwTest_Test
@@ -124,6 +125,21 @@ namespace MsbwTest_Test
         }
 
         [Test]
+        public async Task Should_complete_within_tcs_no_returntype_pass()
+        {
+            // arrange
+            var tcs = new TaskCompletionSource();
+            await Task.Factory.StartNew(() =>
+            {
+                Task.Delay(20.Milliseconds());
+                tcs.SetResult();
+            });
+
+            // act
+            await tcs.ShouldCompleteWithin(100.Milliseconds());
+        }
+
+        [Test]
         public async Task Should_complete_within_tcs_fail()
         {
             // arrange
@@ -132,6 +148,22 @@ namespace MsbwTest_Test
             {
                 await Task.Delay(3.Seconds());
                 tcs.SetResult(5);
+            });
+
+            // act + assert
+            await tcs.InvokingAsync(a => a.ShouldCompleteWithin(50.Milliseconds()))
+                     .ShouldThrow<AssertionException>();
+        }
+
+        [Test]
+        public async Task Should_complete_within_tcs_noreturntype_fail()
+        {
+            // arrange
+            var tcs = new TaskCompletionSource();
+            await Task.Factory.StartNew(async () =>
+            {
+                await Task.Delay(3.Seconds());
+                tcs.SetResult();
             });
 
             // act + assert

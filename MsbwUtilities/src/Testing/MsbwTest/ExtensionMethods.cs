@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Collections;
 using MsbwTest.CustomAssertions;
+using Nito.AsyncEx;
 
 #endregion
 
@@ -39,6 +40,16 @@ namespace MsbwTest
             return await tcs.Task.ShouldCompleteWithin(time,
                                                        reason,
                                                        reasonArgs);
+        }
+
+        public static async Task ShouldCompleteWithin(this TaskCompletionSource tcs,
+                                                      TimeSpan time,
+                                                      string reason = "",
+                                                      params object[] reasonArgs)
+        {
+            await tcs.Task.ShouldCompleteWithin(time,
+                                                reason,
+                                                reasonArgs);
         }
 
         public static async Task<TResult> ShouldCompleteWithin<TResult>(this Task<TResult> task,
