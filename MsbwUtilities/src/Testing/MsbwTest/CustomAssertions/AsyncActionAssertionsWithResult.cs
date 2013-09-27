@@ -72,14 +72,14 @@ namespace MsbwTest.CustomAssertions
             }
 
             Execute.Verification.ForCondition(exception != null).BecauseOf(reason,
-                                                                        reasonArgs)
+                                                                           reasonArgs)
                    .FailWith("Expected {0}{reason}, but no exception was thrown.",
                              new object[]
                              {
                                  typeof (TException)
                              });
             Execute.Verification.ForCondition(exception is TException).BecauseOf(reason,
-                                                                              reasonArgs)
+                                                                                 reasonArgs)
                    .FailWith("Expected {0}{reason}, but found {1}.",
                              (object) typeof (TException),
                              (object) exception);

@@ -90,7 +90,7 @@ namespace MsbwTest_Test
         {
             // arrange
             ITest test = new Test();
- 
+
             // act + assert
             await test.InvokingAsync(t => t.NotAsyncTaskMethodImplementedAsAsync())
                       .ShouldThrow<ArgumentException>();
@@ -130,10 +130,10 @@ namespace MsbwTest_Test
             // arrange
             var tcs = new TaskCompletionSource();
             await Task.Factory.StartNew(() =>
-            {
-                Task.Delay(20.Milliseconds());
-                tcs.SetResult();
-            });
+                                        {
+                                            Task.Delay(20.Milliseconds());
+                                            tcs.SetResult();
+                                        });
 
             // act
             await tcs.ShouldCompleteWithin(100.Milliseconds());
@@ -145,10 +145,10 @@ namespace MsbwTest_Test
             // arrange
             var tcs = new TaskCompletionSource<int>();
             await Task.Factory.StartNew(async () =>
-            {
-                await Task.Delay(3.Seconds());
-                tcs.SetResult(5);
-            });
+                                              {
+                                                  await Task.Delay(3.Seconds());
+                                                  tcs.SetResult(5);
+                                              });
 
             // act + assert
             await tcs.InvokingAsync(a => a.ShouldCompleteWithin(50.Milliseconds()))
@@ -161,10 +161,10 @@ namespace MsbwTest_Test
             // arrange
             var tcs = new TaskCompletionSource();
             await Task.Factory.StartNew(async () =>
-            {
-                await Task.Delay(3.Seconds());
-                tcs.SetResult();
-            });
+                                              {
+                                                  await Task.Delay(3.Seconds());
+                                                  tcs.SetResult();
+                                              });
 
             // act + assert
             await tcs.InvokingAsync(a => a.ShouldCompleteWithin(50.Milliseconds()))
@@ -197,10 +197,10 @@ namespace MsbwTest_Test
             // arrange
             var tcs = new TaskCompletionSource<int>();
             await Task.Factory.StartNew(async () =>
-                                        {
-                                            await Task.Delay(3.Seconds());
-                                            tcs.SetResult(5);
-                                        });
+                                              {
+                                                  await Task.Delay(3.Seconds());
+                                                  tcs.SetResult(5);
+                                              });
 
             // act + assert
             await tcs.Task.InvokingAsync(a => a.ShouldCompleteWithin(20.Milliseconds()))

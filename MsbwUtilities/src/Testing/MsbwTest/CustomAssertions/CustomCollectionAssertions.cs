@@ -47,7 +47,7 @@ namespace MsbwTest.CustomAssertions
                                 null))
             {
                 Execute.Verification.BecauseOf(reason,
-                                            reasonArgs)
+                                               reasonArgs)
                        .FailWith("Expected {context:collection} to contain {0}{reason}, but found <null>.",
                                  new object[]
                                  {

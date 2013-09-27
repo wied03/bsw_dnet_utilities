@@ -4,9 +4,9 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using FluentAssertions;
 using MsBw.MsBwUtility;
 using NUnit.Framework;
-using FluentAssertions;
 
 namespace MsBwUtilityTest
 {

@@ -137,7 +137,6 @@ namespace MsBw.MsBwUtility.Net.Socket
                 }
                 Logger.Debug("Socket reset in stream read, returning and assuming connection is closed");
                 return null;
-
             }
             var received = Encoding.Default.GetString(buffer,
                                                       0,

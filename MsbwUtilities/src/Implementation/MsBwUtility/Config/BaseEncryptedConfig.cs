@@ -21,9 +21,9 @@ namespace MsBw.MsBwUtility.Config
         protected BaseEncryptedConfig(string exePath)
         {
             var map = new ExeConfigurationFileMap
-            {
-                ExeConfigFilename = exePath
-            };
+                      {
+                          ExeConfigFilename = exePath
+                      };
             _configuration = ConfigurationManager.OpenMappedExeConfiguration(map,
                                                                              ConfigurationUserLevel.None);
         }
