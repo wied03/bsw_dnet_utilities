@@ -35,8 +35,10 @@
       <HintPath>..\..\..\..\nuget_pkg_lnk\NLog.2.0.1.2\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,10 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\BaseEncryptedConfig.cs" />
     <Compile Include="Enum\EnumNotFoundException.cs" />
     <Compile Include="Enum\StringValueAttribute.cs" />
     <Compile Include="Enum\StringValueExtensions.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="LambdaExtensions.cs" />
     <Compile Include="Net\Socket\ResponseReceivedEvent.cs" />
     <Compile Include="Net\Socket\IAmARequest.cs" />
     <Compile Include="Net\Socket\VariableDelimiterTcpClientPlaintext.cs" />

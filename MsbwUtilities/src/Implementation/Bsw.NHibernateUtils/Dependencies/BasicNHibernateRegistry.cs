@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using Bsw.NHibernateUtils.Repository;
+using FluentNHibernate.Cfg;
 using NHibernate;
 using StructureMap.Configuration.DSL;
 
@@ -31,6 +32,15 @@ namespace Bsw.NHibernateUtils.Dependencies
             For<ILazySessionFetcher>()
                 .HybridHttpOrThreadLocalScoped()
                 .Use<LazySessionFetcher>();
+        }
+
+        protected static void SetupMappingExport(MappingConfiguration mappingConfiguration)
+        {
+#if DEBUG
+            const string mappingPath = ".";
+            mappingConfiguration.AutoMappings.ExportTo(mappingPath);
+            mappingConfiguration.FluentMappings.ExportTo(mappingPath);
+#endif
         }
     }
 }

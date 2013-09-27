@@ -119,9 +119,26 @@ namespace MsBw.MsBwUtility.Net.Socket
         protected virtual string DoRead()
         {
             var buffer = new byte[BUFFER_SIZE];
-            var actualRead = Stream.Read(buffer,
+            int actualRead;
+            try
+            {
+                actualRead = Stream.Read(buffer,
                                          0,
                                          BUFFER_SIZE);
+            }
+            catch (IOException e)
+            {
+                var socketError = e.InnerException as SocketException;
+                if (socketError == null) throw;
+                if (socketError.SocketErrorCode != SocketError.ConnectionReset &&
+                    socketError.SocketErrorCode != SocketError.Interrupted)
+                {
+                    throw;
+                }
+                Logger.Debug("Socket reset in stream read, returning and assuming connection is closed");
+                return null;
+
+            }
             var received = Encoding.Default.GetString(buffer,
                                                       0,
                                                       actualRead);
