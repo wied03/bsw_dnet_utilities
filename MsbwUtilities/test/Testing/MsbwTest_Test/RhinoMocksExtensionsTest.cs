@@ -3,9 +3,9 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using FluentAssertions;
 using MsbwTest;
 using NUnit.Framework;
-using FluentAssertions;
 using Rhino.Mocks;
 
 namespace MsbwTest_Test

@@ -26,7 +26,7 @@ namespace MsbwTest
             var excludeProps = lambdas.Select(l => l.ToPropertyInfo());
             var mockedInterface = mock.MockedInterface();
             var props = mockedInterface.GetProperties()
-                .Except(excludeProps)
+                                       .Except(excludeProps)
                 ;
             props.Where(p => p.CanRead && p.CanWrite).ToList().ForEach(p => mock.Stub(o => p.GetValue(o))
                                                                                 .PropertyBehavior());
