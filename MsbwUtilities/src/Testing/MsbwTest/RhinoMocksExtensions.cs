@@ -5,7 +5,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Castle.Core.Interceptor;
-using MsBw.MsBwUtility;
 using Rhino.Mocks;
 using Rhino.Mocks.Interfaces;
 
@@ -15,19 +14,8 @@ namespace MsbwTest
     {
         public static void SetupPropertyBehaviorOnAll(this object mock)
         {
-            SetupPropertyBehaviorOnAllExcept(mock);
-        }
-
-        public static void SetupPropertyBehaviorOnAllExcept<TTypeUnderTest>(this TTypeUnderTest mock,
-                                                                            params
-                                                                                Expression<Func<TTypeUnderTest, object>>
-                                                                                [] lambdas) where TTypeUnderTest : class
-        {
-            var excludeProps = lambdas.Select(l => l.ToPropertyInfo());
             var mockedInterface = mock.MockedInterface();
-            var props = mockedInterface.GetProperties()
-                .Except(excludeProps)
-                ;
+            var props = mockedInterface.GetProperties();
             props.Where(p => p.CanRead && p.CanWrite).ToList().ForEach(p => mock.Stub(o => p.GetValue(o))
                                                                                 .PropertyBehavior());
         }
