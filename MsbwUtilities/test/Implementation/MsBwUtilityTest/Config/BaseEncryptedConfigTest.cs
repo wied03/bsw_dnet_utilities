@@ -4,31 +4,27 @@ using System;
 using System.Configuration;
 using System.Linq;
 using System.Linq.Expressions;
+using FluentAssertions;
 using MsBw.MsBwUtility.Config;
 using MsBw.MsBwUtility.Enum;
 using NUnit.Framework;
-using FluentAssertions;
 
 namespace MsBwUtilityTest.Config
 {
     public enum Settings
     {
-        [StringValue("foo")]
-        Username
+        [StringValue("foo")] Username
     }
 
     public class ConfigTest : BaseEncryptedConfig<Settings>
     {
         public ConfigTest(Configuration config) : base(config)
         {
-            
         }
+
         public string Username
         {
-            get
-            {
-                return GetSetting(Settings.Username);
-            }
+            get { return GetSetting(Settings.Username); }
             set
             {
                 SaveSetting(Settings.Username,
