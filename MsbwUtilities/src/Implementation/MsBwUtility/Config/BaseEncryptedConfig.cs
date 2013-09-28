@@ -37,7 +37,9 @@ namespace MsBw.MsBwUtility.Config
         protected int? GetSettingInt(TSettingsClass setting)
         {
             var value = GetSetting(setting);
-            return string.IsNullOrEmpty(value) ? (int?) null : Convert.ToInt32(value);
+            return string.IsNullOrEmpty(value)
+                       ? (int?) null
+                       : Convert.ToInt32(value);
         }
 
         protected void SaveSetting(TSettingsClass enumSetting,
