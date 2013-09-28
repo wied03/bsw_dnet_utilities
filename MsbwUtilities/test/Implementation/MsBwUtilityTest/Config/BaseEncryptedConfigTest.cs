@@ -16,7 +16,9 @@ namespace MsBwUtilityTest.Config
     {
         [StringValue("foo")] Username,
         [StringValue("pass")] Password,
-        [StringValue("bytes")] Bytes
+        [StringValue("bytes")] Bytes,
+        [StringValue("integer")] Number,
+        [StringValue("integerenc")] NumberEncrypted
     }
 
     public class ConfigTest : BaseEncryptedConfig<Settings>
@@ -54,8 +56,27 @@ namespace MsBwUtilityTest.Config
                                      value);
             }
         }
-    }
 
+        public int? Number
+        {
+            get { return GetSettingInt(Settings.Number); }
+            set
+            {
+                SaveSetting(Settings.Number,
+                            value);
+            }
+        }
+
+        public int? NumberEnc
+        {
+            get { return GetEncryptedSettingInt(Settings.NumberEncrypted); }
+            set
+            {
+                SaveEncryptedSetting(Settings.NumberEncrypted,
+                                     value);
+            }
+        }
+    }
 
     [TestFixture]
     public class BaseEncryptedConfigTest : BaseTest
@@ -76,9 +97,12 @@ namespace MsBwUtilityTest.Config
         [TearDown]
         public override void TearDown()
         {
-            _config.AppSettings.Settings.Remove(Settings.Username.StringValue());
-            _config.AppSettings.Settings.Remove(Settings.Password.StringValue());
-            _config.AppSettings.Settings.Remove(Settings.Bytes.StringValue());
+            Action<Settings> remove = settings => _config.AppSettings.Settings.Remove(settings.StringValue());
+            remove(Settings.Username);
+            remove(Settings.Password);
+            remove(Settings.Bytes);
+            remove(Settings.Number);
+            remove(Settings.NumberEncrypted);
             _config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
             base.TearDown();
@@ -102,6 +126,12 @@ namespace MsBwUtilityTest.Config
             _storage.Password
                     .Should()
                     .BeNull();
+            _storage.Number
+                    .Should()
+                    .NotHaveValue();
+            _storage.NumberEnc
+                    .Should()
+                    .NotHaveValue();
             // arrange
             _config.AppSettings.Settings.Add(Settings.Username.StringValue(),
                                              "the username");
@@ -114,6 +144,8 @@ namespace MsBwUtilityTest.Config
             // act
             _storage.Username = "updated username";
             _storage.Password = "the password";
+            _storage.Number = 2;
+            _storage.NumberEnc = 4;
 
             // assert
             _config.AppSettings.Settings[Settings.Username.StringValue()].Value
@@ -122,6 +154,12 @@ namespace MsBwUtilityTest.Config
             _storage.Password
                     .Should()
                     .Be("the password");
+            _storage.Number
+                    .Should()
+                    .Be(2);
+            _storage.NumberEnc
+                    .Should()
+                    .Be(4);
         }
 
         [Test]
@@ -130,19 +168,24 @@ namespace MsBwUtilityTest.Config
             // arrange
             _storage.Password = "foo";
             _storage.Key = "AB".ToByteArrayFromHex();
+            _storage.NumberEnc = 4;
 
             // act
             _storage.Password = null;
             _storage.Key = null;
+            _storage.Number = null;
+            _storage.NumberEnc = null;
 
             // assert
             _storage.Password
                     .Should()
                     .BeNull();
-
             _storage.Key
                     .Should()
                     .BeNull();
+            _storage.NumberEnc
+                    .Should()
+                    .NotHaveValue();
         }
 
         #endregion

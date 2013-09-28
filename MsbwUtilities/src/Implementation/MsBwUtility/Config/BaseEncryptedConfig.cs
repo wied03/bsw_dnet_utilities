@@ -37,11 +37,23 @@ namespace MsBw.MsBwUtility.Config
         protected int? GetSettingInt(TSettingsClass setting)
         {
             var value = GetSetting(setting);
-            if (value == null)
-            {
-                return null;
-            }
-            return Convert.ToInt32(value);
+            return string.IsNullOrEmpty(value) ? (int?) null : Convert.ToInt32(value);
+        }
+
+        protected void SaveSetting(TSettingsClass enumSetting,
+                                   int? value)
+        {
+            var setting = enumSetting as System.Enum;
+            var settingStr = setting.StringValue();
+            var settings = _configuration.AppSettings.Settings;
+            settings.Remove(settingStr);
+            var valueStr = value == null
+                               ? null
+                               : value.ToString();
+            settings.Add(settingStr,
+                         valueStr);
+            _configuration.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
         }
 
         protected string GetSetting(TSettingsClass enumSetting)
@@ -80,6 +92,23 @@ namespace MsBw.MsBwUtility.Config
             }
             SaveSetting(setting,
                         blackBase64);
+        }
+
+        protected int? GetEncryptedSettingInt(TSettingsClass setting)
+        {
+            var str = GetEncryptedSettingString(setting);
+            return str == null
+                       ? (int?) null
+                       : Convert.ToInt32(str);
+        }
+
+        protected void SaveEncryptedSetting(TSettingsClass setting,
+                                            int? value)
+        {
+            SaveEncryptedSetting(setting,
+                                 value.HasValue
+                                     ? value.ToString()
+                                     : null);
         }
 
         protected string GetEncryptedSettingString(TSettingsClass setting)
