@@ -137,12 +137,12 @@ namespace MsBwUtilityTest.Config
 
             // assert
             _storage.Password
-                .Should()
-                .BeNull();
+                    .Should()
+                    .BeNull();
 
             _storage.Key
-                .Should()
-                .BeNull();
+                    .Should()
+                    .BeNull();
         }
 
         #endregion

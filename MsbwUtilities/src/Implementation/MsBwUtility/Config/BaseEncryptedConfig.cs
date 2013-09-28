@@ -60,7 +60,9 @@ namespace MsBw.MsBwUtility.Config
             var settingStr = setting.StringValue();
             var settings = _configuration.AppSettings.Settings;
             settings.Remove(settingStr);
-            var valueStr = value == null ? null : value.ToString();
+            var valueStr = value == null
+                               ? null
+                               : value.ToString();
             settings.Add(settingStr,
                          valueStr);
             _configuration.Save(ConfigurationSaveMode.Modified);
@@ -91,7 +93,9 @@ namespace MsBw.MsBwUtility.Config
         protected void SaveEncryptedSetting(TSettingsClass setting,
                                             string value)
         {
-            var encrypted = value == null ? null : Encrypt(value);
+            var encrypted = value == null
+                                ? null
+                                : Encrypt(value);
             SaveSetting(setting,
                         encrypted);
         }
