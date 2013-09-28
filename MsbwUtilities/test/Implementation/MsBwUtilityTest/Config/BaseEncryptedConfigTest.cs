@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Linq.Expressions;
 using FluentAssertions;
+using MsBw.MsBwUtility;
 using MsBw.MsBwUtility.Config;
 using MsBw.MsBwUtility.Enum;
 using NUnit.Framework;
@@ -13,7 +14,9 @@ namespace MsBwUtilityTest.Config
 {
     public enum Settings
     {
-        [StringValue("foo")] Username
+        [StringValue("foo")] Username,
+        [StringValue("pass")] Password,
+        [StringValue("bytes")] Bytes
     }
 
     public class ConfigTest : BaseEncryptedConfig<Settings>
@@ -29,6 +32,26 @@ namespace MsBwUtilityTest.Config
             {
                 SaveSetting(Settings.Username,
                             value);
+            }
+        }
+
+        public string Password
+        {
+            get { return GetEncryptedSettingString(Settings.Password); }
+            set
+            {
+                SaveEncryptedSetting(Settings.Password,
+                                     value);
+            }
+        }
+
+        public byte[] Key
+        {
+            get { return GetEncryptedSetting(Settings.Bytes); }
+            set
+            {
+                SaveEncryptedSetting(Settings.Bytes,
+                                     value);
             }
         }
     }
@@ -54,6 +77,8 @@ namespace MsBwUtilityTest.Config
         public override void TearDown()
         {
             _config.AppSettings.Settings.Remove(Settings.Username.StringValue());
+            _config.AppSettings.Settings.Remove(Settings.Password.StringValue());
+            _config.AppSettings.Settings.Remove(Settings.Bytes.StringValue());
             _config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
             base.TearDown();
@@ -74,6 +99,9 @@ namespace MsBwUtilityTest.Config
             _storage.Username
                     .Should()
                     .BeNull();
+            _storage.Password
+                    .Should()
+                    .BeNull();
             // arrange
             _config.AppSettings.Settings.Add(Settings.Username.StringValue(),
                                              "the username");
@@ -85,11 +113,36 @@ namespace MsBwUtilityTest.Config
 
             // act
             _storage.Username = "updated username";
+            _storage.Password = "the password";
 
             // assert
             _config.AppSettings.Settings[Settings.Username.StringValue()].Value
                                                                          .Should()
                                                                          .Be("updated username");
+            _storage.Password
+                    .Should()
+                    .Be("the password");
+        }
+
+        [Test]
+        public void Null_set_ok()
+        {
+            // arrange
+            _storage.Password = "foo";
+            _storage.Key = "AB".ToByteArrayFromHex();
+
+            // act
+            _storage.Password = null;
+            _storage.Key = null;
+
+            // assert
+            _storage.Password
+                .Should()
+                .BeNull();
+
+            _storage.Key
+                .Should()
+                .BeNull();
         }
 
         #endregion
