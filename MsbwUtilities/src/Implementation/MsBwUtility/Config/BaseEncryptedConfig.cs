@@ -6,10 +6,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
+using MsBw.MsBwUtility.Enum;
 
 namespace MsBw.MsBwUtility.Config
 {
-    public abstract class BaseEncryptedConfig
+    public abstract class BaseEncryptedConfig<TSettingsClass>
     {
         private readonly Configuration _configuration;
 
@@ -33,7 +34,7 @@ namespace MsBw.MsBwUtility.Config
             _configuration = configuration;
         }
 
-        protected int? GetSettingInt(string setting)
+        protected int? GetSettingInt(TSettingsClass setting)
         {
             var value = GetSetting(setting);
             if (value == null)
@@ -43,26 +44,29 @@ namespace MsBw.MsBwUtility.Config
             return Convert.ToInt32(value);
         }
 
-        protected string GetSetting(string setting)
+        protected string GetSetting(TSettingsClass enumSetting)
         {
-            var element = _configuration.AppSettings.Settings[setting];
+            var setting = enumSetting as System.Enum;
+            var element = _configuration.AppSettings.Settings[setting.StringValue()];
             return element == null
                        ? null
                        : element.Value;
         }
 
-        protected void SaveSetting<T>(string setting,
+        protected void SaveSetting<T>(TSettingsClass enumSetting,
                                       T value)
         {
+            var setting = enumSetting as System.Enum;
+            var settingStr = setting.StringValue();
             var settings = _configuration.AppSettings.Settings;
-            settings.Remove(setting);
-            settings.Add(setting,
+            settings.Remove(settingStr);
+            settings.Add(settingStr,
                          value.ToString());
             _configuration.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
         }
 
-        protected void SaveEncryptedSetting(string setting,
+        protected void SaveEncryptedSetting(TSettingsClass setting,
                                             byte[] redBytes)
         {
             var blackBytes = Encrypt(redBytes);
@@ -71,7 +75,7 @@ namespace MsBw.MsBwUtility.Config
                         blackBase64);
         }
 
-        protected string GetEncryptedSettingString(string setting)
+        protected string GetEncryptedSettingString(TSettingsClass setting)
         {
             var blackBase64 = GetSetting(setting);
             return blackBase64 == null
@@ -79,7 +83,7 @@ namespace MsBw.MsBwUtility.Config
                        : Decrypt(blackBase64);
         }
 
-        protected void SaveEncryptedSetting(string setting,
+        protected void SaveEncryptedSetting(TSettingsClass setting,
                                             string value)
         {
             var encrypted = Encrypt(value);
@@ -87,7 +91,7 @@ namespace MsBw.MsBwUtility.Config
                         encrypted);
         }
 
-        protected byte[] GetEncryptedSetting(string setting)
+        protected byte[] GetEncryptedSetting(TSettingsClass setting)
         {
             var blackBase64 = GetSetting(setting);
             if (blackBase64 == null)
