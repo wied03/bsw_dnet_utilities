@@ -126,6 +126,11 @@ namespace MsBw.MsBwUtility.Net.Socket
                                          0,
                                          BUFFER_SIZE);
             }
+            catch (ObjectDisposedException)
+            {
+                Logger.Debug("Socket object disposed, returning and assuming connection is closed");
+                return null;
+            }
             catch (IOException e)
             {
                 var socketError = e.InnerException as SocketException;
