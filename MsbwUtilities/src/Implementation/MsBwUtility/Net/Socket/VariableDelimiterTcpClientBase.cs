@@ -116,15 +116,16 @@ namespace MsBw.MsBwUtility.Net.Socket
             _receivedBuffer.Clear();
         }
 
-        protected virtual string DoRead()
+        protected virtual Tuple<byte[], int> DoReadIntoBuffer()
         {
-            var buffer = new byte[BUFFER_SIZE];
-            int actualRead;
             try
             {
-                actualRead = Stream.Read(buffer,
-                                         0,
-                                         BUFFER_SIZE);
+                var buffer = new byte[BUFFER_SIZE];
+                var actualRead = Stream.Read(buffer,
+                                             0,
+                                             BUFFER_SIZE);
+                return new Tuple<byte[], int>(buffer,
+                                              actualRead);
             }
             catch (ObjectDisposedException)
             {
@@ -143,10 +144,16 @@ namespace MsBw.MsBwUtility.Net.Socket
                 Logger.Debug("Socket reset in stream read, returning and assuming connection is closed");
                 return null;
             }
-            var received = Encoding.Default.GetString(buffer,
-                                                      0,
-                                                      actualRead);
-            return received;
+        }
+
+        protected virtual string DoRead()
+        {
+            var readInfo = DoReadIntoBuffer();
+            return readInfo == null
+                       ? null
+                       : Encoding.Default.GetString(readInfo.Item1,
+                                                    0,
+                                                    readInfo.Item2);
         }
 
         public void ResponseLoop(CancellationToken token)
