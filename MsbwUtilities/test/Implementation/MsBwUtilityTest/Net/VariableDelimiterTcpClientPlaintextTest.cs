@@ -69,7 +69,10 @@ namespace MsBwUtilityTest.Net
             {
                 _client.Close();
             }
-            _process.Kill();
+            if (!_process.HasExited)
+            {
+                _process.Kill();
+            }
             base.TearDown();
         }
 
