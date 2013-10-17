@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Castle.Core.Interceptor;
 using MsBw.MsBwUtility;
+using MsBw.MsBwUtility.Tasks;
 using Rhino.Mocks;
 using Rhino.Mocks.Interfaces;
 
@@ -40,6 +41,14 @@ namespace MsbwTest
                        .First(it => it != typeof (IMockedObject) &&
                                     it != typeof (ISerializable) &&
                                     it != typeof (IProxyTargetAccessor));
+        }
+
+        public static IMethodOptions<Task> StubAsyncVoid<T>(this T obj,
+                                                            Function<T, Task> action) where T : class
+        {
+            var methodOptions = obj.Stub(action);
+            methodOptions.Return(true.ToTaskResult());
+            return methodOptions;
         }
 
         public static IMethodOptions<Task<T>> ReturnAsync<T>(this IMethodOptions<Task<T>> methodOptions,

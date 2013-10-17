@@ -184,6 +184,30 @@ namespace MsbwTest_Test
                 .Be(99);
         }
 
+        [Test]
+        public async Task Stub_async_void_with_params()
+        {
+            // arrange
+            var mock = Mock;
+            mock.StubAsyncVoid(m => m.NoReturnParam1(null))
+                .IgnoreArguments();
+
+            // act + assert
+            await mock.NoReturnParam1("stuff");
+        }
+
+        [Test]
+        public async Task Stub_async_void_no_params()
+        {
+            // arrange
+            var mock = Mock;
+            mock.StubAsyncVoid(m => m.NoReturnValue())
+                .IgnoreArguments();
+
+            // act + assert
+            await mock.NoReturnValue();
+        }
+
         #endregion
     }
 }
