@@ -59,17 +59,17 @@ namespace MsbwTest
         }
 
         public static IMethodOptions<Task> DoAsyncVoid(this IMethodOptions<Task> methodOptions,
-                                                          Action action,
-                                                          TimeSpan? delayBeforeYourAction = null)
+                                                       Action action,
+                                                       TimeSpan? delayBeforeYourAction = null)
         {
             Func<Task> executor = async () =>
-            {
-                if (delayBeforeYourAction != null)
-                {
-                    await Task.Delay(delayBeforeYourAction.Value);
-                }
-                action();
-            };
+                                        {
+                                            if (delayBeforeYourAction != null)
+                                            {
+                                                await Task.Delay(delayBeforeYourAction.Value);
+                                            }
+                                            action();
+                                        };
             methodOptions.Do(executor);
             return methodOptions;
         }

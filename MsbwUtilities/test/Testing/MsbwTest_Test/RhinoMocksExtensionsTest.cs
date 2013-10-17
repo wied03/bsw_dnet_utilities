@@ -161,14 +161,15 @@ namespace MsbwTest_Test
             var mock = Mock;
             string capturedStr = null;
             int? capturedVal = null;
-            mock.Stub(m => m.NoReturnParam2(null,5))
+            mock.Stub(m => m.NoReturnParam2(null,
+                                            5))
                 .IgnoreArguments()
-                .DoAsyncVoid<string,int>((s,
-                                          i) =>
-                                         {
-                                             capturedStr = s;
-                                             capturedVal = i;
-                                         });
+                .DoAsyncVoid<string, int>((s,
+                                           i) =>
+                                          {
+                                              capturedStr = s;
+                                              capturedVal = i;
+                                          });
 
             // act
             await mock.NoReturnParam2("foo",
