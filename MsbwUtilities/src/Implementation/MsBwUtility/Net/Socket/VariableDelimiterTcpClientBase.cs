@@ -14,7 +14,7 @@ using NLog;
 
 namespace MsBw.MsBwUtility.Net.Socket
 {
-    public abstract class VariableDelimiterTcpClientBase
+    public abstract class VariableDelimiterTcpClientBase : IDisposable
     {
         protected const int BUFFER_SIZE = 256;
         internal const string SCRUB_PLACEHOLDER = "***";
@@ -270,6 +270,24 @@ namespace MsBw.MsBwUtility.Net.Socket
             _client.Close();
             Logger.Trace("Client shutdown complete");
             _closed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // in case something inherits us and uses native resources
+        ~VariableDelimiterTcpClientBase()
+        {
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool freeManagedAlso)
+        {
+            if (!freeManagedAlso || _closed) return;
+            _client.Close();
         }
     }
 }
