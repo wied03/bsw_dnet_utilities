@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using FluentAssertions;
 using MsbwTest;
 using NUnit.Framework;
@@ -81,6 +82,105 @@ namespace MsbwTest_Test
             mock.Prop3
                 .Should()
                 .Be("bar");
+        }
+
+        public interface ITestDoAndReturn
+        {
+            Task NoReturnValue();
+            Task<string> OneReturnValue();
+            Task NoReturnParam1(string stuff);
+
+            Task NoReturnParam2(string stuff,
+                                int otherStuff);
+        }
+
+        private static ITestDoAndReturn Mock
+        {
+            get { return MockRepository.GenerateMock<ITestDoAndReturn>(); }
+        }
+
+        [Test]
+        public async Task Return_async_return_val()
+        {
+            // arrange
+            var mock = Mock;
+            mock.Stub(m => m.OneReturnValue())
+                .IgnoreArguments()
+                .ReturnAsync("stuff");
+
+            // act
+            var result = await mock.OneReturnValue();
+
+            // assert
+            result
+                .Should()
+                .Be("stuff");
+        }
+
+        [Test]
+        public async Task Do_async_void_no_params()
+        {
+            // arrange
+            var mock = Mock;
+            var invoked = false;
+            mock.Stub(m => m.NoReturnValue())
+                .DoAsyncVoid(() => invoked = true);
+
+            // act
+            await mock.NoReturnValue();
+
+            // assert
+            invoked
+                .Should()
+                .BeTrue();
+        }
+
+        [Test]
+        public async Task Do_async_void_1_param()
+        {
+            // arrange
+            var mock = Mock;
+            string capturedStr = null;
+            mock.Stub(m => m.NoReturnParam1(null))
+                .IgnoreArguments()
+                .DoAsyncVoid<string>(s => capturedStr = s);
+
+            // act
+            await mock.NoReturnParam1("the stuff");
+
+            // assert
+            capturedStr
+                .Should()
+                .Be("the stuff");
+        }
+
+        [Test]
+        public async Task Do_async_void_2_params()
+        {
+            // arrange
+            var mock = Mock;
+            string capturedStr = null;
+            int? capturedVal = null;
+            mock.Stub(m => m.NoReturnParam2(null,5))
+                .IgnoreArguments()
+                .DoAsyncVoid<string,int>((s,
+                                          i) =>
+                                         {
+                                             capturedStr = s;
+                                             capturedVal = i;
+                                         });
+
+            // act
+            await mock.NoReturnParam2("foo",
+                                      99);
+
+            // assert
+            capturedStr
+                .Should()
+                .Be("foo");
+            capturedVal
+                .Should()
+                .Be(99);
         }
 
         #endregion

@@ -104,5 +104,10 @@ namespace MsBw.MsBwUtility.Tasks
             }
             return Result.Timeout;
         }
+
+        public static Task<T> ToTaskResult<T>(this T someValue)
+        {
+            return Task.FromResult(someValue);
+        }
     }
 }

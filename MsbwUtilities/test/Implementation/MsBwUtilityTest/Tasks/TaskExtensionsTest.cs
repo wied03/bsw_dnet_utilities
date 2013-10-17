@@ -161,5 +161,19 @@ namespace MsBwUtilityTest.Tasks
                 .ShouldThrow<AggregateException>()
                 .WithInnerException<TimeoutException>();
         }
+
+        [Test]
+        public async Task Task_from_result()
+        {
+            // arrange
+            Func<Task<bool>> tester = () => true.ToTaskResult();
+
+            // act
+            var result = await tester();
+
+            // assert
+            result.Should()
+                  .BeTrue();
+        }
     }
 }
