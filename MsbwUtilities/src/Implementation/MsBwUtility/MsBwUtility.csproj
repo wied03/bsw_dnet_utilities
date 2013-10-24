@@ -31,13 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\..\..\..\nuget_pkg_lnk\NLog.2.0.1.2\lib\net45\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,11 +48,7 @@
     <Compile Include="Enum\StringValueExtensions.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="LambdaExtensions.cs" />
-    <Compile Include="Net\Socket\ResponseReceivedEvent.cs" />
-    <Compile Include="Net\Socket\IAmARequest.cs" />
-    <Compile Include="Net\Socket\VariableDelimiterTcpClientPlaintext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Net\Socket\VariableDelimiterTcpClientBase.cs" />
     <Compile Include="ResharperAttributes.cs" />
     <Compile Include="Tasks\TaskExtensions.cs" />
   </ItemGroup>
