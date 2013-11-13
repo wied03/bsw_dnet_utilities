@@ -1,5 +1,4 @@
 ﻿using Microsoft.Practices.Prism.ViewModel;
-using MsBw.MsBwUtility.JetBrains.Annotations;
 
 namespace Bsw.Coworking.Agent.Config.Utilities.ViewModels
 {
@@ -9,7 +8,6 @@ namespace Bsw.Coworking.Agent.Config.Utilities.ViewModels
     ///     Base class for all ViewModel classes in the application. Provides support for
     ///     property changes notification.
     /// </summary>
-    [UsedImplicitly]
     public abstract class ViewModelBase : NotificationObject
     {
     }
