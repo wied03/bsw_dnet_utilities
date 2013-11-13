@@ -4,11 +4,11 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Bsw.Coworking.Agent.Config.Utilities.Services;
+using Bsw.Wpf.Utilities.Services;
 using Microsoft.Practices.Prism.Events;
 using StructureMap.Configuration.DSL;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Dependencies
+namespace Bsw.Wpf.Utilities.Dependencies
 {
     public class WpfRegistry : Registry
     {

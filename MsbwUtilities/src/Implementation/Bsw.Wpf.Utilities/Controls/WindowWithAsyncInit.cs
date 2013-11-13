@@ -4,9 +4,9 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows;
-using Bsw.Coworking.Agent.Config.Utilities.ViewModels;
+using Bsw.Wpf.Utilities.ViewModels;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Controls
+namespace Bsw.Wpf.Utilities.Controls
 {
     // can't be abstract or WPF designer complains
     public class WindowWithAsyncInit : Window

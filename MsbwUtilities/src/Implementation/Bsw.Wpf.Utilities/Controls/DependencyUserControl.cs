@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Windows.Controls;
 using StructureMap;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Controls
+namespace Bsw.Wpf.Utilities.Controls
 {
     public abstract class DependencyUserControl : UserControl
     {

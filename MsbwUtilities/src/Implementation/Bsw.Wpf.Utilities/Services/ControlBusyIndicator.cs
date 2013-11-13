@@ -7,7 +7,7 @@ using System.Windows;
 using Xceed.Wpf.AvalonDock.Controls;
 using Xceed.Wpf.Toolkit;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Services
+namespace Bsw.Wpf.Utilities.Services
 {
     public class ControlBusyIndicator : IControlBusyIndicator
     {

@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Commands
+namespace Bsw.Wpf.Utilities.Commands
 {
     public class AutoExecuteDelegateCommandGeneric<TParamType> : ICommand
     {

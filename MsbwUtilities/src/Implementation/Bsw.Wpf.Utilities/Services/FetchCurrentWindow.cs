@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Services
+namespace Bsw.Wpf.Utilities.Services
 {
     public class FetchCurrentWindow : IFetchCurrentWindow
     {

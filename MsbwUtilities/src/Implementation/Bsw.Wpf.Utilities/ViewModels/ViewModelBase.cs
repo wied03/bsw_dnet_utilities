@@ -1,6 +1,6 @@
 ﻿using Microsoft.Practices.Prism.ViewModel;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.ViewModels
+namespace Bsw.Wpf.Utilities.ViewModels
 {
     // code credited to http://www.codeproject.com/Articles/97564/Attributes-based-Validation-in-a-WPF-MVVM-Applicat
 

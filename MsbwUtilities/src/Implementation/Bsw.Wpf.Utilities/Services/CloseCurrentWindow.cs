@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Services
+namespace Bsw.Wpf.Utilities.Services
 {
     public class CloseCurrentWindow : ICloseCurrentWindow
     {

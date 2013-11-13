@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Commands
+namespace Bsw.Wpf.Utilities.Commands
 {
     public class AutoExecuteAsyncDelegateCommand : ICommand
     {

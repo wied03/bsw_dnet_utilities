@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.ViewModels
+namespace Bsw.Wpf.Utilities.ViewModels
 {
     public interface IHaveAsyncLoadActions
     {

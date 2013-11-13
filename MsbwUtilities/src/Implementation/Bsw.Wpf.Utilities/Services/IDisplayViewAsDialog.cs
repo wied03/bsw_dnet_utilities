@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Windows;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Services
+namespace Bsw.Wpf.Utilities.Services
 {
     public interface IDisplayViewAsDialog
     {

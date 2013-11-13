@@ -8,7 +8,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Behaviors
+namespace Bsw.Wpf.Utilities.Behaviors
 {
     public class WindowClosingBehavior
     {

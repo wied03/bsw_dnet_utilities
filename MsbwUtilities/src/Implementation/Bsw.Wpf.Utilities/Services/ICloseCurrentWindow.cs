@@ -3,7 +3,7 @@
 using System;
 using System.Linq;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Services
+namespace Bsw.Wpf.Utilities.Services
 {
     public interface ICloseCurrentWindow
     {

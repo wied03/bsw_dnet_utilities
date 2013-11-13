@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Windows;
 using MessageBox = Xceed.Wpf.Toolkit.MessageBox;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Services
+namespace Bsw.Wpf.Utilities.Services
 {
     public class DisplayMessageBox : IDisplayMessageBox
     {

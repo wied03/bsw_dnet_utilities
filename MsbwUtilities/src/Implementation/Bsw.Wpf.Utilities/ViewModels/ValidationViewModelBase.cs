@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.ViewModels
+namespace Bsw.Wpf.Utilities.ViewModels
 {
     /// <summary>
     ///     A base classe for ViewModel classes which supports validation using IDataErrorInfo interface. Properties must

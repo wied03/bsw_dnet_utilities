@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bsw.Coworking.Agent.Config.Utilities.Services
+namespace Bsw.Wpf.Utilities.Services
 {
     public enum DialogType
     {
