@@ -21,35 +21,14 @@ task :clean => [:cleandnet, :cleanpackages]
 task :test => [:codetest]
 # Version here because our re-build below with forcebuildforpackages will not execute for each package
 task :package => [:clean, :version, :pack]
-
-task :version => [:versionbswutil,
-				  :versionbswtest,
-				  :versionbaseentities,
-				  :versionnhibutils,
-				  :versionrubyexecution,
-				  :versionnhibtest]
-
 # Our re-build below with forcebuildforpackages will not execute for each package
-task :push => [:package,
-				:pushbswutil,
-				  :pushbswtest,
-				  :pushbaseentities,
-				  :pushnhibutils,
-				  :pushrubyexecution,
-				  :pushnhibtest]				  
+task :push => [:package]				  
 				  
 # We might have already done this in this build cycle, but we update the source with versions
 # so need to do force a build
 task :forcebuildforpackages do
 	Rake::Task["build"].execute
 end
-				  
-task :pack => [:packbswutil,
-			   :packbswtest,
-			   :packbaseentities,
-			   :packnhibutils,
-			   :packrubyexecution,
-			   :packnhibtest]
 
 with ('test') do |t|	
 	BradyW::Nunit.new :codetest => :build do |test|
@@ -91,6 +70,10 @@ with (".nuget/nuget.exe") do |ngetpath|
 						n.package = "#{projPath}/Bsw.NHibernateUtils.#{ver}.nupkg"
 						n.apikey = apikey						
 					end
+					
+					task :version => :versionnhibutils
+					task :pack => :packnhibutils
+					task :push => :pushnhibutils
 				end
 				
 				with ('src/Testing/Bsw.NHibernate.Testing') do |projPath|
@@ -117,7 +100,11 @@ with (".nuget/nuget.exe") do |ngetpath|
 						n.command = ngetpath
 						n.package = "#{projPath}/Bsw.NHibernate.Testing.#{ver}.nupkg"
 						n.apikey = apikey						
-					end					
+					end
+
+					task :version => :versionnhibtest
+					task :pack => :packnhibtest
+					task :push => :pushnhibtest					
 				end
 			
 				with ('src/Implementation/Bsw.BaseEntities') do |projPath|
@@ -144,7 +131,11 @@ with (".nuget/nuget.exe") do |ngetpath|
 						n.command = ngetpath
 						n.package = "#{projPath}/Bsw.BaseEntities.#{ver}.nupkg"
 						n.apikey = apikey						
-					end							
+					end
+					
+					task :version => :versionbaseentities
+					task :pack => :packbaseentities
+					task :push => :pushbaseentities										
 				end
 				
 				with ('src/Testing/Bsw.RubyExecution') do |projPath|
@@ -173,6 +164,9 @@ with (".nuget/nuget.exe") do |ngetpath|
 						n.apikey = apikey						
 					end							
 					
+					task :version => :versionrubyexecution
+					task :pack => :packrubyexecution
+					task :push => :pushrubyexecution				
 				end
 				
 				with ('src/Testing/MsbwTest') do |projPath|
@@ -201,6 +195,9 @@ with (".nuget/nuget.exe") do |ngetpath|
 						n.apikey = apikey						
 					end							
 					
+					task :version => :versionbswtest
+					task :pack => :packbswtest
+					task :push => :pushbswtest				
 				end
 
 				with ('src/Implementation/MsBwUtility') do |projPath|
@@ -227,7 +224,11 @@ with (".nuget/nuget.exe") do |ngetpath|
 						n.command = ngetpath
 						n.package = "#{projPath}/MsBwUtility.#{ver}.nupkg"
 						n.apikey = apikey						
-					end					
+					end										
+					
+					task :version => :versionbswutil
+					task :pack => :packbswutil
+					task :push => :pushbswutil				
 				end
 			end
 		end
