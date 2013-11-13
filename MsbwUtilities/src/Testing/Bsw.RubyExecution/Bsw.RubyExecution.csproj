@@ -54,7 +54,6 @@
     <Compile Include="ThinServerProcess.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Bsw.RubyExecution.nuspec" />
     <None Include="bundle_install.bat" />
     <None Include="packages.config" />
     <None Include="run_ruby.bat" />
