@@ -230,6 +230,52 @@ with (".nuget/nuget.exe") do |ngetpath|
 					task :pack => :packbswutil
 					task :push => :pushbswutil				
 				end
+				
+				with ({:path => 'src/Implementation/Bsw.Wpf.Utilities',:name => 'Bsw.Wpf.Utilities'}) do |proj|
+					nuspec :specwpfutil do |n|
+						n.id = proj[:name]
+						n.id = "BSW WPF Base Utilities"
+						n.version = ver
+						n.output_file = "#{proj[:path]}/#{proj[:name]}.nuspec"
+						n.authors = "BSW Technology Consulting"
+						n.owners = n.authors
+						n.require_license_acceptance = "false"
+						n.description = "Provides WPF extensions to Prism and services that can be injected into view models"
+						n.projectUrl= "https://github.com/wied03/bsw_dnet_utilities"
+						n.copyright = "Copyright #{Date.today.year}"
+					end
+				
+					with ("#{proj[:path]}/Properties/AssemblyInfo.cs") do |asminfo|			
+						assemblyinfo :versionwpfutil do |asm|
+							puts "Putting version number #{ver} on assembly"
+							asm.version = ver
+							asm.file_version = ver
+							asm.company_name = companyName
+							asm.product_name = "BSW WPF Utility Assembly"
+							asm.output_file = asminfo
+							asm.input_file = asminfo
+						end
+					end
+					
+					nugetpack :packwpfutil => [:versionwpfutil,:forcebuildforpackages] do |n|
+						n.log_level = :verbose
+						n.command = ngetpath
+						n.nuspec = "#{proj[:path]}/Bsw.Wpf.Utilities.csproj"
+						n.base_folder = proj[:path]
+						n.output = proj[:path]
+						n.properties = {:title => "BSW WPF Base Utilities/Patterns" }
+					end					
+					
+					nugetpush :pushwpfutil => :packwpfutil do |n|
+						n.command = ngetpath
+						n.package = "#{proj[:path]}/Bsw.Wpf.Utilities.#{ver}.nupkg"
+						n.apikey = apikey						
+					end										
+					
+					task :version => :versionwpfutil
+					task :pack => :packwpfutil
+					task :push => :pushwpfutil				
+				end
 			end
 		end
 	end
