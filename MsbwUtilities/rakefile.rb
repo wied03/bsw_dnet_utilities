@@ -134,6 +134,12 @@ with (".nuget/nuget.exe") do |ngetpath|
 				define_project.call :project_path => "src/Implementation/Bsw.Wpf.Utilities",
 					 :project_title => 'BSW WPF Base Utilities',
 					 :project_description => "Provides WPF extensions to Prism and services that can be injected into view models"
+					 
+				define_project.call :project_path => "src/Testing/Bsw.Wpf.Testing.Utilities",
+					 :project_title => 'BSW WPF Testing Utilities',
+					 :project_description => "Classes to support unit testing WPF applications, in particular those built with Bsw.Wpf.Utilities",
+					 :dependencies => [:id => 'Bsw.Wpf.Utilities', :version => ver,
+												 :id => 'MsbwUtility', :version => ver]
 			end
 		end
 	end
