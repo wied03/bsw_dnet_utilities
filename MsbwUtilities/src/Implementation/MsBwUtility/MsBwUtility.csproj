@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\BaseConfig.cs" />
     <Compile Include="Config\CryptoHelper.cs" />
     <Compile Include="Config\ICryptoHelper.cs" />
     <Compile Include="Enum\EnumNotFoundException.cs" />
