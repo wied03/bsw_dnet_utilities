@@ -57,7 +57,7 @@ namespace MsBw.MsBwUtility.Config
             Save();
         }
 
-        protected virtual void Save()
+        public virtual void Save()
         {
             _configuration.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection(_sectionName);
