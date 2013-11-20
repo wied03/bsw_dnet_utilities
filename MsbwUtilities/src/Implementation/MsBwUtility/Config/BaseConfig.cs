@@ -34,7 +34,7 @@ namespace MsBw.MsBwUtility.Config
             }
         }
 
-        protected string GetSetting(TSettingsEnum setting)
+        protected string GetValue(TSettingsEnum setting)
         {
             var asEnum = setting as System.Enum;
             var theSetting = Settings[asEnum.StringValue()];
@@ -43,21 +43,22 @@ namespace MsBw.MsBwUtility.Config
                        : theSetting.Value;
         }
 
-        protected void SetSetting(TSettingsEnum setting,
-                                  string value,
-                                  bool saveAndReloadConfigToo = false)
+        protected void SetValue(TSettingsEnum setting,
+                                string value,
+                                bool saveAndReloadConfigToo = false)
         {
             var asEnum = setting as System.Enum;
             var key = asEnum.StringValue();
             var settings = Settings;
-            if (settings.AllKeys.Contains(key))
-            {
-                settings[key].Value = value;
-                return;
-            }
+            settings.Remove(key);
             settings.Add(key,
                          value);
             if (!saveAndReloadConfigToo) return;
+            Save();
+        }
+
+        protected virtual void Save()
+        {
             _configuration.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection(_sectionName);
         }

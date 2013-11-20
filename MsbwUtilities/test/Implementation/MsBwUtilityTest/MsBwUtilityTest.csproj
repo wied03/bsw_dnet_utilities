@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
+    <Compile Include="Config\BaseConfigTest.cs" />
     <Compile Include="Config\CryptoHelperTest.cs" />
     <Compile Include="Enum\StringValueAttributeTest.cs" />
     <Compile Include="Enum\StringValueExtensionsTest.cs" />
@@ -59,6 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="the.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Utility\socat-1.7.2.1\BUGREPORTS" />
     <None Include="Utility\socat-1.7.2.1\CHANGES" />
     <None Include="Utility\socat-1.7.2.1\COPYING" />
