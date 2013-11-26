@@ -32,9 +32,7 @@ end
 
 with ('test') do |t|	
 	BradyW::Nunit.new :codetest => :build do |test|
-		test.files = FileList["#{t}/**/bin/Debug/*Test.dll"]
-		# TeamCity plugin doesn't support 2.6.3 yet
-		test.version = "2.6.2"
+		test.files = FileList["#{t}/**/bin/Debug/*Test.dll"]		
 	end	
 end
 
