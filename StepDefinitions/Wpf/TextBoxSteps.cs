@@ -2,7 +2,7 @@
 using FluentAssertions;
 using TechTalk.SpecFlow;
 
-namespace Bsw.Coworking.Agent.Config.Sys.Test.StepDefinitions.Wpf
+namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
     public class TextBoxSteps : WpfBaseSteps

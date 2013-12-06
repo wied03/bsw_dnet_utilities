@@ -2,7 +2,7 @@
 using System.Threading;
 using TechTalk.SpecFlow;
 
-namespace Bsw.Coworking.Agent.Config.Sys.Test.StepDefinitions.Util
+namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
 {
     [Binding]
     public class TimeSteps

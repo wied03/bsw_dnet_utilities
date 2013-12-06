@@ -4,12 +4,12 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using Bsw.Coworking.Agent.Config.Sys.Test.StepDefinitions.Util;
+using Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WindowItems;
 
-namespace Bsw.Coworking.Agent.Config.Sys.Test.StepDefinitions.Wpf
+namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     public abstract class WpfBaseSteps : BaseSteps
     {

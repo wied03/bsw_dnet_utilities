@@ -11,7 +11,7 @@ using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WindowItems;
 using TestStack.White.Utility;
 
-namespace Bsw.Coworking.Agent.Config.Sys.Test.StepDefinitions.Wpf
+namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
     [UsedImplicitly]

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using TechTalk.SpecFlow;
 
-namespace Bsw.Coworking.Agent.Config.Sys.Test.StepDefinitions
+namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions
 {
     [Binding]
     public class Reporting

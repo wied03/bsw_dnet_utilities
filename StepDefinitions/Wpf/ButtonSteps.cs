@@ -5,7 +5,7 @@ using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WindowItems;
 
-namespace Bsw.Coworking.Agent.Config.Sys.Test.StepDefinitions.Wpf
+namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
     public class ButtonSteps : WpfBaseSteps

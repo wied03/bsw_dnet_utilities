@@ -18,7 +18,7 @@ using Button = TestStack.White.UIItems.Button;
 using ListView = TestStack.White.UIItems.ListView;
 using TextBox = TestStack.White.UIItems.TextBox;
 
-namespace Bsw.Coworking.Agent.Config.Sys.Test.StepDefinitions.Wpf
+namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
     [UsedImplicitly]

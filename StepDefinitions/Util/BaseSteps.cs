@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using TechTalk.SpecFlow;
 
-namespace Bsw.Coworking.Agent.Config.Sys.Test.StepDefinitions.Util
+namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
 {
     public abstract class BaseSteps : Steps
     {
