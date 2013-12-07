@@ -225,16 +225,21 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         public void WhenITypeIntoTheGridCell(string text,
                                              int cellIndex)
         {
-            var row = Context
-                .Grid
-                .SelectedRows
-                .First();
-            var cell = row.Get(SearchCriteria.ByClassName(typeof (DataGridCell).Name)
-                                             .AndIndex(cellIndex));
+            var cell = GetCellOnCurrentlySelectedRow(cellIndex);
             cell
                 .Should()
                 .NotBeNull();
             cell.Enter(text);
+        }
+
+        private IUIItem GetCellOnCurrentlySelectedRow(int cellIndex)
+        {
+            var row = Context
+                .Grid
+                .SelectedRows
+                .First();
+            return row.Get(SearchCriteria.ByClassName(typeof (DataGridCell).Name)
+                                         .AndIndex(cellIndex));
         }
 
         [Then(@"grid column '(.*)', row (.*) has contents '(.*)'")]
@@ -263,14 +268,21 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                                int columnIndex,
                                                string expectedContent)
         {
-            var row = GetRow(rowIndex);
-            var cell = row.Get(SearchCriteria.ByClassName(typeof (DataGridCell).Name)
-                                             .AndIndex(columnIndex));
+            var cell = GetCell(rowIndex,
+                               columnIndex);
             cell.Should()
                 .NotBeNull();
             cell.Name
                 .Should()
                 .Be(expectedContent);
+        }
+
+        private IUIItem GetCell(int rowIndex,
+                                int columnIndex)
+        {
+            var row = GetRow(rowIndex);
+            return row.Get(SearchCriteria.ByClassName(typeof (DataGridCell).Name)
+                                         .AndIndex(columnIndex));
         }
 
         [Then(@"there is a masked textbox in column '(.*)' on row (.*)")]
@@ -297,6 +309,14 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             var box = FindWidgetIn<TextBox>(columnIndex,
                                             rowIndex);
             Context.TextBox = box;
+        }
+
+        [When(@"I erase the contents of the grid column '(.*)'")]
+        public void WhenIEraseTheContentsOfTheGridColumn(string columnName)
+        {
+            var cellIndex = GetHeaderColumn(columnName).Index;
+            var cell = GetCellOnCurrentlySelectedRow(cellIndex);
+            cell.SetValue(string.Empty);
         }
     }
 }
