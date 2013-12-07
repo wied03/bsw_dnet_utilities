@@ -4,6 +4,7 @@ using TechTalk.SpecFlow;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WindowItems;
+using TestStack.White.Utility;
 
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
@@ -70,8 +71,10 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         public void WhenIClickTheButtonUnderTheLabel(string buttonText,
                                                      string labelNearest)
         {
-            var button = GetButtonAndStoreInContext(buttonText,
-                                                    labelNearest);
+            var button = Retry.For(() => GetButtonAndStoreInContext(buttonText,
+                                                                    labelNearest),
+                                   btn => !btn.Enabled,
+                                   Context.NumberOfRetrySeconds);
             button.Enabled
                   .Should()
                   .BeTrue("Can't click a button that's not enabled");
