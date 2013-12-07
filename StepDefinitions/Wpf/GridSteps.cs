@@ -13,6 +13,7 @@ using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.ListBoxItems;
 using TestStack.White.UIItems.ListViewItems;
 using TestStack.White.UIItems.WPFUIItems;
+using TestStack.White.Utility;
 using TestStack.White.WindowsAPI;
 using Button = TestStack.White.UIItems.Button;
 using ListView = TestStack.White.UIItems.ListView;
@@ -49,8 +50,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         public void ThenThatGridHasRows(int numberOfRows)
         {
             Context.Grid.Rows
-                        .Should()
-                        .HaveCount(numberOfRows);
+                   .Should()
+                   .HaveCount(numberOfRows);
         }
 
         [When(@"I use the combobox in column '(.*)' on row (.*)")]
@@ -104,7 +105,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         }
 
         private void FindAndSetComboBox(int columnIndex,
-                                               int gridRow)
+                                        int gridRow)
         {
             var box = FindWidgetIn<WPFComboBox>(columnIndex,
                                                 gridRow);
@@ -112,7 +113,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         }
 
         private TWidgetType FindWidgetIn<TWidgetType>(int columnIndex,
-                                                             int gridRow) where TWidgetType : UIItem
+                                                      int gridRow) where TWidgetType : UIItem
         {
             var row = GetRow(gridRow);
             var headerCellBounds = Context.Grid.Header.Columns[columnIndex].Bounds;
@@ -140,6 +141,9 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         private ListViewRows ValidateRowIndex(int gridRow)
         {
             var listViewRows = Context.Grid.Rows;
+            // try for 3 seconds to get what we're looking for
+            Retry.For(() => gridRow < listViewRows.Count,
+                      3.Seconds());
             gridRow
                 .Should()
                 .BeLessThan(listViewRows.Count,
@@ -309,14 +313,6 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             var box = FindWidgetIn<TextBox>(columnIndex,
                                             rowIndex);
             Context.TextBox = box;
-        }
-
-        [When(@"I erase the contents of the grid column '(.*)'")]
-        public void WhenIEraseTheContentsOfTheGridColumn(string columnName)
-        {
-            var cellIndex = GetHeaderColumn(columnName).Index;
-            var cell = GetCellOnCurrentlySelectedRow(cellIndex);
-            cell.SetValue(string.Empty);
         }
     }
 }
