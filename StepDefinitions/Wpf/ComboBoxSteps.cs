@@ -26,5 +26,13 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         {
             Context.ComboBox.Select(itemText);
         }
+
+        [Then(@"that combobox is set to '(.*)'")]
+        public void ThenThatComboboxIsSetTo(string itemText)
+        {
+            Context.ComboBox.SelectedItemText
+                   .Should()
+                   .Be(itemText);
+        }
     }
 }
