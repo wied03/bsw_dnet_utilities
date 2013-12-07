@@ -34,6 +34,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         private void FindAndSetGrid(string labelText)
         {
             var grid = LocateClosestElementOfType<ListView>(labelText);
+            Retry.For(() => grid != null,
+                      3.Seconds());
             grid
                 .Should()
                 .NotBeNull();
@@ -49,9 +51,19 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         [Then(@"that grid has (\d+) rows")]
         public void ThenThatGridHasRows(int numberOfRows)
         {
-            Context.Grid.Rows
-                   .Should()
-                   .HaveCount(numberOfRows);
+            var rows = Context.Grid.Rows;
+            // try for 3 seconds to get what we're looking for
+            var retryNumber = 0;
+            Retry.For(() =>
+                      {
+                          Console.WriteLine("Looking for # of grid rows try # {0}",
+                                            retryNumber++);
+                          return rows.Count == numberOfRows;
+                      },
+                      3.Seconds());
+            rows
+                .Should()
+                .HaveCount(numberOfRows);
         }
 
         [When(@"I use the combobox in column '(.*)' on row (.*)")]
@@ -142,7 +154,13 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         {
             var listViewRows = Context.Grid.Rows;
             // try for 3 seconds to get what we're looking for
-            Retry.For(() => gridRow < listViewRows.Count,
+            var retryNumber = 0;
+            Retry.For(() =>
+                      {
+                          Console.WriteLine("Looking for grid row try # {0}",
+                                            retryNumber++);
+                          return gridRow < listViewRows.Count;
+                      },
                       3.Seconds());
             gridRow
                 .Should()

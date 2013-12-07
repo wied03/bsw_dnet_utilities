@@ -22,14 +22,6 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             button.Click();
         }
 
-        [When(@"I click the '(.*)' button and wait for the window to load")]
-        public void WhenIClickTheButtonAndWaitForTheWindowToLoad(string buttonText)
-        {
-            var button = Window.Get<Button>(SearchCriteria.ByText(buttonText));
-            button.Click();
-            When(ProgressBarSteps.ActionWhenWaitForProgressBarToFinish());
-        }
-
         [Then(@"that button is clickable")]
         public void ThenThatButtonIsClickable()
         {
