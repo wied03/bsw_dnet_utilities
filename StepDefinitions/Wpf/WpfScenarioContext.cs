@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using FluentAssertions;
 using MsBw.MsBwUtility.JetBrains.Annotations;
 using TechTalk.SpecFlow;
 using TestStack.White;
@@ -21,6 +22,20 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             {
                 return ScenarioContext.Current;
             }
+        }
+
+        public TimeSpan NumberOfRetrySeconds
+        {
+            get
+            {
+                if (!Context.ContainsKey("numberofretryseconds"))
+                {
+                    // 10 second default
+                    NumberOfRetrySeconds = 10.Seconds();
+                }
+                return Context.Get<TimeSpan>("numberofretryseconds");
+            }
+            set { Context["numberofretryseconds"] = value; }
         }
 
         public Application App

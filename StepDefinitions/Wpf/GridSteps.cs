@@ -34,10 +34,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         private void FindAndSetGrid(string labelText)
         {
             var grid = LocateClosestElementOfType<ListView>(labelText);
-            Retry.For(() => grid != null,
-                      3.Seconds());
-            grid
-                .Should()
+            grid.Should()
                 .NotBeNull();
             Context.Grid = grid;
         }
@@ -51,16 +48,19 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         [Then(@"that grid has (\d+) rows")]
         public void ThenThatGridHasRows(int numberOfRows)
         {
-            var rows = Context.Grid.Rows;
+            var grid = Context.Grid;
+            ListViewRows rows = null;
             // try for 3 seconds to get what we're looking for
             var retryNumber = 0;
             Retry.For(() =>
                       {
                           Console.WriteLine("Looking for # of grid rows try # {0}",
                                             retryNumber++);
+                          // seems like Grid.Rows is replaced once it's populated, so keep refreshing
+                          rows = grid.Rows;
                           return rows.Count == numberOfRows;
                       },
-                      3.Seconds());
+                      Context.NumberOfRetrySeconds);
             rows
                 .Should()
                 .HaveCount(numberOfRows);
@@ -127,7 +127,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         private TWidgetType FindWidgetIn<TWidgetType>(int columnIndex,
                                                       int gridRow) where TWidgetType : UIItem
         {
-            var row = GetRow(gridRow);
+            var row = GetRowFromIndex(gridRow);
             var headerCellBounds = Context.Grid.Header.Columns[columnIndex].Bounds;
             var widgetType = typeof (TWidgetType);
             var widgetsOnRow = row.GetMultiple(SearchCriteria.ByControlType(testControlType: widgetType,
@@ -143,37 +143,34 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             return widget;
         }
 
-        private ListViewRow GetRow(int gridRow)
+        private ListViewRow GetRowFromIndex(int gridRow)
         {
-            var listViewRows = ValidateRowIndex(gridRow);
-            var row = listViewRows[gridRow];
-            return row;
-        }
-
-        private ListViewRows ValidateRowIndex(int gridRow)
-        {
-            var listViewRows = Context.Grid.Rows;
+            var grid = Context.Grid;
+            ListViewRows listViewRows = null;
             // try for 3 seconds to get what we're looking for
             var retryNumber = 0;
             Retry.For(() =>
                       {
                           Console.WriteLine("Looking for grid row try # {0}",
                                             retryNumber++);
+                          // seems like Grid.Rows is replaced once it's populated, so keep refreshing
+                          listViewRows = grid.Rows;
                           return gridRow < listViewRows.Count;
                       },
-                      3.Seconds());
+                      Context.NumberOfRetrySeconds);
             gridRow
                 .Should()
                 .BeLessThan(listViewRows.Count,
-                            "Can't access a row at zero based index >= the number of rows in the grid");
-            return listViewRows;
+                            "The index of the item you are trying to access should be at less than the total row count of the grid");
+            var row = listViewRows[gridRow];
+            return row;
         }
 
         [When(@"I press the '(.*)' key in row (.*) of that grid")]
         public void WhenIPressTheKeyInRowOfThatGrid(KeyboardInput.SpecialKeys key,
                                                     int rowNumber)
         {
-            var row = GetRow(rowNumber);
+            var row = GetRowFromIndex(rowNumber);
             row.Select();
             row.KeyIn(key);
         }
@@ -189,7 +186,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         [When(@"I select row (.*) of the grid")]
         public void WhenISelectRowOfTheGrid(int gridRow)
         {
-            var row = GetRow(gridRow);
+            var row = GetRowFromIndex(gridRow);
             row.Select();
         }
 
@@ -205,7 +202,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         public void ThenThereIsAButtonInColumnOnRow(string buttonText,
                                                     int rowIndex)
         {
-            var row = GetRow(rowIndex);
+            var row = GetRowFromIndex(rowIndex);
             var button = row.Get<Button>(SearchCriteria.ByClassName(typeof (Button).Name)
                                                        .AndByText(buttonText));
             Context.Button = button;
@@ -302,7 +299,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         private IUIItem GetCell(int rowIndex,
                                 int columnIndex)
         {
-            var row = GetRow(rowIndex);
+            var row = GetRowFromIndex(rowIndex);
             return row.Get(SearchCriteria.ByClassName(typeof (DataGridCell).Name)
                                          .AndIndex(columnIndex));
         }
