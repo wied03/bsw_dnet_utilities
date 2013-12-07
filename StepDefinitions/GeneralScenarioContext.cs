@@ -10,7 +10,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions
 {
     public class GeneralScenarioContext
     {
-        public const string CONTEXT_KEY_SERVICE_CONTROLLER = "servicecontroller";
+        private const string CONTEXT_KEY_SERVICE_CONTROLLER = "servicecontroller";
 
         protected ScenarioContext Context
         {

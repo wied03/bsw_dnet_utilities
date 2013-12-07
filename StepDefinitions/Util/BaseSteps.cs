@@ -10,15 +10,16 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
     public abstract class BaseSteps : Steps
     {
         private readonly GeneralScenarioContext _context;
+        protected static GeneralScenarioContext ContextStatic { get; private set; }
 
-        protected BaseSteps()
+        protected BaseSteps() : this(new GeneralScenarioContext())
         {
-            _context = new GeneralScenarioContext();
         }
 
         protected BaseSteps(GeneralScenarioContext context)
         {
             _context = context;
+            ContextStatic = context;
         }
 
         protected GeneralScenarioContext Context

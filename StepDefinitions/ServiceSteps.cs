@@ -28,11 +28,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions
         [AfterScenario]
         public static void ShutdownOrphanedService()
         {
-            var current = ScenarioContext.Current;
-            // Not the cleanest way to do this, but this method has to be static so we can't use 'Context'
-            if (!current.ContainsKey(GeneralScenarioContext.CONTEXT_KEY_SERVICE_CONTROLLER)) return;
-            var controller = current.Get<ServiceController>(GeneralScenarioContext.CONTEXT_KEY_SERVICE_CONTROLLER);
-            if (controller.Status != ServiceControllerStatus.Running) return;
+            var controller = ContextStatic.ServiceController;
+            if (controller == null || controller.Status != ServiceControllerStatus.Running) return;
             Console.WriteLine("Service was orphaned in running state, stopping");
             controller.Stop();
         }
