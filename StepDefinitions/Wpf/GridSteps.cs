@@ -325,9 +325,41 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         public void ThenThereIsAMaskedTextboxInColumnOnRow(int columnIndex,
                                                            int rowIndex)
         {
+            FindAndSetTextbox(columnIndex,
+                              rowIndex);
+        }
+
+        private void FindAndSetTextbox(int columnIndex,
+                                       int rowIndex)
+        {
             var box = FindWidgetIn<TextBox>(columnIndex,
                                             rowIndex);
             Context.TextBox = box;
+        }
+
+        [When(@"I use the masked textbox in column '(.*)' on row (.*)")]
+        public void WhenIUseTheMaskedTextboxInColumnOnRow(string columnName,
+                                                          int rowIndex)
+        {
+            var headerColumn = GetHeaderColumn(columnName);
+            ActionWhenIUseTheMaskedTextboxInColumnOnRow(headerColumn.Index,
+                                                        rowIndex);
+        }
+
+        private void ActionWhenIUseTheMaskedTextboxInColumnOnRow(int columnIndex,
+                                                                 int rowIndex)
+        {
+            When(string.Format(@"I use the masked textbox in column {0} on row {1}",
+                               columnIndex,
+                               rowIndex));
+        }
+
+        [When(@"I use the masked textbox in column (\d+) on row (.*)")]
+        public void WhenIUseTheMaskedTextboxInColumnOnRow(int columnIndex,
+                                                          int rowIndex)
+        {
+            FindAndSetTextbox(columnIndex,
+                              rowIndex);
         }
     }
 }

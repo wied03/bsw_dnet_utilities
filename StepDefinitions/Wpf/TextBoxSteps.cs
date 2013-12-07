@@ -17,5 +17,14 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                .Should()
                .Be(contents);
         }
+
+        [When(@"I enter '(.*)' into that textbox")]
+        public void WhenIEnterIntoThatTextbox(string contents)
+        {
+            var box = Context.TextBox;
+            box.Should()
+               .NotBeNull();
+            box.Text = contents;
+        }
     }
 }
