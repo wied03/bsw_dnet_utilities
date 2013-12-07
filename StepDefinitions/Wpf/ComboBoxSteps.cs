@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
@@ -24,7 +25,21 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         [When(@"I select '(.*)'")]
         public void WhenISelect(string itemText)
         {
-            Context.ComboBox.Select(itemText);
+            var comboBox = Context.ComboBox;
+            var itemsText = Context
+                .ComboBox
+                .Items
+                .Select(i => i.Text).ToList();
+            if (!itemsText.Contains(itemText))
+            {
+                var validItems = itemsText.Aggregate((i1,
+                                                      i2) => i1 + ", " + i2);
+                Assert.Fail(
+                            "The item you tried to select in the dropdown ({0}) was not found in the list of dropdown options [{1}]",
+                            itemText,
+                            validItems);
+            }
+            comboBox.Select(itemText);
         }
 
         [Then(@"that combobox is set to '(.*)'")]
