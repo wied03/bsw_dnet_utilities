@@ -72,6 +72,5 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                               widget.Location);
             return (TUiType)widget;
         }
-
     }
 }

@@ -16,16 +16,16 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         }
 
         [When(@"I click the '(.*)' button")]
-        public void WhenIClickTheButton(string p0)
+        public void WhenIClickTheButton(string buttonText)
         {
-            var button = Window.Get<Button>(SearchCriteria.ByText(p0));
+            var button = Window.Get<Button>(SearchCriteria.ByText(buttonText));
             button.Click();
         }
 
         [When(@"I click the '(.*)' button and wait for the window to load")]
-        public void WhenIClickTheButtonAndWaitForTheWindowToLoad(string p0)
+        public void WhenIClickTheButtonAndWaitForTheWindowToLoad(string buttonText)
         {
-            var button = Window.Get<Button>(SearchCriteria.ByText(p0));
+            var button = Window.Get<Button>(SearchCriteria.ByText(buttonText));
             button.Click();
             When(ProgressBarSteps.ActionWhenWaitForProgressBarToFinish());
         }

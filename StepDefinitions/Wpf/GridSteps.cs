@@ -46,11 +46,11 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         }
 
         [Then(@"that grid has (\d+) rows")]
-        public void ThenThatGridHasRows(int p0)
+        public void ThenThatGridHasRows(int numberOfRows)
         {
             Context.Grid.Rows
                         .Should()
-                        .HaveCount(p0);
+                        .HaveCount(numberOfRows);
         }
 
         [When(@"I use the combobox in column '(.*)' on row (.*)")]
