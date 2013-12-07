@@ -5,7 +5,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using FluentAssertions;
 using MsBw.MsBwUtility.JetBrains.Annotations;
-using TechTalk.SpecFlow;
 using TestStack.White;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.ListBoxItems;
@@ -14,16 +13,8 @@ using TestStack.White.UIItems.WindowItems;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [UsedImplicitly]
-    public class WpfScenarioContext
+    public class WpfScenarioContext : GeneralScenarioContext
     {
-        protected ScenarioContext Context
-        {
-            get
-            {
-                return ScenarioContext.Current;
-            }
-        }
-
         public TimeSpan NumberOfRetrySeconds
         {
             get

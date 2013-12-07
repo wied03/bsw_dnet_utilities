@@ -9,6 +9,23 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
 {
     public abstract class BaseSteps : Steps
     {
+        private readonly GeneralScenarioContext _context;
+
+        protected BaseSteps()
+        {
+            _context = new GeneralScenarioContext();
+        }
+
+        protected BaseSteps(GeneralScenarioContext context)
+        {
+            _context = context;
+        }
+
+        protected GeneralScenarioContext Context
+        {
+            get { return _context; }
+        }
+
         protected void ThenFormat(string format,
                                   params object[] args)
         {

@@ -16,12 +16,12 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
     {
         private readonly WpfScenarioContext _wpfContext;
 
-        protected WpfBaseSteps()
+        protected WpfBaseSteps() : base(new WpfScenarioContext())
         {
-            _wpfContext = new WpfScenarioContext();
+            _wpfContext = (WpfScenarioContext) base.Context;
         }
 
-        protected WpfScenarioContext Context
+        protected new WpfScenarioContext Context
         {
             get { return _wpfContext; }
         }

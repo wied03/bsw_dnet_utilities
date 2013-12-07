@@ -65,6 +65,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -81,7 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StepDefinitions\GeneralScenarioContext.cs" />
     <Compile Include="StepDefinitions\Reporting.cs" />
+    <Compile Include="StepDefinitions\ServiceSteps.cs" />
     <Compile Include="StepDefinitions\Util\BaseSteps.cs" />
     <Compile Include="StepDefinitions\Util\TimeSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\ButtonSteps.cs" />
