@@ -3,28 +3,25 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Castle.DynamicProxy;
 using TechTalk.SpecFlow;
 
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
 {
-    public abstract class BaseSteps : Steps
+    public abstract class BaseSteps<TContextType> : Steps where TContextType : GeneralScenarioContext, new()
     {
-        private readonly GeneralScenarioContext _context;
-        protected static GeneralScenarioContext ContextStatic { get; private set; }
+        private static readonly ProxyGenerator Generator = new ProxyGenerator();
+        protected static readonly TContextType ContextStatic = CreateProxiedContext(new TContextType());
 
-        protected BaseSteps() : this(new GeneralScenarioContext())
+        protected TContextType Context
         {
+            get { return ContextStatic; }
         }
 
-        protected BaseSteps(GeneralScenarioContext context)
+        private static TContextType CreateProxiedContext(TContextType context)
         {
-            _context = context;
-            ContextStatic = context;
-        }
-
-        protected GeneralScenarioContext Context
-        {
-            get { return _context; }
+            return Generator.CreateClassProxyWithTarget(context,
+                                                        new ScenarioContextInterceptor());
         }
 
         protected void ThenFormat(string format,

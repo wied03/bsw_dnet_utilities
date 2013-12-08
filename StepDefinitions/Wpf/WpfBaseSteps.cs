@@ -12,20 +12,8 @@ using TestStack.White.Utility;
 
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
-    public abstract class WpfBaseSteps : BaseSteps
+    public abstract class WpfBaseSteps : BaseSteps<WpfScenarioContext>
     {
-        private readonly WpfScenarioContext _wpfContext;
-
-        protected WpfBaseSteps() : base(new WpfScenarioContext())
-        {
-            _wpfContext = (WpfScenarioContext) base.Context;
-        }
-
-        protected new WpfScenarioContext Context
-        {
-            get { return _wpfContext; }
-        }
-
         private Window Window
         {
             get { return Context.Window; }

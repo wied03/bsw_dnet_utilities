@@ -11,7 +11,7 @@ using TechTalk.SpecFlow;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions
 {
     [Binding]
-    public class ServiceSteps : BaseSteps
+    public class ServiceSteps : BaseSteps<GeneralScenarioContext>
     {
         [When(@"I start the '(.*)' service")]
         public void WhenIStartTheService(string serviceName)
