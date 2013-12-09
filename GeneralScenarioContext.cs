@@ -10,5 +10,6 @@ namespace Bsw.Utilities.Windows.SystemTest
     public class GeneralScenarioContext
     {
         public virtual List<string> ServicesStarted { get; set; }
+        public virtual DateTimeOffset? NowSnapshot { get; set; }
     }
 }
