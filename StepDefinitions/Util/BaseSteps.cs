@@ -3,7 +3,9 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Castle.DynamicProxy;
+using Nito.AsyncEx;
 using TechTalk.SpecFlow;
 
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
@@ -36,6 +38,12 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
         {
             When(string.Format(format,
                                args));
+        }
+
+        // until Specflow supports async tasks properly
+        protected static void SpecFlowAsync(Func<Task> task)
+        {
+            AsyncContext.Run(task);
         }
     }
 }
