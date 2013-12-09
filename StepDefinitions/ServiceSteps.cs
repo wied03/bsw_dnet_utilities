@@ -29,6 +29,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions
                       .Be(ServiceControllerStatus.Stopped,
                           "Can't start a service that isn't stopped");
             controller.Start();
+            controller.WaitForStatus(desiredStatus: ServiceControllerStatus.Running,
+                                     timeout: 15.Seconds());
             Context.ServicesStarted.Add(serviceName);
         }
 
@@ -42,6 +44,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions
             {
                 Console.WriteLine("Service was orphaned in running state, stopping");
                 controller.Stop();
+                controller.WaitForStatus(desiredStatus: ServiceControllerStatus.Stopped,
+                                     timeout: 15.Seconds());
             }
         }
 
@@ -51,6 +55,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions
             // ServiceController doesn't update Status once constructed, so need to reconstruct each time
             var controller = new ServiceController(serviceName);
             controller.Stop();
+            controller.WaitForStatus(desiredStatus: ServiceControllerStatus.Stopped,
+                                     timeout: 15.Seconds());
         }
     }
 }
