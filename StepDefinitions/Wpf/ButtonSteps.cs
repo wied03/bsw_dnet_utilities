@@ -59,7 +59,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                                   string labelNearest)
         {
             var button = LocateClosestElementOfType<Button>(labelNearest,
-                                                                        buttonText);
+                                                            buttonText);
             button
                 .Should()
                 .NotBeNull();

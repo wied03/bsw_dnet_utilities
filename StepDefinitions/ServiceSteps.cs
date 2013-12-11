@@ -45,7 +45,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions
                 Console.WriteLine("Service was orphaned in running state, stopping");
                 controller.Stop();
                 controller.WaitForStatus(desiredStatus: ServiceControllerStatus.Stopped,
-                                     timeout: 15.Seconds());
+                                         timeout: 15.Seconds());
             }
         }
 
