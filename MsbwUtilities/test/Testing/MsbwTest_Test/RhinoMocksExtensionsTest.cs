@@ -1,10 +1,12 @@
 ﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
 
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentAssertions;
+using MsBw.MsBwUtility.JetBrains.Annotations;
 using MsbwTest;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -15,7 +17,7 @@ namespace MsbwTest_Test
     {
         string Prop1 { get; set; }
         int Prop2 { get; set; }
-        string Prop3 { get; set; }
+        string Prop3 { get; [UsedImplicitly] set; }
     }
 
     [TestFixture]
@@ -84,6 +86,8 @@ namespace MsbwTest_Test
                 .Be("bar");
         }
 
+        // Rhino Mocks / Castle Proxy need this to be pub
+// ReSharper disable once MemberCanBePrivate.Global
         public interface ITestDoAndReturn
         {
             Task NoReturnValue();
@@ -92,6 +96,10 @@ namespace MsbwTest_Test
 
             Task NoReturnParam2(string stuff,
                                 int otherStuff);
+
+            Task<string> ReturnWithParam1(int stuff);
+            Task<string> ReturnWithParam2(int stuff,
+                                          string otherStuff);
         }
 
         private static ITestDoAndReturn Mock
@@ -206,6 +214,180 @@ namespace MsbwTest_Test
 
             // act + assert
             await mock.NoReturnValue();
+        }
+
+        [Test]
+        public async Task Do_async_return_value()
+        {
+            // arrange
+            var mock = Mock;
+
+            // act
+            mock.Stub(m => m.OneReturnValue())
+                .DoAsync(() => "hi there");
+            var result = await mock.OneReturnValue();
+
+            // assert
+            result
+                .Should()
+                .Be("hi there");
+        }
+
+        [Test]
+        public async Task Do_async_return_value_timed()
+        {
+            // arrange
+            var mock = Mock;
+            var sw = new Stopwatch();
+
+            // act
+            mock.Stub(m => m.OneReturnValue())
+                .DoAsync(() => "hi there",
+                         3.Seconds());
+            sw.Start();
+            var result = await mock.OneReturnValue();
+            sw.Stop();
+
+            // assert
+            sw.Elapsed
+              .Should()
+              .Be(3.Seconds());
+            result.Should()
+                  .Be("hi there");
+        }
+
+        [Test]
+        public async Task Do_async_return_value_1_parameter()
+        {
+            // arrange
+            var mock = Mock;
+            int? invokedWithNumber = null;
+
+            // act
+            mock.Stub(m => m.ReturnWithParam1(33))
+                .IgnoreArguments()
+                .DoAsync<int, string>(num =>
+                                      {
+                                          invokedWithNumber = num;
+                                          return "hi there";
+                                      });
+            var result = await mock.ReturnWithParam1(52);
+
+            // assert
+            invokedWithNumber
+                .Should()
+                .Be(52);
+            result
+                .Should()
+                .Be("hi there");
+        }
+
+        [Test]
+        public async Task Do_async_return_value_1_parameter_timed()
+        {
+            // arrange
+            var mock = Mock;
+            int? invokedWithNumber = null;
+            var sw = new Stopwatch();
+
+            // act
+            mock.Stub(m => m.ReturnWithParam1(33))
+                .IgnoreArguments()
+                .DoAsync<int, string>(num =>
+                                      {
+                                          invokedWithNumber = num;
+                                          return "hi there";
+                                      },
+                                      3.Seconds());
+            sw.Start();
+            var result = await mock.ReturnWithParam1(52);
+            sw.Stop();
+
+            // assert
+            sw.Elapsed
+              .Should()
+              .Be(3.Seconds());
+            invokedWithNumber
+                .Should()
+                .Be(52);
+            result
+                .Should()
+                .Be("hi there");
+        }
+
+        [Test]
+        public async Task Do_async_return_value_2_parameters()
+        {
+            // arrange
+            var mock = Mock;
+            int? invokedWithNumber = null;
+            string invokedWithString = null;
+
+            // act
+            mock.Stub(m => m.ReturnWithParam2(55,
+                                              null))
+                .IgnoreArguments()
+                .DoAsync<int, string, string>((num,
+                                               str) =>
+                                              {
+                                                  invokedWithNumber = num;
+                                                  invokedWithString = str;
+                                                  return "foobar";
+                                              });
+            var result = await mock.ReturnWithParam2(95,
+                                                     "hi there");
+
+            // assert
+            result
+                .Should()
+                .Be("foobar");
+            invokedWithNumber
+                .Should()
+                .Be(95);
+            invokedWithString
+                .Should()
+                .Be("hi there");
+        }
+
+        [Test]
+        public async Task Do_async_return_value_2_parameters_timed()
+        {
+            // arrange
+            var mock = Mock;
+            int? invokedWithNumber = null;
+            string invokedWithString = null;
+            var sw = new Stopwatch();
+
+            // act
+            mock.Stub(m => m.ReturnWithParam2(55,
+                                              null))
+                .IgnoreArguments()
+                .DoAsync<int, string, string>((num,
+                                               str) =>
+                {
+                    invokedWithNumber = num;
+                    invokedWithString = str;
+                    return "foobar";
+                },3.Seconds());
+
+            sw.Start();
+            var result = await mock.ReturnWithParam2(95,
+                                                     "hi there");
+            sw.Stop();
+
+            // assert
+            sw.Elapsed
+              .Should()
+              .Be(3.Seconds());
+            result
+                .Should()
+                .Be("foobar");
+            invokedWithNumber
+                .Should()
+                .Be(95);
+            invokedWithString
+                .Should()
+                .Be("hi there");
         }
 
         #endregion

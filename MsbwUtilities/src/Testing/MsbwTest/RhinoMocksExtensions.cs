@@ -83,6 +83,30 @@ namespace MsbwTest
             return methodOptions;
         }
 
+        public static IMethodOptions<Task<TReturnType>> DoAsync<TReturnType>(
+            this IMethodOptions<Task<TReturnType>> methodOptions,
+            Func<TReturnType> action,
+            TimeSpan? delayBeforeYourAction = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static IMethodOptions<Task<TReturnType>> DoAsync<TParam1, TReturnType>(
+            this IMethodOptions<Task<TReturnType>> methodOptions,
+            Func<TParam1, TReturnType> action,
+            TimeSpan? delayBeforeYourAction = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static IMethodOptions<Task<TReturnType>> DoAsync<TParam1, TParam2, TReturnType>(
+            this IMethodOptions<Task<TReturnType>> methodOptions,
+            Func<TParam1, TParam2, TReturnType> action,
+            TimeSpan? delayBeforeYourAction = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public static IMethodOptions<Task> DoAsyncVoid<T>(this IMethodOptions<Task> methodOptions,
                                                           Action<T> action,
                                                           TimeSpan? delayBeforeYourAction = null)
