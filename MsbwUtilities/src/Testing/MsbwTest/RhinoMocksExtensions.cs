@@ -63,8 +63,7 @@ namespace MsbwTest
                                                }
                                                return someValue;
                                            };
-            methodOptions.Return(executor());
-            return methodOptions;
+            return methodOptions.Do(executor);
         }
 
         public static IMethodOptions<Task> DoAsyncVoid(this IMethodOptions<Task> methodOptions,
@@ -79,8 +78,7 @@ namespace MsbwTest
                                             }
                                             action();
                                         };
-            methodOptions.Do(executor);
-            return methodOptions;
+            return methodOptions.Do(executor);
         }
 
         public static IMethodOptions<Task<TReturnType>> DoAsync<TReturnType>(
@@ -88,7 +86,15 @@ namespace MsbwTest
             Func<TReturnType> action,
             TimeSpan? delayBeforeYourAction = null)
         {
-            throw new NotImplementedException();
+            Func<Task<TReturnType>> executor = async () =>
+                                                     {
+                                                         if (delayBeforeYourAction != null)
+                                                         {
+                                                             await Task.Delay(delayBeforeYourAction.Value);
+                                                         }
+                                                         return action();
+                                                     };
+            return methodOptions.Do(executor);
         }
 
         public static IMethodOptions<Task<TReturnType>> DoAsync<TParam1, TReturnType>(
@@ -96,7 +102,15 @@ namespace MsbwTest
             Func<TParam1, TReturnType> action,
             TimeSpan? delayBeforeYourAction = null)
         {
-            throw new NotImplementedException();
+            Func<TParam1, Task<TReturnType>> executor = async p1 =>
+                                                              {
+                                                                  if (delayBeforeYourAction != null)
+                                                                  {
+                                                                      await Task.Delay(delayBeforeYourAction.Value);
+                                                                  }
+                                                                  return action(p1);
+                                                              };
+            return methodOptions.Do(executor);
         }
 
         public static IMethodOptions<Task<TReturnType>> DoAsync<TParam1, TParam2, TReturnType>(
@@ -104,7 +118,17 @@ namespace MsbwTest
             Func<TParam1, TParam2, TReturnType> action,
             TimeSpan? delayBeforeYourAction = null)
         {
-            throw new NotImplementedException();
+            Func<TParam1, TParam2, Task<TReturnType>> executor = async (p1,
+                                                                        p2) =>
+                                                                       {
+                                                                           if (delayBeforeYourAction != null)
+                                                                           {
+                                                                               await Task.Delay(delayBeforeYourAction.Value);
+                                                                           }
+                                                                           return action(p1,
+                                                                                         p2);
+                                                                       };
+            return methodOptions.Do(executor);
         }
 
         public static IMethodOptions<Task> DoAsyncVoid<T>(this IMethodOptions<Task> methodOptions,
@@ -119,8 +143,7 @@ namespace MsbwTest
                                                }
                                                action(o);
                                            };
-            methodOptions.Do(executor);
-            return methodOptions;
+            return methodOptions.Do(executor);
         }
 
         public static IMethodOptions<Task> DoAsyncVoid<T1, T2>(this IMethodOptions<Task> methodOptions,
@@ -137,8 +160,7 @@ namespace MsbwTest
                                                     action(o1,
                                                            o2);
                                                 };
-            methodOptions.Do(executor);
-            return methodOptions;
+            return methodOptions.Do(executor);
         }
     }
 }

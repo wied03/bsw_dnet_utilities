@@ -251,7 +251,10 @@ namespace MsbwTest_Test
             // assert
             sw.Elapsed
               .Should()
-              .Be(3.Seconds());
+              .BeGreaterOrEqualTo(3.Seconds())
+              .And
+              .BeLessOrEqualTo(4.Seconds())
+              ;
             result.Should()
                   .Be("hi there");
         }
@@ -306,7 +309,10 @@ namespace MsbwTest_Test
             // assert
             sw.Elapsed
               .Should()
-              .Be(3.Seconds());
+              .BeGreaterOrEqualTo(3.Seconds())
+              .And
+              .BeLessOrEqualTo(4.Seconds())
+              ;
             invokedWithNumber
                 .Should()
                 .Be(52);
@@ -378,7 +384,10 @@ namespace MsbwTest_Test
             // assert
             sw.Elapsed
               .Should()
-              .Be(3.Seconds());
+              .BeGreaterOrEqualTo(3.Seconds())
+              .And
+              .BeLessOrEqualTo(4.Seconds())
+              ;
             result
                 .Should()
                 .Be("foobar");
