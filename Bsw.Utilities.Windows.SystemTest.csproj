@@ -38,10 +38,10 @@
       <HintPath>..\..\..\nuget_pkg_lnk\FluentAssertions.2.0.1\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
     <Reference Include="MsbwTest">
-      <HintPath>..\..\..\nuget_pkg_lnk\MsbwTest.1.0.68\lib\net45\MsbwTest.dll</HintPath>
+      <HintPath>..\..\..\nuget_pkg_lnk\MsbwTest.1.0.69\lib\net45\MsbwTest.dll</HintPath>
     </Reference>
     <Reference Include="MsBwUtility">
-      <HintPath>..\..\..\nuget_pkg_lnk\MsBwUtility.1.0.68\lib\net45\MsBwUtility.dll</HintPath>
+      <HintPath>..\..\..\nuget_pkg_lnk\MsBwUtility.1.0.69\lib\net45\MsBwUtility.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\nuget_pkg_lnk\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
