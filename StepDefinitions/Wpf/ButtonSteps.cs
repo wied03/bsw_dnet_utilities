@@ -20,6 +20,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         public void WhenIClickTheButton(string buttonText)
         {
             var button = Window.Get<Button>(SearchCriteria.ByText(buttonText));
+            Retry.For(() => button.Enabled,
+                      Context.NumberOfRetrySeconds);
             button.Click();
         }
 
