@@ -63,7 +63,7 @@ namespace MsbwTest
                                                }
                                                return someValue;
                                            };
-            return methodOptions.Do(executor);
+            return methodOptions.Return(executor());
         }
 
         public static IMethodOptions<Task> DoAsyncVoid(this IMethodOptions<Task> methodOptions,
@@ -123,7 +123,10 @@ namespace MsbwTest
                                                                        {
                                                                            if (delayBeforeYourAction != null)
                                                                            {
-                                                                               await Task.Delay(delayBeforeYourAction.Value);
+                                                                               await
+                                                                                   Task.Delay(
+                                                                                              delayBeforeYourAction
+                                                                                                  .Value);
                                                                            }
                                                                            return action(p1,
                                                                                          p2);

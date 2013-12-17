@@ -98,6 +98,7 @@ namespace MsbwTest_Test
                                 int otherStuff);
 
             Task<string> ReturnWithParam1(int stuff);
+
             Task<string> ReturnWithParam2(int stuff,
                                           string otherStuff);
         }
@@ -123,6 +124,25 @@ namespace MsbwTest_Test
             result
                 .Should()
                 .Be("stuff");
+        }
+
+        [Test]
+        public async Task Return_async_return_val_and_param()
+        {
+            // arrange
+            var mock = Mock;
+            mock.Stub(m => m.ReturnWithParam1(5))
+                .IgnoreArguments()
+                .ReturnAsync("stuff");
+
+            // act
+            var result = await mock.ReturnWithParam1(55);
+
+            // assert
+            result
+                .Should()
+                .Be("stuff",
+                    "shouldn't care about arguments when using returnasync");
         }
 
         [Test]
@@ -254,7 +274,7 @@ namespace MsbwTest_Test
               .BeGreaterOrEqualTo(3.Seconds())
               .And
               .BeLessOrEqualTo(4.Seconds())
-              ;
+                ;
             result.Should()
                   .Be("hi there");
         }
@@ -312,7 +332,7 @@ namespace MsbwTest_Test
               .BeGreaterOrEqualTo(3.Seconds())
               .And
               .BeLessOrEqualTo(4.Seconds())
-              ;
+                ;
             invokedWithNumber
                 .Should()
                 .Be(52);
@@ -370,11 +390,12 @@ namespace MsbwTest_Test
                 .IgnoreArguments()
                 .DoAsync<int, string, string>((num,
                                                str) =>
-                {
-                    invokedWithNumber = num;
-                    invokedWithString = str;
-                    return "foobar";
-                },3.Seconds());
+                                              {
+                                                  invokedWithNumber = num;
+                                                  invokedWithString = str;
+                                                  return "foobar";
+                                              },
+                                              3.Seconds());
 
             sw.Start();
             var result = await mock.ReturnWithParam2(95,
@@ -387,7 +408,7 @@ namespace MsbwTest_Test
               .BeGreaterOrEqualTo(3.Seconds())
               .And
               .BeLessOrEqualTo(4.Seconds())
-              ;
+                ;
             result
                 .Should()
                 .Be("foobar");
