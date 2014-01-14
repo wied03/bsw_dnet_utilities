@@ -51,6 +51,7 @@ with (".nuget/nuget.exe") do |ngetpath|
 					project_title = options[:project_title]
 					proj_path_and_name = "#{project_path}/#{project_name}"
 					specTask = "spec_#{project_name}"
+					desc "Builds nuspec for #{project_name}"
 					nuspec specTask do |n|
 						n.id = project_name
 						n.title = project_title
@@ -68,6 +69,7 @@ with (".nuget/nuget.exe") do |ngetpath|
 					end
 				
 					asmTask = "asm_#{project_name}"
+					desc "Updates assembly info for #{project_name}"
 					with ("#{project_path}/Properties/AssemblyInfo.cs") do |asminfo|			
 						assemblyinfo asmTask do |asm|
 							puts "Putting version number #{ver} on assembly"
@@ -81,6 +83,7 @@ with (".nuget/nuget.exe") do |ngetpath|
 					end
 					
 					packTask = "pack_#{project_name}"
+					desc "Creates a nupkg file for #{project_name}"
 					nugetpack packTask => [specTask,asmTask,:forcebuildforpackages] do |n|
 						#n.log_level = :verbose
 						n.command = ngetpath
@@ -90,6 +93,7 @@ with (".nuget/nuget.exe") do |ngetpath|
 					end					
 					
 					pushTask = "push_#{project_name}"
+					desc "Pushes the nuget package to nuget.org for #{project_name}"
 					nugetpush pushTask => packTask do |n|
 						n.command = ngetpath
 						n.package = "#{proj_path_and_name}.#{ver}.nupkg"
@@ -137,6 +141,12 @@ with (".nuget/nuget.exe") do |ngetpath|
 					 :project_title => 'BSW WPF Testing Utilities',
 					 :project_description => "Classes to support unit testing WPF applications, in particular those built with Bsw.Wpf.Utilities",
 					 :dependencies => [{:id => 'Bsw.Wpf.Utilities', :version => ver},
+												 {:id => 'MsbwUtility', :version => ver}]
+												 
+				 define_project.call :project_path => "src/Testing/Bsw.Utilities.Windows.SystemTest",
+					 :project_title => 'BSW WPF System Testing Utilities',
+					 :project_description => "Specflow step definitions to support system testing WPF applications with the White framework",
+					 :dependencies => [{:id => 'MsbwTest', :version => ver},
 												 {:id => 'MsbwUtility', :version => ver}]
 			end
 		end
