@@ -237,6 +237,8 @@ namespace MsbwTest_Test
         }
 
         [Test]
+        [Category("Cat1")]
+        [Category("Cat2")]
         public async Task Do_async_return_value()
         {
             // arrange

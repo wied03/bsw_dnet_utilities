@@ -105,6 +105,10 @@ with (".nuget/nuget.exe") do |ngetpath|
 					task :push => pushTask								
 			end
 			
+				define_project.call  :project_path => 'src/Testing/Bsw.NUnit.Traceability.Addin',
+					 :project_title => 'NUnit Traceability Addin',
+					 :project_description => "Lists all NUnit categories when running each test"
+			
 				define_project.call  :project_path => 'src/Implementation/Bsw.NHibernateUtils',
 					 :project_title => 'BSW NHibernate Utilities',
 					 :project_description => "Provides unit of work, StructureMap dependency injection base registry, and base repository for building a data layer"							
