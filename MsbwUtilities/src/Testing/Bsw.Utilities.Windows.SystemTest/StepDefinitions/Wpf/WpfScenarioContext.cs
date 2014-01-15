@@ -21,5 +21,6 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         public virtual WPFComboBox ComboBox { get; set; }
         public virtual ListView Grid { get; set; }
         public virtual TextBox TextBox { get; set; }
+        public virtual CheckBox CheckBox { get; set; }
     }
 }
