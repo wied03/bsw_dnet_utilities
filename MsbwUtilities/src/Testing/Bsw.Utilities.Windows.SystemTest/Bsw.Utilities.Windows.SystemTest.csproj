@@ -79,7 +79,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GeneralScenarioContext.cs" />
     <Compile Include="ScenarioContextInterceptor.cs" />
-    <Compile Include="StepDefinitions\Reporting.cs" />
     <Compile Include="StepDefinitions\ServiceSteps.cs" />
     <Compile Include="StepDefinitions\Util\BaseSteps.cs" />
     <Compile Include="StepDefinitions\Util\FileSteps.cs" />
