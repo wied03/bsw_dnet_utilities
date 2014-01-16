@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bsw.Utilities.Windows.Syste
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bsw.NUnit.Traceability.Addin", "src\Testing\Bsw.NUnit.Traceability.Addin\Bsw.NUnit.Traceability.Addin.csproj", "{1B002AAE-BBD2-4898-BDF3-21E3AE4F7432}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bsw.NUnit.Traceability.Addin.Test", "test\Testing\Bsw.NUnit.Traceability.Addin.Test\Bsw.NUnit.Traceability.Addin.Test.csproj", "{D402C7E7-5C46-41D0-BEAF-F7325CA7D224}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,6 +120,10 @@ Global
 		{1B002AAE-BBD2-4898-BDF3-21E3AE4F7432}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B002AAE-BBD2-4898-BDF3-21E3AE4F7432}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B002AAE-BBD2-4898-BDF3-21E3AE4F7432}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D402C7E7-5C46-41D0-BEAF-F7325CA7D224}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D402C7E7-5C46-41D0-BEAF-F7325CA7D224}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D402C7E7-5C46-41D0-BEAF-F7325CA7D224}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D402C7E7-5C46-41D0-BEAF-F7325CA7D224}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,5 +148,6 @@ Global
 		{F6A633E2-470A-465A-AA1F-FD81F7EBFC8B} = {299FFA68-C199-4A8F-A121-73F192C0F43B}
 		{0D7880B5-F30D-46D1-AC3D-693D34DB280E} = {6716D037-B12E-4F1C-B30C-A0F19137D78C}
 		{4CE86329-22AC-459E-B2F4-3888E1424858} = {6716D037-B12E-4F1C-B30C-A0F19137D78C}
+		{D402C7E7-5C46-41D0-BEAF-F7325CA7D224} = {6716D037-B12E-4F1C-B30C-A0F19137D78C}
 	EndGlobalSection
 EndGlobal

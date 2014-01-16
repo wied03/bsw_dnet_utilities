@@ -1,10 +1,12 @@
 ﻿// Copyright 2014 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
 
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using NUnit.Core;
 using NUnit.Core.Extensibility;
 using NUnit.Framework;
@@ -15,10 +17,17 @@ namespace Bsw.NUnit.Traceability.Addin
     public class JiraTraceability : IAddin,
                                     EventListener
     {
+        private static readonly Regex JiraRegex = new Regex(@"JIRA_(\w+_\d+)");
         private readonly IDictionary<string, Type> _testTypeMapping;
+        private readonly IWriteCategoriesToOutput _writer;
 
-        public JiraTraceability()
+        public JiraTraceability() : this(new WriteCategoriesToOutput())
         {
+        }
+
+        internal JiraTraceability(IWriteCategoriesToOutput writer)
+        {
+            _writer = writer;
             _testTypeMapping = new Dictionary<string, Type>();
         }
 
@@ -54,9 +63,20 @@ namespace Bsw.NUnit.Traceability.Addin
             if (!categories.Any()) return;
             foreach (var category in categories)
             {
-                Console.WriteLine("Test Category: {0}",
-                                  category);
+                var match = JiraRegex.Match(category);
+                var text = match.Success
+                               ? FormatNUnitCompatibileCategoryBackToJiraIssue(match)
+                               : string.Format("Test Category: {0}",
+                                               category);
+                _writer.Write(text);
             }
+        }
+
+        private static string FormatNUnitCompatibileCategoryBackToJiraIssue(Match match)
+        {
+            return string.Format("Related JIRA Issue: {0}",
+                                 match.Groups[1].Value.Replace('_',
+                                                               '-'));
         }
 
         private MethodInfo GetMethodInfo(TestName testName)
