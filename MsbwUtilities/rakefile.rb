@@ -11,28 +11,20 @@ with('MsbwUtilities.sln') do |sln|
 		clean.solution = sln
 	end
 
-	BradyW::MSBuild.new :build do |build|
+	BradyW::MSBuild.new :build => :version do |build|
 		build.solution = sln
 	end
 end
 
-task :ci => [:clean, :build, :test]
+task :ci => [:clean, :build, :test, :package]
 task :clean => [:cleandnet, :cleanpackages]
 task :test => [:codetest]
-# Version here because our re-build below with forcebuildforpackages will not execute for each package
-task :package => [:clean, :version, :pack]
-# Our re-build below with forcebuildforpackages will not execute for each package
-task :push => [:package]				  
-				  
-# We might have already done this in this build cycle, but we update the source with versions
-# so need to do force a build
-task :forcebuildforpackages do
-	Rake::Task["build"].execute
-end
+
+task :push => [:package]
 
 with ('test') do |t|	
 	BradyW::Nunit.new :codetest => :build do |test|
-		test.files = FileList["#{t}/**/bin/Debug/*Test.dll"]		
+		test.files = FileList["#{t}/**/bin/Debug/*Test.dll"]
 	end	
 end
 
@@ -84,7 +76,7 @@ with (".nuget/nuget.exe") do |ngetpath|
 					
 					packTask = "pack_#{project_name}"
 					desc "Creates a nupkg file for #{project_name}"
-					nugetpack packTask => [specTask,asmTask,:forcebuildforpackages] do |n|
+					nugetpack packTask => [specTask,:build] do |n|
 						#n.log_level = :verbose
 						n.command = ngetpath
 						n.nuspec = "#{proj_path_and_name}.csproj"
@@ -101,7 +93,7 @@ with (".nuget/nuget.exe") do |ngetpath|
 					end										
 					
 					task :version => asmTask
-					task :pack => packTask
+					task :package => packTask
 					task :push => pushTask								
 			end
 			
