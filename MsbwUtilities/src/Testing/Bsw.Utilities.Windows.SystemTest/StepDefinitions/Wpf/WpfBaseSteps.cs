@@ -5,20 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util;
+using Bsw.Utilities.Windows.SystemTest.Transformations;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
-using TestStack.White.UIItems.WindowItems;
 using TestStack.White.Utility;
 
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     public abstract class WpfBaseSteps : BaseSteps<WpfScenarioContext>
     {
-        private Window Window
-        {
-            get { return Context.Window; }
-        }
-
         protected TUiType RetryLocate<TUiType>(Func<TUiType> retryAction,
                                                string itemLookingFor = null) where TUiType : UIItem
         {
@@ -32,30 +27,79 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                  return retryAction();
                              },
                              t => t == null,
-                             Context.NumberOfRetrySeconds);
+                             NumberOfRetrySeconds);
         }
 
-        protected TUiType LocateClosestElementOfType<TUiType>(string labelText) where TUiType : UIItem
+        protected TimeSpan NumberOfRetrySeconds
+        {
+            get
+            {
+                var timeout = Context.NumberOfRetrySeconds;
+                if (!timeout.HasValue)
+                {
+                    throw new Exception(
+                        "You must set Context.NumberOfRetrySeconds in a BeforeStep/BeforeScenario method");
+                }
+                return timeout.Value;
+            }
+        }
+
+        protected TUiType LocateClosestElementOfType<TUiType>(string labelText,
+                                                              ThatIs direction = ThatIs.InAnyDirection)
+            where TUiType : UIItem
         {
             return RetryLocate(() =>
                                {
-                                   var window = Window;
+                                   var window = Context.Window;
                                    var label = window.Get<Label>(SearchCriteria.ByText(labelText));
                                    var theType = typeof (TUiType);
                                    var possibleItems =
                                        window.GetMultiple(SearchCriteria.ByControlType(testControlType: theType,
                                                                                        framework: WindowsFramework.Wpf));
                                    return FindClosest<TUiType>(label,
-                                                               possibleItems);
+                                                               possibleItems,
+                                                               direction);
                                });
         }
 
         private static TUiType FindClosest<TUiType>(IUIItem label,
-                                                    IEnumerable<IUIItem> possibleItems) where TUiType : UIItem
+                                                    IEnumerable<IUIItem> possibleItems,
+                                                    ThatIs direction) where TUiType : UIItem
         {
             var labelPosition = label.Location;
+            Func<IUIItem, IUIItem, bool> predicate;
+            switch (direction)
+            {
+                case ThatIs.Underneath:
+                    predicate = (item,
+                                 lbl) => item.Location.Y > lbl.Location.Y;
+                    break;
+                case ThatIs.Above:
+                    predicate = (item,
+                                 lbl) => item.Location.Y < lbl.Location.Y;
+                    break;
+                case ThatIs.ToLeftOf:
+                    predicate = (item,
+                                 lbl) => item.Location.X < lbl.Location.X;
+                    break;
+                case ThatIs.InAnyDirection:
+                    predicate = (item,
+                                 lbl) => true; // our orderby below takes care of this
+                    break;
+                case ThatIs.ToRightOf:
+                    predicate = (item,
+                                 lbl) => item.Location.X > lbl.Location.X;
+                    break;
+                default:
+                    var error =
+                        string.Format(
+                                      "Unmapped 'ThatIs' value '{0}'.  Edit WpfBaseSteps to add a case statement for this value!",
+                                      direction);
+                    throw new Exception(error);
+            }
             var pair = (from item in possibleItems
-                        where item.Location.Y > label.Location.Y
+                        where predicate(item,
+                                        label)
                         // only below
                         select new {widget = item, distance = (item.Location - labelPosition).Length}
                        ).OrderBy(p => p.distance)
@@ -74,15 +118,17 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         }
 
         protected TUiType LocateClosestElementOfType<TUiType>(string labelText,
-                                                              string widgetText) where TUiType : UIItem
+                                                              string widgetText,
+                                                              ThatIs direction) where TUiType : UIItem
         {
             return RetryLocate(() =>
                                {
-                                   var window = Window;
+                                   var window = Context.Window;
                                    var label = window.Get<Label>(SearchCriteria.ByText(labelText));
                                    var possibleItems = window.GetMultiple(SearchCriteria.ByText(widgetText));
                                    return FindClosest<TUiType>(label,
-                                                               possibleItems);
+                                                               possibleItems,
+                                                               direction);
                                });
         }
     }

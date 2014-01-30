@@ -60,7 +60,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                           rows = grid.Rows;
                           return rows.Count == numberOfRows;
                       },
-                      Context.NumberOfRetrySeconds);
+                      NumberOfRetrySeconds);
             rows
                 .Should()
                 .HaveCount(numberOfRows);
@@ -157,7 +157,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                           listViewRows = grid.Rows;
                           return gridRow < listViewRows.Count;
                       },
-                      Context.NumberOfRetrySeconds);
+                      NumberOfRetrySeconds);
             gridRow
                 .Should()
                 .BeLessThan(listViewRows.Count,

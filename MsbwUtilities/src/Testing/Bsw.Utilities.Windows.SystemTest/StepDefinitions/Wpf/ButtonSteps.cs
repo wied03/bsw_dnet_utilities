@@ -1,4 +1,5 @@
 ﻿using System;
+using Bsw.Utilities.Windows.SystemTest.Transformations;
 using FluentAssertions;
 using TechTalk.SpecFlow;
 using TestStack.White.UIItems;
@@ -21,7 +22,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         {
             var button = Window.Get<Button>(SearchCriteria.ByText(buttonText));
             Retry.For(() => button.Enabled,
-                      Context.NumberOfRetrySeconds);
+                      NumberOfRetrySeconds);
             button.Click();
         }
 
@@ -53,15 +54,16 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         public void ThenThereIsAButtonUnderTheLabel(string buttonText,
                                                     string labelNearest)
         {
-            GetButtonAndStoreInContext(buttonText,
+            GetButtonUnderLabelAndStoreInContext(buttonText,
                                        labelNearest);
         }
 
-        private Button GetButtonAndStoreInContext(string buttonText,
+        private Button GetButtonUnderLabelAndStoreInContext(string buttonText,
                                                   string labelNearest)
         {
-            var button = LocateClosestElementOfType<Button>(labelNearest,
-                                                            buttonText);
+            var button = LocateClosestElementOfType<Button>(labelText: labelNearest,
+                                                            widgetText: buttonText,
+                                                            direction: ThatIs.Underneath);
             button
                 .Should()
                 .NotBeNull();
@@ -73,10 +75,10 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         public void WhenIClickTheButtonUnderTheLabel(string buttonText,
                                                      string labelNearest)
         {
-            var button = Retry.For(() => GetButtonAndStoreInContext(buttonText,
+            var button = Retry.For(() => GetButtonUnderLabelAndStoreInContext(buttonText,
                                                                     labelNearest),
                                    btn => !btn.Enabled,
-                                   Context.NumberOfRetrySeconds);
+                                   NumberOfRetrySeconds);
             button.Enabled
                   .Should()
                   .BeTrue("Can't click a button that's not enabled");

@@ -14,7 +14,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
     [UsedImplicitly]
     public class WpfScenarioContext : GeneralScenarioContext
     {
-        public virtual TimeSpan NumberOfRetrySeconds { get; set; }
+        public virtual TimeSpan? NumberOfRetrySeconds { get; set; }
         public virtual Application App { get; set; }
         public virtual Window Window { get; set; }
         public virtual Button Button { get; set; }

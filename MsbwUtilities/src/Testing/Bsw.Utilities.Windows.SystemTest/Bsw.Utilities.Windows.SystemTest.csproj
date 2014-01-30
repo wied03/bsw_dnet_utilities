@@ -73,6 +73,8 @@
     <Reference Include="TestStack.White">
       <HintPath>..\..\..\..\nuget_pkg_lnk\TestStack.White.0.11.0.207\lib\net40\TestStack.White.dll</HintPath>
     </Reference>
+    <Reference Include="UIAutomationClient" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -88,10 +90,13 @@
     <Compile Include="StepDefinitions\Wpf\CheckboxSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\ComboBoxSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\GridSteps.cs" />
+    <Compile Include="StepDefinitions\Wpf\LabelSteps.cs" />
+    <Compile Include="StepDefinitions\Wpf\MessageBoxSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\ProgressBarSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\TextBoxSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\WpfBaseSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\WpfScenarioContext.cs" />
+    <Compile Include="Transformations\Directions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -107,6 +112,7 @@
       <Name>MsbwTest</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

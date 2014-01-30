@@ -23,7 +23,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
         {
             var processIds = Retry.For(() => GetProcessIdsWithFilename(processPath).ToList(),
                                        pn => !pn.Any(),
-                                       Context.NumberOfRetrySeconds);
+                                       NumberOfRetrySeconds);
             processIds
                 .Should()
                 .HaveCount(1,
