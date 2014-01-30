@@ -19,7 +19,6 @@ namespace Bsw.NUnit.Traceability.Addin
     {
         private static readonly Regex JiraRegex = new Regex(@"JIRA_(\w+_\d+)");
         private readonly IDictionary<string, Type> _typeNameToReflectedTypeCache;
-        private readonly IDictionary<Type, string> _alreadyWrittenFixtureLevelCategories;
         private readonly IWriteCategoriesToOutput _writer;
 
         public JiraTraceability() : this(new WriteCategoriesToOutput())
@@ -30,7 +29,6 @@ namespace Bsw.NUnit.Traceability.Addin
         {
             _writer = writer;
             _typeNameToReflectedTypeCache = new Dictionary<string, Type>();
-            _alreadyWrittenFixtureLevelCategories = new Dictionary<Type, string>();
         }
 
         public bool Install(IExtensionHost host)
@@ -57,16 +55,11 @@ namespace Bsw.NUnit.Traceability.Addin
         {
             var method = GetMethodInfo(testName);
             var declaringType = method.DeclaringType;
-            // only do fixture level stuff once since we can only intercept each test event
-            if (!_alreadyWrittenFixtureLevelCategories.ContainsKey(declaringType))
-            {
-                Debug.Assert(declaringType != null,
-                             "declaringType != null");
-                var fixtureAttributes = declaringType.GetCustomAttributes(typeof (CategoryAttribute),
-                                                                          true);
-                WriteCategories(fixtureAttributes);
-                _alreadyWrittenFixtureLevelCategories[declaringType] = string.Empty;
-            }
+            Debug.Assert(declaringType != null,
+                         "declaringType != null");
+            var fixtureAttributes = declaringType.GetCustomAttributes(typeof (CategoryAttribute),
+                                                                      true);
+            WriteCategories(fixtureAttributes);
             var attributes = method.GetCustomAttributes(typeof (CategoryAttribute),
                                                         true);
             WriteCategories(attributes);

@@ -152,6 +152,21 @@ namespace Bsw.NUnit.Traceability.Addin.Test
             Written
                 .ShouldBeEquivalentTo(new[] {"Related JIRA Issue: CRT-123", "Related JIRA Issue: CRT-123"});
         }
+
+        [Test]
+        public void Suite_leval_cat_written_with_each_test()
+        {
+            // arrange
+            var testName = TestNameBasedOnCurrentTestMethod;
+
+            // act
+            Addin.TestStarted(testName);
+            Addin.TestStarted(testName);
+
+            // assert
+            Written
+               .ShouldBeEquivalentTo(new[] { "Related JIRA Issue: CRT-123", "Related JIRA Issue: CRT-123" });
+        }
     }
 
     [TestFixture]
@@ -211,23 +226,6 @@ namespace Bsw.NUnit.Traceability.Addin.Test
         }
 
         [Test]
-        public void Only_log_fixture_level_categories_once()
-        {
-            // arrange
-            var testName = TestNameBasedOnCurrentTestMethod;
-
-            // act
-            Addin.TestStarted(testName);
-            Addin.TestStarted(testName);
-
-            // assert
-            Written
-                .Should()
-                .HaveCount(1,
-                           "No categories on test method, should only do the type level stuff once");
-        }
-
-        [Test]
         [Category("JIRA_CRT_456")]
         [Category("JIRA_CRT_123")]
         public void Multiple_jira_categories()
@@ -243,8 +241,8 @@ namespace Bsw.NUnit.Traceability.Addin.Test
                 .ShouldBeEquivalentTo(new[]
                                       {
                                           "Test Category: fixture level cat",
-                                          "Related JIRA Issue: CRT-123",
-                                          "Related JIRA Issue: CRT-456"
+                                          "Related JIRA Issue: CRT-456",
+                                          "Related JIRA Issue: CRT-123"
                                       });
         }
 
