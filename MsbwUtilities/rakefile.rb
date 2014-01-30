@@ -34,7 +34,7 @@ end
 
 with (".nuget/nuget.exe") do |ngetpath|
 	with (ENV['nuget_apikey']) do |apikey|
-		with (ENV['version_number']) do |ver|
+		with (ENV['version_number'] || '1.0.0.0') do |ver|
 			with("BSW Technology Consulting") do |companyName|			
 			define_project = lambda do |options|					
 					project_path = options[:project_path]
