@@ -8,6 +8,7 @@ using TechTalk.SpecFlow;
 using TestStack.White;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
+using TestStack.White.WindowsAPI;
 
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
@@ -189,6 +190,12 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         public void WhenUseTextbox(int textBoxIndexFromZero)
         {
             GetTextbox(textBoxIndexFromZero);
+        }
+
+        [When(@"I unfocus the textbox")]
+        public void WhenIUnfocusTheTextbox()
+        {
+            Context.TextBox.KeyIn(key: KeyboardInput.SpecialKeys.TAB);
         }
     }
 }

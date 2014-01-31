@@ -32,7 +32,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 
         private Tuple<string, string> GetDialogTitleAndText()
         {
-            var dialogWindow = Context.Window.ModalWindows().First();
+            var dialogWindow = RetryLocate(() => Context.Window.ModalWindows().FirstOrDefault());
             var dialogElement = dialogWindow.AutomationElement;
             Func<string, string> findTextBox = autoId =>
             {
