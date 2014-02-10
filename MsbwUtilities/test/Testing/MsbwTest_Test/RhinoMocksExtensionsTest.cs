@@ -330,11 +330,10 @@ namespace MsbwTest_Test
 
             // assert
             sw.Elapsed
+              .TotalSeconds
               .Should()
-              .BeGreaterOrEqualTo(3.Seconds())
-              .And
-              .BeLessOrEqualTo(4.Seconds())
-                ;
+              .BeApproximately(expectedValue: 3,
+                               precision: .1);
             invokedWithNumber
                 .Should()
                 .Be(52);
