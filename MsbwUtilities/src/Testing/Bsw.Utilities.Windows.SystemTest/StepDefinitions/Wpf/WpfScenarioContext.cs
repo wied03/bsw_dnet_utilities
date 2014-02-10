@@ -12,6 +12,8 @@ using TestStack.White.UIItems.WindowItems;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [UsedImplicitly]
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
+    // we use a Castle proxy so need virtual
     public class WpfScenarioContext : GeneralScenarioContext
     {
         public virtual TimeSpan? NumberOfRetrySeconds { get; set; }
@@ -22,5 +24,6 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         public virtual ListView Grid { get; set; }
         public virtual TextBox TextBox { get; set; }
         public virtual CheckBox CheckBox { get; set; }
+        public virtual Action MostRecentElementLocateAction { get; set; }
     }
 }

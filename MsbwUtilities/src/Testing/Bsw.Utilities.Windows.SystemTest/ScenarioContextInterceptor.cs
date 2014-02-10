@@ -11,17 +11,17 @@ namespace Bsw.Utilities.Windows.SystemTest
 {
     public class ScenarioContextInterceptor : IInterceptor
     {
-        private static ScenarioContext Context
+        static ScenarioContext Context
         {
             get { return ScenarioContext.Current; }
         }
 
-        private static string GetKey(MethodInfo method)
+        static string GetKey(MethodInfo method)
         {
             return method.Name.Substring(4);
         }
 
-        private static object GetValue(MethodInfo method)
+        static object GetValue(MethodInfo method)
         {
             var key = GetKey(method);
             return Context.ContainsKey(key)
@@ -29,8 +29,8 @@ namespace Bsw.Utilities.Windows.SystemTest
                        : null;
         }
 
-        private static void SetValue(MethodInfo method,
-                                     object value)
+        static void SetValue(MethodInfo method,
+                             object value)
         {
             var key = GetKey(method);
             if (value == null && Context.ContainsKey(key))

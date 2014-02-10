@@ -12,7 +12,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
 {
     public abstract class BaseSteps<TContextType> : Steps where TContextType : GeneralScenarioContext, new()
     {
-        private static readonly ProxyGenerator Generator = new ProxyGenerator();
+        static readonly ProxyGenerator Generator = new ProxyGenerator();
         protected static readonly TContextType ContextStatic = CreateProxiedContext(new TContextType());
 
         protected TContextType Context
@@ -20,7 +20,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
             get { return ContextStatic; }
         }
 
-        private static TContextType CreateProxiedContext(TContextType context)
+        static TContextType CreateProxiedContext(TContextType context)
         {
             return Generator.CreateClassProxyWithTarget(context,
                                                         new ScenarioContextInterceptor());

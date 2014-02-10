@@ -14,8 +14,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
     [Binding]
     public class MessageBoxSteps : WpfBaseSteps
     {
-        private const string AUTOMATION_ID_XCEED_MESSAGEBOX_TEXT = "MessageText";
-        private const string AUTOMATION_ID_XCEED_MESSAGEBOX_TITLE = "TitleText";
+        const string AUTOMATION_ID_XCEED_MESSAGEBOX_TEXT = "MessageText";
+        const string AUTOMATION_ID_XCEED_MESSAGEBOX_TITLE = "TitleText";
 
         [Then(@"a '(.*)' message box appears that says '(.*)'")]
         public void ThenAMessageBoxAppearsThatSays(string title,
@@ -30,23 +30,23 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                  .Be(expectedMessageBoxText);
         }
 
-        private Tuple<string, string> GetDialogTitleAndText()
+        Tuple<string, string> GetDialogTitleAndText()
         {
             var dialogWindow = RetryLocate(() => Context.Window.ModalWindows().FirstOrDefault());
             var dialogElement = dialogWindow.AutomationElement;
             Func<string, string> findTextBox = autoId =>
-            {
-                var treeWalker =
-                    new TreeWalker(
-                        new PropertyCondition(
-                            property: AutomationElement.AutomationIdProperty,
-                            value: autoId));
-                var element = treeWalker.GetFirstChild(dialogElement);
-                var textbox = new TextBox(automationElement: element,
-                                          actionListener: new NullActionListener());
-                // this is awkward, but Text throws an exception, probably since these are only visible in raw view
-                return textbox.Name;
-            };
+                                               {
+                                                   var treeWalker =
+                                                       new TreeWalker(
+                                                           new PropertyCondition(
+                                                               property: AutomationElement.AutomationIdProperty,
+                                                               value: autoId));
+                                                   var element = treeWalker.GetFirstChild(dialogElement);
+                                                   var textbox = new TextBox(automationElement: element,
+                                                                             actionListener: new NullActionListener());
+                                                   // this is awkward, but Text throws an exception, probably since these are only visible in raw view
+                                                   return textbox.Name;
+                                               };
             var titleText = findTextBox(AUTOMATION_ID_XCEED_MESSAGEBOX_TITLE);
             var messageBoxText = findTextBox(AUTOMATION_ID_XCEED_MESSAGEBOX_TEXT);
             var tuple = new Tuple<string, string>(titleText,

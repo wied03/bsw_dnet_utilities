@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Windows.Controls;
+using Bsw.Utilities.Windows.SystemTest.Transformations;
 using FluentAssertions;
 using MsBw.MsBwUtility.JetBrains.Annotations;
 using NUnit.Framework;
@@ -28,27 +29,35 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         [Then(@"there is a grid under the label '(.*)'")]
         public void ThenThereIsAGridUnderTheLabel(string labelText)
         {
-            FindAndSetGrid(labelText);
+            FindAndSetGridUnderLabel(labelText);
         }
 
-        private void FindAndSetGrid(string labelText)
+        void FindAndSetGridUnderLabel(string labelText)
         {
-            var grid = LocateClosestElementOfType<ListView>(labelText);
-            grid.Should()
-                .NotBeNull();
-            Context.Grid = grid;
+            // grid seem to have problems sometimes with not reflecting current state and need refreshing
+            Action mostRecentElementLocateAction = () =>
+                                                   {
+                                                       var grid =
+                                                           LocateClosestElementOfType<ListView>(labelText: labelText,
+                                                                                                direction:
+                                                                                                    ThatIs.Underneath);
+                                                       grid.Should()
+                                                           .NotBeNull();
+                                                       Context.Grid = grid;
+                                                   };
+            Context.MostRecentElementLocateAction = mostRecentElementLocateAction;
+            mostRecentElementLocateAction();
         }
 
         [When(@"I use the grid under the label '(.*)'")]
         public void WhenIUseTheGridUnderTheLabel(string labelText)
         {
-            FindAndSetGrid(labelText);
+            FindAndSetGridUnderLabel(labelText);
         }
 
         [Then(@"that grid has (\d+) rows")]
         public void ThenThatGridHasRows(int numberOfRows)
         {
-            var grid = Context.Grid;
             ListViewRows rows = null;
             // try for 3 seconds to get what we're looking for
             var retryNumber = 0;
@@ -56,8 +65,12 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                       {
                           Console.WriteLine("Looking for # of grid rows try # {0}",
                                             retryNumber++);
+                          Context.MostRecentElementLocateAction();
                           // seems like Grid.Rows is replaced once it's populated, so keep refreshing
-                          rows = grid.Rows;
+                          rows = Context.Grid.Rows;
+                          Console.WriteLine("Current row count {0}, expected row count {1}",
+                                            rows.Count,
+                                            numberOfRows);
                           return rows.Count == numberOfRows;
                       },
                       NumberOfRetrySeconds);
@@ -75,8 +88,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                                    rowIndex);
         }
 
-        private void ActionWhenIUseTheComboboxInColumnOnRow(int columnIndex,
-                                                            int rowIndex)
+        void ActionWhenIUseTheComboboxInColumnOnRow(int columnIndex,
+                                                    int rowIndex)
         {
             WhenFormat(@"I use the combobox in column {0} on row {1}",
                        columnIndex,
@@ -100,8 +113,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                                     rowIndex);
         }
 
-        private void ActionThenThereIsAComboboxInColumnOnRow(int columnIndex,
-                                                             int gridRow)
+        void ActionThenThereIsAComboboxInColumnOnRow(int columnIndex,
+                                                     int gridRow)
         {
             ThenFormat(@"there is a combobox in column {0} on row {1}",
                        columnIndex,
@@ -116,16 +129,16 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                gridRow);
         }
 
-        private void FindAndSetComboBox(int columnIndex,
-                                        int gridRow)
+        void FindAndSetComboBox(int columnIndex,
+                                int gridRow)
         {
             var box = FindWidgetIn<WPFComboBox>(columnIndex,
                                                 gridRow);
             Context.ComboBox = box;
         }
 
-        private TWidgetType FindWidgetIn<TWidgetType>(int columnIndex,
-                                                      int gridRow) where TWidgetType : UIItem
+        TWidgetType FindWidgetIn<TWidgetType>(int columnIndex,
+                                              int gridRow) where TWidgetType : UIItem
         {
             var row = GetRowFromIndex(gridRow);
             var headerCellBounds = Context.Grid.Header.Columns[columnIndex].Bounds;
@@ -143,7 +156,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             return widget;
         }
 
-        private ListViewRow GetRowFromIndex(int gridRow)
+        ListViewRow GetRowFromIndex(int gridRow)
         {
             var grid = Context.Grid;
             ListViewRows listViewRows = null;
@@ -217,7 +230,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                            headerColumn.Index);
         }
 
-        private ListViewColumn GetHeaderColumn(string columnName)
+        ListViewColumn GetHeaderColumn(string columnName)
         {
             var header = Context.Grid.Header;
             var headerColumn = header.Column(columnName);
@@ -232,8 +245,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             return null;
         }
 
-        private void ActionWhenITypeIntoTheGridCell(string text,
-                                                    int cellIndex)
+        void ActionWhenITypeIntoTheGridCell(string text,
+                                            int cellIndex)
         {
             WhenFormat(@"I type '{0}' into grid cell {1}",
                        text,
@@ -251,7 +264,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             cell.Enter(text);
         }
 
-        private IUIItem GetCellOnCurrentlySelectedRow(int cellIndex)
+        IUIItem GetCellOnCurrentlySelectedRow(int cellIndex)
         {
             var row = Context
                 .Grid
@@ -272,9 +285,9 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                              expectedContent);
         }
 
-        private void ActionThenGridRowCellHasContents(int rowIndex,
-                                                      int columnIndex,
-                                                      string expectedContent)
+        void ActionThenGridRowCellHasContents(int rowIndex,
+                                              int columnIndex,
+                                              string expectedContent)
         {
             ThenFormat(@"grid row {0}, cell {1} has contents '{2}'",
                        rowIndex,
@@ -296,8 +309,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                 .Be(expectedContent);
         }
 
-        private IUIItem GetCell(int rowIndex,
-                                int columnIndex)
+        IUIItem GetCell(int rowIndex,
+                        int columnIndex)
         {
             var row = GetRowFromIndex(rowIndex);
             return row.Get(SearchCriteria.ByClassName(typeof (DataGridCell).Name)
@@ -313,8 +326,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                                          rowIndex);
         }
 
-        private void ActionThenThereIsAMaskedTextboxInColumnOnRow(int columnIndex,
-                                                                  int rowIndex)
+        void ActionThenThereIsAMaskedTextboxInColumnOnRow(int columnIndex,
+                                                          int rowIndex)
         {
             ThenFormat(@"there is a masked textbox in column {0} on row {1}",
                        columnIndex,
@@ -329,8 +342,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                               rowIndex);
         }
 
-        private void FindAndSetTextbox(int columnIndex,
-                                       int rowIndex)
+        void FindAndSetTextbox(int columnIndex,
+                               int rowIndex)
         {
             var box = FindWidgetIn<TextBox>(columnIndex,
                                             rowIndex);
@@ -346,8 +359,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                                         rowIndex);
         }
 
-        private void ActionWhenIUseTheMaskedTextboxInColumnOnRow(int columnIndex,
-                                                                 int rowIndex)
+        void ActionWhenIUseTheMaskedTextboxInColumnOnRow(int columnIndex,
+                                                         int rowIndex)
         {
             When(string.Format(@"I use the masked textbox in column {0} on row {1}",
                                columnIndex,

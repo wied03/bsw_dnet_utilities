@@ -26,8 +26,8 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                    .NotBeNull();
         }
 
-        private void FindTextBox(ThatIs direction,
-                                 string labelText)
+        void FindTextBox(ThatIs direction,
+                         string labelText)
         {
             Context.TextBox = RetryLocate(() => LocateClosestElementOfType<TextBox>(labelText: labelText,
                                                                                     direction: direction));
@@ -70,13 +70,13 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         {
             var text = Context.TextBox;
             Action<string> check = s =>
-            {
-                text.Text = s;
-                text.Text
-                    .Should()
-                    .BeEmpty("{0} is not a hex character",
-                             s);
-            };
+                                   {
+                                       text.Text = s;
+                                       text.Text
+                                           .Should()
+                                           .BeEmpty("{0} is not a hex character",
+                                                    s);
+                                   };
             for (var c = 'g'; c < 'z'; c++)
             {
                 var str = c.ToString(CultureInfo.InvariantCulture);
@@ -84,7 +84,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                 check(str.ToUpper());
             }
 
-            char[] specialCharSpotCheck = { ';', '!', '.', '"' };
+            char[] specialCharSpotCheck = {';', '!', '.', '"'};
             foreach (var c in specialCharSpotCheck)
             {
                 var str = c.ToString(CultureInfo.InvariantCulture);
@@ -97,14 +97,14 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         {
             var text = Context.TextBox;
             Action<string> check = s =>
-            {
-                text.Text = s;
-                text.Text
-                    .Trim()
-                    .Should()
-                    .BeEmpty("{0} is not an integer",
-                             s);
-            };
+                                   {
+                                       text.Text = s;
+                                       text.Text
+                                           .Trim()
+                                           .Should()
+                                           .BeEmpty("{0} is not an integer",
+                                                    s);
+                                   };
             for (var c = 'a'; c < 'z'; c++)
             {
                 var str = c.ToString(CultureInfo.InvariantCulture);
@@ -112,7 +112,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                 check(str.ToUpper());
             }
 
-            char[] specialCharSpotCheck = { ';', '!', '.', '"' };
+            char[] specialCharSpotCheck = {';', '!', '.', '"'};
             foreach (var c in specialCharSpotCheck)
             {
                 var str = c.ToString(CultureInfo.InvariantCulture);
@@ -149,7 +149,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             box.Text = contents;
         }
 
-        private List<TextBox> GetTextboxes()
+        List<TextBox> GetTextboxes()
         {
             var type = typeof (TextBox);
             var criteria = SearchCriteria.ByControlType(testControlType: type,
@@ -176,7 +176,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             GetTextbox(textBoxIndexFromZero);
         }
 
-        private void GetTextbox(int textBoxIndexFromZero)
+        void GetTextbox(int textBoxIndexFromZero)
         {
             var textboxes = GetTextboxes();
             textBoxIndexFromZero

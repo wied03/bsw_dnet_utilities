@@ -12,7 +12,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
     [Binding]
     public class ButtonSteps : WpfBaseSteps
     {
-        private Window Window
+        Window Window
         {
             get { return Context.Window; }
         }
@@ -55,11 +55,11 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                                     string labelNearest)
         {
             GetButtonUnderLabelAndStoreInContext(buttonText,
-                                       labelNearest);
+                                                 labelNearest);
         }
 
-        private Button GetButtonUnderLabelAndStoreInContext(string buttonText,
-                                                  string labelNearest)
+        Button GetButtonUnderLabelAndStoreInContext(string buttonText,
+                                                    string labelNearest)
         {
             var button = LocateClosestElementOfType<Button>(labelText: labelNearest,
                                                             widgetText: buttonText,
@@ -76,7 +76,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                                      string labelNearest)
         {
             var button = Retry.For(() => GetButtonUnderLabelAndStoreInContext(buttonText,
-                                                                    labelNearest),
+                                                                              labelNearest),
                                    btn => !btn.Enabled,
                                    NumberOfRetrySeconds);
             button.Enabled

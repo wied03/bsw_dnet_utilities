@@ -67,7 +67,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
             return SelectProcessIdQuery(query);
         }
 
-        private static IEnumerable<int> SelectProcessIdQuery(string query)
+        static IEnumerable<int> SelectProcessIdQuery(string query)
         {
             var searcher = new ManagementObjectSearcher(query);
             return searcher.Get()

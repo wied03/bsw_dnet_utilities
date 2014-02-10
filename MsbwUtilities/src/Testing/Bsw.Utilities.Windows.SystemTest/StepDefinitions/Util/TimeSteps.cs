@@ -13,7 +13,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
             WaitFor(seconds);
         }
 
-        private static void WaitFor(int seconds)
+        static void WaitFor(int seconds)
         {
             Thread.Sleep(TimeSpan.FromSeconds(seconds));
         }

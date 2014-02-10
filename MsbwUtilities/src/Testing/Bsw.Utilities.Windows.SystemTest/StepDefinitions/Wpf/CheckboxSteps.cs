@@ -23,7 +23,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             checkbox.Checked = false;
         }
 
-        private CheckBox FindCheckbox(string labelText)
+        CheckBox FindCheckbox(string labelText)
         {
             var checkbox = Context.Window.Get<CheckBox>(SearchCriteria.ByText(labelText));
             checkbox.Should()

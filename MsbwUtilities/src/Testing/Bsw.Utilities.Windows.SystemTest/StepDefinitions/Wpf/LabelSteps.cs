@@ -19,7 +19,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                  labelText);
         }
 
-        private const string FORMAT_THERE_IS_A_LABEL_THAT_SAYS = @"there is a label that says '{0}'";
+        const string FORMAT_THERE_IS_A_LABEL_THAT_SAYS = @"there is a label that says '{0}'";
 
         [Then(@"there is a label that says '(.*)'")]
         public void ThenThereIsALabelThatSays(string labelText)

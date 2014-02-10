@@ -17,7 +17,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
     [UsedImplicitly]
     public class ProgressBarSteps : WpfBaseSteps
     {
-        private Window Window
+        Window Window
         {
             get { return Context.Window; }
         }
@@ -39,7 +39,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             Wait();
         }
 
-        private void Wait()
+        void Wait()
         {
             Console.WriteLine(@"Getting progress bar...");
             var progressBar = Window.Get<ProgressBar>(SearchCriteria.Indexed(0));

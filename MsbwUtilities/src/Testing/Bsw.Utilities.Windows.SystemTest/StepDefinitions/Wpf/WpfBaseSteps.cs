@@ -45,6 +45,21 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
         }
 
         protected TUiType LocateClosestElementOfType<TUiType>(string labelText,
+                                                              string widgetText,
+                                                              ThatIs direction) where TUiType : UIItem
+        {
+            return RetryLocate(() =>
+                               {
+                                   var window = Context.Window;
+                                   var label = window.Get<Label>(SearchCriteria.ByText(labelText));
+                                   var possibleItems = window.GetMultiple(SearchCriteria.ByText(widgetText));
+                                   return FindClosestTo<TUiType>(label,
+                                                                 possibleItems,
+                                                                 direction);
+                               });
+        }
+
+        protected TUiType LocateClosestElementOfType<TUiType>(string labelText,
                                                               ThatIs direction = ThatIs.InAnyDirection)
             where TUiType : UIItem
         {
@@ -56,17 +71,17 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                    var possibleItems =
                                        window.GetMultiple(SearchCriteria.ByControlType(testControlType: theType,
                                                                                        framework: WindowsFramework.Wpf));
-                                   return FindClosest<TUiType>(label,
-                                                               possibleItems,
-                                                               direction);
+                                   return FindClosestTo<TUiType>(label,
+                                                                 possibleItems,
+                                                                 direction);
                                });
         }
 
-        private static TUiType FindClosest<TUiType>(IUIItem label,
-                                                    IEnumerable<IUIItem> possibleItems,
-                                                    ThatIs direction) where TUiType : UIItem
+        static TUiType FindClosestTo<TUiType>(IUIItem referencePoint,
+                                              IEnumerable<IUIItem> possibleItems,
+                                              ThatIs direction) where TUiType : UIItem
         {
-            var labelPosition = label.Location;
+            var labelPosition = referencePoint.Location;
             Func<IUIItem, IUIItem, bool> predicate;
             switch (direction)
             {
@@ -99,7 +114,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             }
             var pair = (from item in possibleItems
                         where predicate(item,
-                                        label)
+                                        referencePoint)
                         // only below
                         select new {widget = item, distance = (item.Location - labelPosition).Length}
                        ).OrderBy(p => p.distance)
@@ -115,21 +130,6 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                               widget.Name,
                               widget.Location);
             return (TUiType) widget;
-        }
-
-        protected TUiType LocateClosestElementOfType<TUiType>(string labelText,
-                                                              string widgetText,
-                                                              ThatIs direction) where TUiType : UIItem
-        {
-            return RetryLocate(() =>
-                               {
-                                   var window = Context.Window;
-                                   var label = window.Get<Label>(SearchCriteria.ByText(labelText));
-                                   var possibleItems = window.GetMultiple(SearchCriteria.ByText(widgetText));
-                                   return FindClosest<TUiType>(label,
-                                                               possibleItems,
-                                                               direction);
-                               });
         }
     }
 }
