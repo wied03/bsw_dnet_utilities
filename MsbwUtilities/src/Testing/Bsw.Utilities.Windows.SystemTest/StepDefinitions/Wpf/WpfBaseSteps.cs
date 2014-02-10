@@ -6,9 +6,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util;
 using Bsw.Utilities.Windows.SystemTest.Transformations;
+using TechTalk.SpecFlow;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.Utility;
+using TestStack.White.WindowsAPI;
 
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
@@ -130,6 +132,12 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
                                                                possibleItems,
                                                                direction);
                                });
+        }
+
+        [When(@"I press tab to get the focus to change")]
+        public void WhenIPressTabToGetTheFocusToChange()
+        {
+            Context.Window.KeyIn(KeyboardInput.SpecialKeys.TAB);
         }
     }
 }
