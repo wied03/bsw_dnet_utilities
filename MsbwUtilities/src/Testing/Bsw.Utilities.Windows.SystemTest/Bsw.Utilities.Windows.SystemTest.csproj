@@ -90,6 +90,7 @@
     <Compile Include="StepDefinitions\Wpf\CheckboxSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\ComboBoxSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\GridSteps.cs" />
+    <Compile Include="StepDefinitions\Wpf\KeySteps.cs" />
     <Compile Include="StepDefinitions\Wpf\LabelSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\MessageBoxSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\ProgressBarSteps.cs" />
