@@ -17,7 +17,7 @@ namespace MsbwTest.Specflow
     [Binding]
     public class Transforms
     {
-        private static readonly Regex QuoteRegex = new Regex(@"'(.*)'");
+        static readonly Regex QuoteRegex = new Regex(@"'(.*)'");
 
         [StepArgumentTransformation(@"\[(.*)\]")]
         [UsedImplicitly]

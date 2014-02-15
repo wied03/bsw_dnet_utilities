@@ -24,7 +24,7 @@ namespace MsbwTest_Test.CustomAssertions
             base.SetUp();
         }
 
-        private async Task<int> Tester(bool throwException)
+        async Task<int> Tester(bool throwException)
         {
             await Task.Delay(100.Milliseconds());
             if (throwException)

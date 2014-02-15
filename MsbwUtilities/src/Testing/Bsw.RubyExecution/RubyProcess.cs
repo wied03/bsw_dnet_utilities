@@ -17,7 +17,7 @@ namespace Bsw.RubyExecution
     {
         public Process RubyProc { get; private set; }
         public string WorkingDirectory { get; private set; }
-        private static readonly string ThisBinPath = Path.GetFullPath(@".");
+        static readonly string ThisBinPath = Path.GetFullPath(@".");
 
         public RubyProcess(string workingDirectory)
         {

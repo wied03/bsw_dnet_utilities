@@ -1,6 +1,7 @@
 ﻿// Copyright 2014 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
 
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using NUnit.Framework;
@@ -30,9 +31,9 @@ namespace Bsw.Utilities.Windows.SystemTest_Test
         public static void FixtureSetup()
         {
             Runner = TestRunnerManager.GetTestRunner();
-            var featureInfo = new FeatureInfo(new System.Globalization.CultureInfo("en-US"),
-                                             "foo",
-                                             "foo");
+            var featureInfo = new FeatureInfo(new CultureInfo("en-US"),
+                                              "foo",
+                                              "foo");
             Runner.OnFeatureStart(featureInfo);
         }
 

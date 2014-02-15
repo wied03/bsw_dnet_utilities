@@ -18,7 +18,7 @@ namespace Bsw.RubyExecution.Test
     [TestFixture]
     public class ThinServerProcessTest : BaseTest
     {
-        private TcpListener _tcpListener;
+        TcpListener _tcpListener;
 
         #region Setup/Teardown
 

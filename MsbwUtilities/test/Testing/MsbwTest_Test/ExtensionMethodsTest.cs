@@ -27,22 +27,22 @@ namespace MsbwTest_Test
 
         #region Utility Methods
 
-        private async Task DoStuff()
+        async Task DoStuff()
         {
             throw new Exception("foobar");
         }
 
-        private async Task<int> DoOtherStuff()
+        async Task<int> DoOtherStuff()
         {
             throw new Exception("foobar");
         }
 
-        private async Task DoSomethingForTime(TimeSpan time)
+        async Task DoSomethingForTime(TimeSpan time)
         {
             await Task.Delay(time);
         }
 
-        private Task NotAsyncTaskMethod()
+        Task NotAsyncTaskMethod()
         {
             return Task.Factory.StartNew(() =>
                                          {
@@ -51,12 +51,12 @@ namespace MsbwTest_Test
                                          });
         }
 
-        private interface ITest
+        interface ITest
         {
             Task NotAsyncTaskMethodImplementedAsAsync();
         }
 
-        private class Test : ITest
+        class Test : ITest
         {
             public async Task NotAsyncTaskMethodImplementedAsAsync()
             {

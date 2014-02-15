@@ -13,8 +13,8 @@ namespace Bsw.NHibernateUtils.Repository
 {
     public class LazySessionFetcher : ILazySessionFetcher
     {
-        private Lazy<ISession> _lazySession;
-        private readonly ISessionFactory _sessionFactory;
+        Lazy<ISession> _lazySession;
+        readonly ISessionFactory _sessionFactory;
 
         public LazySessionFetcher(ISessionFactory sessionFactory)
         {
@@ -23,7 +23,7 @@ namespace Bsw.NHibernateUtils.Repository
             Disposed = false;
         }
 
-        private void CreateSessionAndTransaction()
+        void CreateSessionAndTransaction()
         {
             _lazySession = new Lazy<ISession>(() =>
                                               {

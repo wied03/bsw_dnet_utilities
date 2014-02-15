@@ -18,9 +18,9 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
     [Binding]
     public class CustomCollectionStepDef
     {
-        private IEnumerable<object> _actualItems;
-        private IEnumerable<object> _expectedItems;
-        private Exception _exception;
+        IEnumerable<object> _actualItems;
+        IEnumerable<object> _expectedItems;
+        Exception _exception;
 
         public class TestObject
         {

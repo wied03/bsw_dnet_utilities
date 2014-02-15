@@ -20,8 +20,8 @@ namespace Bsw.NHibernateUtils.Test.Mapping
     [TestFixture]
     public class ExtensionMethodsTest : BaseTest
     {
-        private AutoPersistenceModel _persistenceModel;
-        private IIdentityInstance _mockIdInstance;
+        AutoPersistenceModel _persistenceModel;
+        IIdentityInstance _mockIdInstance;
 
         #region Setup/Teardown
 
@@ -37,7 +37,7 @@ namespace Bsw.NHibernateUtils.Test.Mapping
 
         #region Utility Methods
 
-        private List<IIdConvention> ActualIdConventions
+        List<IIdConvention> ActualIdConventions
         {
             get
             {
@@ -48,7 +48,7 @@ namespace Bsw.NHibernateUtils.Test.Mapping
             }
         }
 
-        private IGeneratorInstance GeneratorMock
+        IGeneratorInstance GeneratorMock
         {
             get
             {

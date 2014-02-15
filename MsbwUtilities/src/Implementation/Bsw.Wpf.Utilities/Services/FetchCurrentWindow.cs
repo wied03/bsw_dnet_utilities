@@ -22,6 +22,6 @@ namespace Bsw.Wpf.Utilities.Services
         }
 
         [DllImport("user32.dll")]
-        private static extern IntPtr GetActiveWindow();
+        static extern IntPtr GetActiveWindow();
     }
 }

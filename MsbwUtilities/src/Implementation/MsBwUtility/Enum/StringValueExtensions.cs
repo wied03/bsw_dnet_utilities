@@ -15,7 +15,7 @@ namespace MsBw.MsBwUtility.Enum
 {
     public static class StringValueExtensions
     {
-        private static readonly IDictionary<string, object> CachedEnumValues = new Dictionary<string, object>();
+        static readonly IDictionary<string, object> CachedEnumValues = new Dictionary<string, object>();
 
         public static TEnum EnumValue<TEnum>(this string theStringVal)
         {
@@ -45,7 +45,7 @@ namespace MsBw.MsBwUtility.Enum
             return enumValue;
         }
 
-        private static string GetStringValForField(FieldInfo field)
+        static string GetStringValForField(FieldInfo field)
         {
             var stringValueAttribute = field.StringValAttr();
             return stringValueAttribute != null
@@ -53,7 +53,7 @@ namespace MsBw.MsBwUtility.Enum
                        : field.Name;
         }
 
-        private static StringValueAttribute StringValAttr(this FieldInfo field)
+        static StringValueAttribute StringValAttr(this FieldInfo field)
         {
             var attrs = field.GetCustomAttributes(typeof (StringValueAttribute),
                                                   true);
@@ -63,7 +63,7 @@ namespace MsBw.MsBwUtility.Enum
                        : null;
         }
 
-        private static readonly IDictionary<System.Enum, string> StringValues = new Dictionary<System.Enum, string>();
+        static readonly IDictionary<System.Enum, string> StringValues = new Dictionary<System.Enum, string>();
 
         public static string StringValue(this System.Enum theEnum)
         {
@@ -100,10 +100,10 @@ namespace MsBw.MsBwUtility.Enum
             return mapping[value];
         }
 
-        private static readonly Dictionary<Type, Dictionary<object, object>> ReverseMapping =
+        static readonly Dictionary<Type, Dictionary<object, object>> ReverseMapping =
             new Dictionary<Type, Dictionary<object, object>>();
 
-        private static void AddReverseMapping<TEnumType, TKeyValue>(Dictionary<TKeyValue, TEnumType> mapping)
+        static void AddReverseMapping<TEnumType, TKeyValue>(Dictionary<TKeyValue, TEnumType> mapping)
         {
             var reverse = new Dictionary<object, object>();
             ReverseMapping[typeof (TEnumType)] = reverse;

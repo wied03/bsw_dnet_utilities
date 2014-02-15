@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using NUnit.Framework;
 using FluentAssertions;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 
 namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations

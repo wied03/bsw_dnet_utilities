@@ -34,7 +34,7 @@ namespace MsBwUtilityTest
 
         #region Utility Methods
 
-        private static PropertyInfo Test(Expression<Func<TestClass, object>> lambda)
+        static PropertyInfo Test(Expression<Func<TestClass, object>> lambda)
         {
             return lambda.ToPropertyInfo();
         }

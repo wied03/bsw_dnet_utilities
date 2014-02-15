@@ -10,7 +10,7 @@ namespace Bsw.Wpf.Utilities.Commands
 {
     public class AutoExecuteDelegateCommand : ICommand
     {
-        private readonly DelegateCommand _wrapped;
+        readonly DelegateCommand _wrapped;
 
         public AutoExecuteDelegateCommand(Action executeMethod)
             : this(executeMethod,

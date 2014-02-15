@@ -21,7 +21,7 @@ namespace MsbwTest.CustomAssertions
 {
     public class AsyncActionAssertionsWithResult<TResult>
     {
-        private readonly Func<Task<TResult>> _asyncAction;
+        readonly Func<Task<TResult>> _asyncAction;
 
         public AsyncActionAssertionsWithResult(Func<Task<TResult>> asyncAction)
         {

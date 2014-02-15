@@ -8,7 +8,7 @@ namespace Bsw.Wpf.Utilities.Services
 {
     public class CloseCurrentWindow : ICloseCurrentWindow
     {
-        private readonly IFetchCurrentWindow _currentWindowFetcher;
+        readonly IFetchCurrentWindow _currentWindowFetcher;
 
         public CloseCurrentWindow(IFetchCurrentWindow currentWindowFetcher)
         {

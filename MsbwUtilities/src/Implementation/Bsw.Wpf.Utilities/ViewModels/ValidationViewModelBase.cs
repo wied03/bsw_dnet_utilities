@@ -15,8 +15,8 @@ namespace Bsw.Wpf.Utilities.ViewModels
     public class ValidationViewModelBase : ViewModelBase,
                                            IDataErrorInfo
     {
-        private readonly Dictionary<string, Func<ValidationViewModelBase, object>> _propertyGetters;
-        private readonly Dictionary<string, ValidationAttribute[]> _validators;
+        readonly Dictionary<string, Func<ValidationViewModelBase, object>> _propertyGetters;
+        readonly Dictionary<string, ValidationAttribute[]> _validators;
         public int ValidationExceptionCount { get; private set; }
 
         internal ValidationResult GetValidationResult(ValidationAttribute attr,
@@ -124,13 +124,13 @@ namespace Bsw.Wpf.Utilities.ViewModels
                               GetValueGetter);
         }
 
-        private static ValidationAttribute[] GetValidations(PropertyInfo property)
+        static ValidationAttribute[] GetValidations(PropertyInfo property)
         {
             return (ValidationAttribute[]) property.GetCustomAttributes(typeof (ValidationAttribute),
                                                                         true);
         }
 
-        private static Func<ValidationViewModelBase, object> GetValueGetter(PropertyInfo property)
+        static Func<ValidationViewModelBase, object> GetValueGetter(PropertyInfo property)
         {
             return viewmodel => property.GetValue(viewmodel,
                                                   null);

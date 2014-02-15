@@ -10,7 +10,7 @@ namespace Bsw.Wpf.Utilities.Commands
 {
     public class VirtualFriendlyDelegateCommand<T> : ICommand
     {
-        private readonly DelegateCommand<T> _command;
+        readonly DelegateCommand<T> _command;
 
         public VirtualFriendlyDelegateCommand(Action<T> executeCommand)
             : this(executeCommand,

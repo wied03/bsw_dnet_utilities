@@ -15,7 +15,7 @@ namespace Bsw.NHibernateUtils.Web
 {
     public class NHibernateModule : IHttpModule
     {
-        private ILazySessionFetcher _lazySessionFetcher;
+        ILazySessionFetcher _lazySessionFetcher;
 
         public void Init(HttpApplication context)
         {
@@ -23,14 +23,14 @@ namespace Bsw.NHibernateUtils.Web
             context.EndRequest += ContextEndRequest;
         }
 
-        private void ContextBeginRequest(object sender,
-                                         EventArgs e)
+        void ContextBeginRequest(object sender,
+                                 EventArgs e)
         {
             _lazySessionFetcher = ObjectFactory.GetInstance<ILazySessionFetcher>();
         }
 
-        private void ContextEndRequest(object sender,
-                                       EventArgs e)
+        void ContextEndRequest(object sender,
+                               EventArgs e)
         {
             Dispose();
         }

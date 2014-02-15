@@ -13,7 +13,7 @@ namespace MsBwUtilityTest.Config
     [TestFixture]
     public class CryptoHelperTest : BaseTest
     {
-        private ICryptoHelper _crypto;
+        ICryptoHelper _crypto;
 
         #region Setup/Teardown
 

@@ -18,7 +18,7 @@ namespace Bsw.NHibernateUtils.Test.Repository
     [TestFixture]
     public class LazySessionFetcherTest : BaseDbDrivenTest
     {
-        private ILazySessionFetcher _lazySessionFetcher;
+        ILazySessionFetcher _lazySessionFetcher;
 
         #region Setup/Teardown
 

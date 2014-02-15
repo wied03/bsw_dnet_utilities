@@ -10,9 +10,9 @@ namespace MsbwTest_Test
     [Binding]
     public class ExtensionMethodsSteps
     {
-        private char _character;
-        private int _count;
-        private string _result;
+        char _character;
+        int _count;
+        string _result;
 
         [Given(@"character '(.*)' with count (.*)")]
         public void GivenCharacterWithCount(char character,

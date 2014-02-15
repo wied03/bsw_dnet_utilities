@@ -15,7 +15,7 @@ namespace MsBw.MsBwUtility.Enum
 {
     public class EnumNotFoundException : Exception
     {
-        private const string ERROR_FORMAT = "Unable to find a value in '{0}' for '{1}'.  Valid values are [{2}]";
+        const string ERROR_FORMAT = "Unable to find a value in '{0}' for '{1}'.  Valid values are [{2}]";
 
         public EnumNotFoundException(string value,
                                      Type enumType,
@@ -38,9 +38,9 @@ namespace MsBw.MsBwUtility.Enum
         {
         }
 
-        private static string GenerateMapExceptionMessage(object value,
-                                                          Type enumType,
-                                                          IDictionary mappings)
+        static string GenerateMapExceptionMessage(object value,
+                                                  Type enumType,
+                                                  IDictionary mappings)
         {
             var valuesList = (from object mapping in mappings.Keys
                               select string.Format("Value: {0} ENUM val: {1}",

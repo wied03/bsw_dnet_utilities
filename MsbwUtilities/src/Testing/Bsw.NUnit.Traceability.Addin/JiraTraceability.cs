@@ -17,9 +17,9 @@ namespace Bsw.NUnit.Traceability.Addin
     public class JiraTraceability : IAddin,
                                     EventListener
     {
-        private static readonly Regex JiraRegex = new Regex(@"JIRA_(\w+_\d+)");
-        private readonly IDictionary<string, Type> _typeNameToReflectedTypeCache;
-        private readonly IWriteCategoriesToOutput _writer;
+        static readonly Regex JiraRegex = new Regex(@"JIRA_(\w+_\d+)");
+        readonly IDictionary<string, Type> _typeNameToReflectedTypeCache;
+        readonly IWriteCategoriesToOutput _writer;
 
         public JiraTraceability() : this(new WriteCategoriesToOutput())
         {
@@ -65,7 +65,7 @@ namespace Bsw.NUnit.Traceability.Addin
             WriteCategories(attributes);
         }
 
-        private void WriteCategories(IEnumerable<object> categoryAttributes)
+        void WriteCategories(IEnumerable<object> categoryAttributes)
         {
             var categories = categoryAttributes
                 .Cast<CategoryAttribute>()
@@ -84,14 +84,14 @@ namespace Bsw.NUnit.Traceability.Addin
             }
         }
 
-        private static string FormatNUnitCompatibileCategoryBackToJiraIssue(Match match)
+        static string FormatNUnitCompatibileCategoryBackToJiraIssue(Match match)
         {
             return string.Format("Related JIRA Issue: {0}",
                                  match.Groups[1].Value.Replace('_',
                                                                '-'));
         }
 
-        private MethodInfo GetMethodInfo(TestName testName)
+        MethodInfo GetMethodInfo(TestName testName)
         {
             var fullName = testName.FullName;
             var marker = fullName.LastIndexOf('.');
@@ -105,7 +105,7 @@ namespace Bsw.NUnit.Traceability.Addin
             return method;
         }
 
-        private static Type GetTestType(string type)
+        static Type GetTestType(string type)
         {
             var testAssemblies = AppDomain.CurrentDomain.GetAssemblies()
                                           .Where(asm => asm.GetName().Name.Contains("Test"));

@@ -12,7 +12,7 @@ namespace MsbwTest.CustomAssertions
 {
     public class AsyncActionAssertions
     {
-        private readonly Func<Task> _asyncAction;
+        readonly Func<Task> _asyncAction;
 
         public AsyncActionAssertions(Func<Task> asyncAction)
         {

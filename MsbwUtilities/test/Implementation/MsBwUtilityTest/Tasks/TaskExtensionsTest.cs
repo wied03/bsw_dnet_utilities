@@ -24,13 +24,13 @@ namespace MsBwUtilityTest.Tasks
             base.SetUp();
         }
 
-        private static async Task<int> DelayFor(TimeSpan time)
+        static async Task<int> DelayFor(TimeSpan time)
         {
             await Task.Delay(time);
             return 5;
         }
 
-        private static async Task DelayForVoid(TimeSpan time)
+        static async Task DelayForVoid(TimeSpan time)
         {
             await Task.Delay(time);
         }

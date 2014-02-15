@@ -18,14 +18,14 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
 {
     public abstract class BaseViewModelTest
     {
-        private Dictionary<string, ValidationAttribute[]> _validators;
+        Dictionary<string, ValidationAttribute[]> _validators;
         protected IDisplayMessageBox MessageBoxMock { get; private set; }
         protected IControlBusyIndicator ControlBusyMock { get; private set; }
         protected ICloseCurrentWindow CloseCurrentWindowMock { get; private set; }
         protected IDisplayViewAsDialog ViewAsDialogMock { get; private set; }
         protected Tuple<string, DialogType?> DisplayedMessage { get; private set; }
         protected Exception DisplayedErrorMessage { get; private set; }
-        private Stack<string> BusyIndicatorStack { get; set; }
+        Stack<string> BusyIndicatorStack { get; set; }
         protected IEventAggregator EventAggregator { get; private set; }
         protected int NumWindowsClosed { get; private set; }
 
@@ -45,14 +45,14 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
         {
         }
 
-        private void SetupCloseCurrentWindowMock()
+        void SetupCloseCurrentWindowMock()
         {
             NumWindowsClosed = 0;
             CloseCurrentWindowMock.Stub(c => c.Close())
                                   .Do(new Action(() => NumWindowsClosed++));
         }
 
-        private void SetupMessageBoxMock()
+        void SetupMessageBoxMock()
         {
             DisplayedMessage = null;
             DisplayedErrorMessage = null;
@@ -71,7 +71,7 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
                                                             DisplayedErrorMessage = e));
         }
 
-        private void SetupBusyIndicatorMock()
+        void SetupBusyIndicatorMock()
         {
             Func<Stack<string>> stackFetcher = () => BusyIndicatorStack ?? (BusyIndicatorStack = new Stack<string>());
             ControlBusyMock.Stub(c => c.Show(null))
@@ -105,7 +105,7 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
                         danglingMessages);
         }
 
-        private void InstantiateMocks()
+        void InstantiateMocks()
         {
             MessageBoxMock = MockRepository.GenerateMock<IDisplayMessageBox>();
             ControlBusyMock = MockRepository.GenerateMock<IControlBusyIndicator>();
@@ -142,7 +142,7 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
                 .Select(v => v.ErrorMessage);
         }
 
-        private static ValidationAttribute[] GetValidations(PropertyInfo property)
+        static ValidationAttribute[] GetValidations(PropertyInfo property)
         {
             return (ValidationAttribute[]) property.GetCustomAttributes(typeof (ValidationAttribute),
                                                                         true);

@@ -45,11 +45,11 @@ namespace Bsw.NUnit.Traceability.Addin.Test
                 // ReSharper restore PossibleNullReferenceException
                 var methodName = method.Name;
                 return new TestName
-                {
-                    FullName = string.Format("{0}.{1}",
-                                             theType,
-                                             methodName)
-                };
+                       {
+                           FullName = string.Format("{0}.{1}",
+                                                    theType,
+                                                    methodName)
+                       };
             }
         }
 
@@ -86,7 +86,7 @@ namespace Bsw.NUnit.Traceability.Addin.Test
 
             // assert
             Written
-                .ShouldBeEquivalentTo(new[] { "Test Category: some other stuff" });
+                .ShouldBeEquivalentTo(new[] {"Test Category: some other stuff"});
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace Bsw.NUnit.Traceability.Addin.Test
 
             // assert
             Written
-                .ShouldBeEquivalentTo(new[] { "Related JIRA Issue: CRT-123" });
+                .ShouldBeEquivalentTo(new[] {"Related JIRA Issue: CRT-123"});
         }
     }
 
@@ -165,7 +165,7 @@ namespace Bsw.NUnit.Traceability.Addin.Test
 
             // assert
             Written
-               .ShouldBeEquivalentTo(new[] { "Related JIRA Issue: CRT-123", "Related JIRA Issue: CRT-123" });
+                .ShouldBeEquivalentTo(new[] {"Related JIRA Issue: CRT-123", "Related JIRA Issue: CRT-123"});
         }
     }
 
@@ -187,7 +187,7 @@ namespace Bsw.NUnit.Traceability.Addin.Test
 
             // assert
             Written
-                .ShouldBeEquivalentTo(new[] { "Test Category: fixture level cat", "Test Category: some other stuff" });
+                .ShouldBeEquivalentTo(new[] {"Test Category: fixture level cat", "Test Category: some other stuff"});
         }
 
         [Test]
@@ -205,7 +205,7 @@ namespace Bsw.NUnit.Traceability.Addin.Test
             Written
                 .ShouldBeEquivalentTo(new[]
                                       {
-                                          "Test Category: fixture level cat", 
+                                          "Test Category: fixture level cat",
                                           "Test Category: some other stuff",
                                           "Test Category: some other stuff 2"
                                       });
@@ -222,7 +222,7 @@ namespace Bsw.NUnit.Traceability.Addin.Test
 
             // assert
             Written
-                 .ShouldBeEquivalentTo(new[] { "Test Category: fixture level cat" });
+                .ShouldBeEquivalentTo(new[] {"Test Category: fixture level cat"});
         }
 
         [Test]
@@ -258,7 +258,7 @@ namespace Bsw.NUnit.Traceability.Addin.Test
 
             // assert
             Written
-                .ShouldBeEquivalentTo(new[] { "Test Category: fixture level cat", "Related JIRA Issue: CRT-123" });
+                .ShouldBeEquivalentTo(new[] {"Test Category: fixture level cat", "Related JIRA Issue: CRT-123"});
         }
 
         #endregion

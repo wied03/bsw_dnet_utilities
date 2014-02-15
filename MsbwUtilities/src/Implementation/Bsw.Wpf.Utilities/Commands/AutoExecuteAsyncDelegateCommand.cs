@@ -10,7 +10,7 @@ namespace Bsw.Wpf.Utilities.Commands
 {
     public class AutoExecuteAsyncDelegateCommand : ICommand
     {
-        private readonly AsyncDelegateCommandWrapper _wrapped;
+        readonly AsyncDelegateCommandWrapper _wrapped;
 
         public AutoExecuteAsyncDelegateCommand(Func<Task> executeMethod)
             : this(executeMethod,

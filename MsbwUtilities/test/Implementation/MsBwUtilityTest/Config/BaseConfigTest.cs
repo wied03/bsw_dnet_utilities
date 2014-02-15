@@ -4,50 +4,46 @@ using System;
 using System.Configuration;
 using System.Linq;
 using System.Linq.Expressions;
+using FluentAssertions;
 using MsBw.MsBwUtility.Config;
 using MsBw.MsBwUtility.Enum;
 using NUnit.Framework;
-using FluentAssertions;
 
 namespace MsBwUtilityTest.Config
 {
     public enum Set
     {
-        [StringValue("set1")]
-        Setting1,
-        [StringValue("set2")]
-        Setting2
+        [StringValue("set1")] Setting1,
+        [StringValue("set2")] Setting2
     }
 
     public class TestConfig : BaseConfig<Set>
     {
         public const string SECTION_NAME = "theSection";
 
-        public TestConfig(Configuration config) : base(SECTION_NAME,config)
+        public TestConfig(Configuration config) : base(SECTION_NAME,
+                                                       config)
         {
         }
 
         public string Setting1
         {
-            get
-            {
-                return GetValue(Set.Setting1);
-            }
+            get { return GetValue(Set.Setting1); }
             set
             {
-                SetValue(Set.Setting1,value);
+                SetValue(Set.Setting1,
+                         value);
             }
         }
 
         public string Setting2
         {
-            get
-            {
-                return GetValue(Set.Setting2);
-            }
+            get { return GetValue(Set.Setting2); }
             set
             {
-                SetValue(Set.Setting2, value,true);
+                SetValue(Set.Setting2,
+                         value,
+                         true);
             }
         }
 
@@ -60,9 +56,9 @@ namespace MsBwUtilityTest.Config
     [TestFixture]
     public class BaseConfigTest : BaseTest
     {
-        private Configuration _config;
-        private TestConfig _testConfig;
-        private KeyValueConfigurationCollection _settings;
+        Configuration _config;
+        TestConfig _testConfig;
+        KeyValueConfigurationCollection _settings;
 
         #region Setup/Teardown
 
@@ -84,14 +80,14 @@ namespace MsBwUtilityTest.Config
 
         #region Utility Methods
 
-        private static Configuration GetConfig()
+        static Configuration GetConfig()
         {
             return ConfigurationManager.OpenMappedExeConfiguration(new ExeConfigurationFileMap
-            {
-                ExeConfigFilename = "the.exe.config",
-                RoamingUserConfigFilename = "the.user.config"
-            },
-                                                                      ConfigurationUserLevel.PerUserRoaming);
+                                                                   {
+                                                                       ExeConfigFilename = "the.exe.config",
+                                                                       RoamingUserConfigFilename = "the.user.config"
+                                                                   },
+                                                                   ConfigurationUserLevel.PerUserRoaming);
         }
 
         #endregion
@@ -161,7 +157,7 @@ namespace MsBwUtilityTest.Config
                                                  .Should()
                                                  .Be("bar");
             var readConfig = GetConfig();
-            var section = (AppSettingsSection)readConfig.GetSection(TestConfig.SECTION_NAME);
+            var section = (AppSettingsSection) readConfig.GetSection(TestConfig.SECTION_NAME);
             section.Settings[Set.Setting2.StringValue()].Value
                                                         .Should()
                                                         .Be("bar",
@@ -185,7 +181,7 @@ namespace MsBwUtilityTest.Config
                                                  .Should()
                                                  .Be("bar");
             var readConfig = GetConfig();
-            var section = (AppSettingsSection)readConfig.GetSection(TestConfig.SECTION_NAME);
+            var section = (AppSettingsSection) readConfig.GetSection(TestConfig.SECTION_NAME);
             section.Settings[Set.Setting1.StringValue()].Value
                                                         .Should()
                                                         .Be("bar",

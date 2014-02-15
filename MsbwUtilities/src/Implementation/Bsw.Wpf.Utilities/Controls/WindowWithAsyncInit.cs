@@ -16,8 +16,8 @@ namespace Bsw.Wpf.Utilities.Controls
             Loaded += WindowWithAsyncInitLoaded;
         }
 
-        private async void WindowWithAsyncInitLoaded(object sender,
-                                                     RoutedEventArgs e)
+        async void WindowWithAsyncInitLoaded(object sender,
+                                             RoutedEventArgs e)
         {
             var viewModel = DataContext as IHaveAsyncLoadActions;
             // if i don't check this for null, this can cause problems in the designer

@@ -19,7 +19,7 @@ namespace Bsw.BaseEntities.Entity
     public abstract class StandardDbAssignedIntKeyEntity<TEntityType> : IStandardDbAssignedIntKeyEntity
         where TEntityType : StandardDbAssignedIntKeyEntity<TEntityType>
     {
-        private int? _oldHashCode;
+        int? _oldHashCode;
 
 // ReSharper disable once UnusedAutoPropertyAccessor.Global
         // NHibernate sets this

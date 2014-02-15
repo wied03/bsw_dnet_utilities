@@ -10,7 +10,7 @@ namespace Bsw.Wpf.Utilities.Commands
 {
     public class AutoExecuteDelegateCommandGeneric<TParamType> : ICommand
     {
-        private readonly DelegateCommand<TParamType> _wrapped;
+        readonly DelegateCommand<TParamType> _wrapped;
 
         public AutoExecuteDelegateCommandGeneric(Action<TParamType> executeMethod)
             : this(executeMethod,

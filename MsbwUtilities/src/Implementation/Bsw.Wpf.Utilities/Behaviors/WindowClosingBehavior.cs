@@ -33,8 +33,8 @@ namespace Bsw.Wpf.Utilities.Behaviors
                                                                                                        new UIPropertyMetadata
                                                                                                            (ClosedChanged));
 
-        private static void ClosedChanged(DependencyObject target,
-                                          DependencyPropertyChangedEventArgs e)
+        static void ClosedChanged(DependencyObject target,
+                                  DependencyPropertyChangedEventArgs e)
         {
             var window = target as Window;
 
@@ -71,8 +71,8 @@ namespace Bsw.Wpf.Utilities.Behaviors
                                                                                                         new UIPropertyMetadata
                                                                                                             (ClosingChanged));
 
-        private static void ClosingChanged(DependencyObject target,
-                                           DependencyPropertyChangedEventArgs e)
+        static void ClosingChanged(DependencyObject target,
+                                   DependencyPropertyChangedEventArgs e)
         {
             var window = target as Window;
 
@@ -108,8 +108,8 @@ namespace Bsw.Wpf.Utilities.Behaviors
                                                                                                                   WindowClosingBehavior
                                                                                                                   ));
 
-        private static void WindowClosed(object sender,
-                                         EventArgs e)
+        static void WindowClosed(object sender,
+                                 EventArgs e)
         {
             var closed = GetClosed(sender as Window);
             if (closed != null)
@@ -118,8 +118,8 @@ namespace Bsw.Wpf.Utilities.Behaviors
             }
         }
 
-        private static void WindowClosing(object sender,
-                                          CancelEventArgs e)
+        static void WindowClosing(object sender,
+                                  CancelEventArgs e)
         {
             var closing = GetClosing(sender as Window);
             if (closing == null) return;

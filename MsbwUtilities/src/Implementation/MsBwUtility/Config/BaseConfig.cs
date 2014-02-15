@@ -10,8 +10,8 @@ namespace MsBw.MsBwUtility.Config
 {
     public abstract class BaseConfig<TSettingsEnum>
     {
-        private readonly Configuration _configuration;
-        private readonly string _sectionName;
+        readonly Configuration _configuration;
+        readonly string _sectionName;
 
         protected Configuration Config
         {

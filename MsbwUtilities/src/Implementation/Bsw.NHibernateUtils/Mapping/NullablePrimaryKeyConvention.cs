@@ -14,7 +14,7 @@ namespace Bsw.NHibernateUtils.Mapping
 {
     public class NullablePrimaryKeyConvention : IIdConvention
     {
-        private readonly Action<IGeneratorInstance> _generateStyle;
+        readonly Action<IGeneratorInstance> _generateStyle;
 
         public NullablePrimaryKeyConvention(Action<IGeneratorInstance> generateStyle)
         {

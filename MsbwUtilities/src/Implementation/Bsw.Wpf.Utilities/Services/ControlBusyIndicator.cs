@@ -11,9 +11,9 @@ namespace Bsw.Wpf.Utilities.Services
 {
     public class ControlBusyIndicator : IControlBusyIndicator
     {
-        private readonly Lazy<BusyIndicator> _indicator;
+        readonly Lazy<BusyIndicator> _indicator;
 
-        private BusyIndicator Indicator
+        BusyIndicator Indicator
         {
             get { return _indicator.Value; }
         }
@@ -27,7 +27,7 @@ namespace Bsw.Wpf.Utilities.Services
                                                  });
         }
 
-        private static BusyIndicator FindBusyIndicator(DependencyObject view)
+        static BusyIndicator FindBusyIndicator(DependencyObject view)
         {
             var indicator = view.FindVisualChildren<BusyIndicator>()
                                 .FirstOrDefault();

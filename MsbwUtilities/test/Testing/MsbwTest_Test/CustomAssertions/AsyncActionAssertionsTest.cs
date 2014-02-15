@@ -22,7 +22,7 @@ namespace MsbwTest_Test.CustomAssertions
             base.SetUp();
         }
 
-        private async Task Tester(bool throwException)
+        async Task Tester(bool throwException)
         {
             if (throwException)
             {
@@ -32,7 +32,7 @@ namespace MsbwTest_Test.CustomAssertions
         }
 
 
-        private async Task ThrowException()
+        async Task ThrowException()
         {
             await Task.Delay(100.Milliseconds());
             throw new ArgumentException("foobar");

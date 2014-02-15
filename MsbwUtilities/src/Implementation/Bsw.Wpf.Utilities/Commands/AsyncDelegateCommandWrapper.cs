@@ -13,7 +13,7 @@ namespace Bsw.Wpf.Utilities.Commands
     /// </summary>
     public class AsyncDelegateCommandWrapper : DelegateCommand
     {
-        private readonly Func<Task> _executeMethod;
+        readonly Func<Task> _executeMethod;
 
         public AsyncDelegateCommandWrapper(Func<Task> executeMethod)
             : this(executeMethod,

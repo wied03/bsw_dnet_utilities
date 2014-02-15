@@ -5,8 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using Bsw.Utilities.Windows.SystemTest.Transformations;
-using NUnit.Framework;
 using FluentAssertions;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 
 namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
@@ -26,7 +26,7 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
     [TestFixture]
     public class DateTimeTransformationsTest : BaseTest
     {
-        private void SetNowShapShotTo(DateTimeOffset? value)
+        void SetNowShapShotTo(DateTimeOffset? value)
         {
             const string key = DateTimeTransformations.SCENARIO_CONTEXT_NOW_SNAPSHOT;
             var context = ScenarioContext.Current;
@@ -41,7 +41,7 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
         }
 
         #region Tests
-       
+
         [Test]
         public void Get_time_from_date()
         {
@@ -81,9 +81,9 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
             Debug.Assert(result != null,
                          "result != null");
             result.Value.DateTime
-                 .Should()
-                 .BeCloseTo(nearbyTime: DateTime.Now.AddMinutes(5),
-                            precision: 500);
+                  .Should()
+                  .BeCloseTo(nearbyTime: DateTime.Now.AddMinutes(5),
+                             precision: 500);
         }
 
         [Test]

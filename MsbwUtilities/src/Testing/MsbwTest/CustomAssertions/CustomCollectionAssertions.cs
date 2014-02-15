@@ -21,7 +21,7 @@ namespace MsbwTest.CustomAssertions
 {
     public class CustomCollectionAssertions<T>
     {
-        private readonly GenericCollectionAssertions<T> _assertions;
+        readonly GenericCollectionAssertions<T> _assertions;
 
         public CustomCollectionAssertions(GenericCollectionAssertions<T> assertions)
         {

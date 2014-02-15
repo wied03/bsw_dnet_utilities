@@ -36,7 +36,7 @@ namespace Bsw.RubyExecution
                                                "shutdown.txt");
         }
 
-        private void WaitForServerToStart()
+        void WaitForServerToStart()
         {
             var up = false;
             for (var i = 0; i < 10; i++)
@@ -83,7 +83,7 @@ namespace Bsw.RubyExecution
             Started = true;
         }
 
-        private static string ThinPath
+        static string ThinPath
         {
             get
             {

@@ -103,7 +103,7 @@ namespace MsbwTest_Test
                                           string otherStuff);
         }
 
-        private static ITestDoAndReturn Mock
+        static ITestDoAndReturn Mock
         {
             get { return MockRepository.GenerateMock<ITestDoAndReturn>(); }
         }

@@ -48,8 +48,8 @@ namespace MsBw.MsBwUtility.Config
         public string Encrypt(string value)
         {
             return value == null
-                                ? null
-                                : DoEncrypt(value);
+                       ? null
+                       : DoEncrypt(value);
         }
 
         public byte[] DecryptAsBytes(string blackBase64)
@@ -63,21 +63,21 @@ namespace MsBw.MsBwUtility.Config
             return redHexBytes;
         }
 
-        private static byte[] DoEncrypt(byte[] redBytes)
+        static byte[] DoEncrypt(byte[] redBytes)
         {
             return ProtectedData.Protect(redBytes,
                                          null, // entropy doesn't add much value (would just be another key)
                                          DataProtectionScope.CurrentUser);
         }
 
-        private static byte[] DoDecrypt(byte[] blackBytes)
+        static byte[] DoDecrypt(byte[] blackBytes)
         {
             return ProtectedData.Unprotect(blackBytes,
                                            null,
                                            DataProtectionScope.CurrentUser);
         }
 
-        private static string DoEncrypt(string text)
+        static string DoEncrypt(string text)
         {
             var redBytes = Encoding.Default.GetBytes(text);
             var blackBytes = DoEncrypt(redBytes);
@@ -85,7 +85,7 @@ namespace MsBw.MsBwUtility.Config
             return blackBase64;
         }
 
-        private static string DoDecrypt(string blackBase64)
+        static string DoDecrypt(string blackBase64)
         {
             var blackBytes = Convert.FromBase64String(blackBase64);
             var redBytes = DoDecrypt(blackBytes);
