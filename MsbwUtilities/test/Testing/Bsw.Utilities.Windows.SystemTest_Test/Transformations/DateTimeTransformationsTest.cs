@@ -25,36 +25,6 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
     [TestFixture]
     public class DateTimeTransformationsTest : BaseTest
     {
-        ITestRunner _runner;
-
-        #region Setup/Teardown
-
-        [SetUp]
-        public override void SetUp()
-        {
-            base.SetUp();
-            _runner = GetDummyTestRunner();
-        }
-
-        #endregion
-
-        #region Utility Methods
-
-        static ITestRunner GetDummyTestRunner()
-        {
-            var runner = TestRunnerManager.GetTestRunner();
-            var featureInfo = new FeatureInfo(new System.Globalization.CultureInfo("en-US"),
-                                              "foo",
-                                              "foo");
-            runner.OnFeatureStart(featureInfo);
-            var scenarioInfo = new ScenarioInfo("foo",
-                                                null);
-            runner.OnScenarioStart(scenarioInfo);
-            return runner;
-        }
-
-        #endregion
-
         #region Tests
        
         [Test]
@@ -64,7 +34,7 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
             DummySteps.TransformedDate = null;
 
             // act
-            _runner.When("I test 5 minutes from '2/14/2013 1:45 PM'");
+            Runner.When("I test 5 minutes from '2/14/2013 1:45 PM'");
             var result = DummySteps.TransformedDate;
 
             // assert
@@ -76,6 +46,71 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
             result.Value.DateTime
                   .Should()
                   .Be(DateTime.Parse("2/14/2013 1:50 PM"));
+        }
+
+        [Test]
+        public void Get_time_from_now()
+        {
+            // arrange
+            DummySteps.TransformedDate = null;
+
+            // act
+            Runner.When("I test 5 minutes from 'now'");
+            var result = DummySteps.TransformedDate;
+
+            // assert
+            result
+                .Should()
+                .NotBeNull();
+            Debug.Assert(result != null,
+                         "result != null");
+            result.Value.DateTime
+                 .Should()
+                 .BeCloseTo(nearbyTime: DateTime.Now.AddMinutes(5),
+                            precision: 500);
+        }
+
+        [Test]
+        public void Exact_date()
+        {
+            // arrange
+            DummySteps.TransformedDate = null;
+
+            // act
+            Runner.When("I test '2/14/2013 1:45 PM'");
+            var result = DummySteps.TransformedDate;
+
+            // assert
+            result
+                .Should()
+                .NotBeNull();
+            Debug.Assert(result != null,
+                         "result != null");
+            result.Value.DateTime
+                  .Should()
+                  .Be(DateTime.Parse("2/14/2013 1:45 PM"));
+        }
+
+        [Test]
+        public void Exact_now()
+        {
+            // arrange
+            DummySteps.TransformedDate = null;
+
+            // act
+            Runner.When("I test 'now'");
+            var result = DummySteps.TransformedDate;
+
+            // assert
+            result
+                .Should()
+                .NotBeNull();
+            Debug.Assert(result != null,
+                         "result != null");
+            result.Value.DateTime
+                  .Should()
+                  .BeCloseTo(nearbyTime: DateTime.Now,
+                             precision: 500);
         }
 
         #endregion

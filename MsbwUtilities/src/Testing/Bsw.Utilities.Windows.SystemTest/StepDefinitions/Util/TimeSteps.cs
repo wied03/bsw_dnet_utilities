@@ -27,7 +27,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
         [When(@"I set the current date/time for this test to (.*)")]
         public void SetNowToThisTime(DateTimeOffset date)
         {
-            throw new NotImplementedException();
+            Context.NowSnapshot = date;
         }
     }
 }

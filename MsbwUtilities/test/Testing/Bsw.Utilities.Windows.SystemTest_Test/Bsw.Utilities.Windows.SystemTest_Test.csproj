@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StepDefinitions\Util\TimeStepsTest.cs" />
     <Compile Include="Transformations\DateTimeTransformationsTest.cs" />
   </ItemGroup>
   <ItemGroup>

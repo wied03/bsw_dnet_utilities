@@ -10,11 +10,19 @@ namespace Bsw.Utilities.Windows.SystemTest.Transformations
     [Binding]
     public class DateTimeTransformations
     {
-        [StepArgumentTransformation(@"(\d+) minutes from '(.*)'")]
-        public DateTimeOffset GetTime(int minutes,
-                                      string baseDate)
+        [StepArgumentTransformation(@"'(.*)'")]
+        public DateTimeOffset GetTimeFrom(string exactDate)
         {
-            var typed = DateTimeOffset.Parse(baseDate);
+            return exactDate == "now"
+                       ? DateTimeOffset.Now
+                       : DateTimeOffset.Parse(exactDate);
+        }
+
+        [StepArgumentTransformation(@"(\d+) minutes from (.*)")]
+        public DateTimeOffset GetTime(int minutes,
+                                      DateTimeOffset typed)
+        {
+            //var typed = DateTimeOffset.Parse(baseDate);
             return typed.AddMinutes(minutes);
         } 
     }
