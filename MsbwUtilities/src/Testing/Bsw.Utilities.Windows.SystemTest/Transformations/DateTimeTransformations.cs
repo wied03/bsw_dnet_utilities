@@ -24,9 +24,23 @@ namespace Bsw.Utilities.Windows.SystemTest.Transformations
             return DateTimeOffset.Parse(exactDate);
         }
 
-        [StepArgumentTransformation(@"(\d+) minutes from (.*)")]
-        public DateTimeOffset GetTime(int minutes,
-                                      DateTimeOffset typed)
+        [StepArgumentTransformation(@"(\d+) months? from (.*)")]
+        public DateTimeOffset GetMonthsFrom(int months,
+                                            DateTimeOffset typed)
+        {
+            return typed.AddMonths(months);
+        }
+
+        [StepArgumentTransformation(@"(\d+) days? from (.*)")]
+        public DateTimeOffset GetDaysFrom(int days,
+                                          DateTimeOffset typed)
+        {
+            return typed.AddDays(days);
+        }
+
+        [StepArgumentTransformation(@"(\d+) minutes? from (.*)")]
+        public DateTimeOffset GetMinutesFrom(int minutes,
+                                             DateTimeOffset typed)
         {
             return typed.AddMinutes(minutes);
         }

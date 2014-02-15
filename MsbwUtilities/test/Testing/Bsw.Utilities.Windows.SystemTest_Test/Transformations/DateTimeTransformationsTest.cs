@@ -46,7 +46,71 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
         #region Tests
 
         [Test]
-        public void Get_time_from_date()
+        public void Day()
+        {
+            // arrange
+            DummySteps.TransformedDate = null;
+
+            // act
+            Runner.When("I test 1 day from '2/14/2013 1:45 PM'");
+            var result = DummySteps.TransformedDate;
+
+            // assert
+            result
+                .Should()
+                .Be(DateTimeOffset.Parse("2/15/2013 1:45 PM"));
+        }
+
+        [Test]
+        public void Days()
+        {
+            // arrange
+            DummySteps.TransformedDate = null;
+
+            // act
+            Runner.When("I test 2 days from '2/14/2013 1:45 PM'");
+            var result = DummySteps.TransformedDate;
+
+            // assert
+            result
+                .Should()
+                .Be(DateTimeOffset.Parse("2/16/2013 1:45 PM"));
+        }
+
+        [Test]
+        public void Months()
+        {
+            // arrange
+            DummySteps.TransformedDate = null;
+
+            // act
+            Runner.When("I test 2 months from '3/14/2013 1:45 PM'");
+            var result = DummySteps.TransformedDate;
+
+            // assert
+            result
+                .Should()
+                .Be(DateTimeOffset.Parse("5/14/2013 1:45 PM"));
+        }
+
+        [Test]
+        public void Month()
+        {
+            // arrange
+            DummySteps.TransformedDate = null;
+
+            // act
+            Runner.When("I test 1 month from '3/14/2013 1:45 PM'");
+            var result = DummySteps.TransformedDate;
+
+            // assert
+            result
+                .Should()
+                .Be(DateTimeOffset.Parse("4/14/2013 1:45 PM"));
+        }
+
+        [Test]
+        public void Minutes()
         {
             // arrange
             DummySteps.TransformedDate = null;
@@ -67,7 +131,24 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
         }
 
         [Test]
-        public void Get_time_from_now_no_baseline()
+        public void Minute()
+        {
+            // arrange
+            DummySteps.TransformedDate = null;
+            RemoveNowSnapshot();
+
+            // act
+            Runner.When("I test 1 minute from '2/14/2014 1:05 PM'");
+            var result = DummySteps.TransformedDate;
+
+            // assert
+            result
+                .Should()
+                .Be(DateTimeOffset.Parse("2/14/2014 1:06 PM"));
+        }
+
+        [Test]
+        public void Minutes_now_no_baseline()
         {
             // arrange
             DummySteps.TransformedDate = null;
@@ -90,7 +171,7 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
         }
 
         [Test]
-        public void Get_time_from_now_null_baseline()
+        public void Minutes_null_baseline()
         {
             // arrange
             DummySteps.TransformedDate = null;
@@ -114,7 +195,7 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
         }
 
         [Test]
-        public void Get_time_from_now_baseline_already()
+        public void Minues_now_baseline()
         {
             // arrange
             DummySteps.TransformedDate = null;
