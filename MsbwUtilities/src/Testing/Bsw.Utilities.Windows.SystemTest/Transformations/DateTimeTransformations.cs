@@ -16,9 +16,10 @@ namespace Bsw.Utilities.Windows.SystemTest.Transformations
             if (exactDate == "now")
             {
                 var context = ScenarioContext.Current;
-                return context.ContainsKey(SCENARIO_CONTEXT_NOW_SNAPSHOT)
-                           ? context.Get<DateTimeOffset>(SCENARIO_CONTEXT_NOW_SNAPSHOT)
-                           : DateTimeOffset.Now;
+                var existingSnapshot = context.ContainsKey(SCENARIO_CONTEXT_NOW_SNAPSHOT)
+                                           ? context[SCENARIO_CONTEXT_NOW_SNAPSHOT]
+                                           : null;
+                return (existingSnapshot as DateTimeOffset?) ?? DateTimeOffset.Now;
             }
             return DateTimeOffset.Parse(exactDate);
         }

@@ -26,17 +26,20 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
     [TestFixture]
     public class DateTimeTransformationsTest : BaseTest
     {
-        void SetNowShapShotTo(DateTimeOffset? value)
+        static void SetNowShapShotTo(DateTimeOffset? value)
         {
             const string key = DateTimeTransformations.SCENARIO_CONTEXT_NOW_SNAPSHOT;
             var context = ScenarioContext.Current;
-            if (!value.HasValue && context.ContainsKey(key))
+            context[key] = value;
+        }
+
+        static void RemoveNowSnapshot()
+        {
+            const string key = DateTimeTransformations.SCENARIO_CONTEXT_NOW_SNAPSHOT;
+            var context = ScenarioContext.Current;
+            if (context.ContainsKey(key))
             {
                 context.Remove(key);
-            }
-            else
-            {
-                context[key] = value;
             }
         }
 
@@ -68,6 +71,30 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
         {
             // arrange
             DummySteps.TransformedDate = null;
+            RemoveNowSnapshot();
+
+            // act
+            Runner.When("I test 5 minutes from 'now'");
+            var result = DummySteps.TransformedDate;
+
+            // assert
+            result
+                .Should()
+                .NotBeNull();
+            Debug.Assert(result != null,
+                         "result != null");
+            result.Value.DateTime
+                  .Should()
+                  .BeCloseTo(nearbyTime: DateTime.Now.AddMinutes(5),
+                             precision: 500);
+        }
+
+        [Test]
+        public void Get_time_from_now_null_baseline()
+        {
+            // arrange
+            DummySteps.TransformedDate = null;
+            // make sure we can handle this in case a step sets it to null
             SetNowShapShotTo(null);
 
             // act
@@ -134,7 +161,7 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.Transformations
         {
             // arrange
             DummySteps.TransformedDate = null;
-            SetNowShapShotTo(null);
+            RemoveNowSnapshot();
 
             // act
             Runner.When("I test 'now'");
