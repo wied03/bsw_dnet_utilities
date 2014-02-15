@@ -97,6 +97,7 @@
     <Compile Include="StepDefinitions\Wpf\TextBoxSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\WpfBaseSteps.cs" />
     <Compile Include="StepDefinitions\Wpf\WpfScenarioContext.cs" />
+    <Compile Include="Transformations\DateTimeTransformations.cs" />
     <Compile Include="Transformations\Directions.cs" />
   </ItemGroup>
   <ItemGroup>
