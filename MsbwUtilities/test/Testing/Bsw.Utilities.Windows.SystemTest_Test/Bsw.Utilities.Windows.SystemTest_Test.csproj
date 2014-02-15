@@ -56,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StepDefinitions\Util\TimeStepsTest.cs" />
     <Compile Include="Transformations\DateTimeTransformationsTest.cs" />
+    <Compile Include="Transformations\JsonTransformationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Testing\Bsw.Utilities.Windows.SystemTest\Bsw.Utilities.Windows.SystemTest.csproj">
