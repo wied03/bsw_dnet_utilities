@@ -61,6 +61,10 @@
       <Project>{d7152e85-153c-4589-a20e-5fc73e97ecc4}</Project>
       <Name>Bsw.Utilities.Windows.SystemTest</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Testing\MsbwTest\MsbwTest.csproj">
+      <Project>{e4a41539-3a82-4450-993c-0af590c28047}</Project>
+      <Name>MsbwTest</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

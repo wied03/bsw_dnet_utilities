@@ -24,18 +24,10 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
             ContextStatic.NowSnapshot = null;
         }
 
-        [StepArgumentTransformation(@"(\d+) minutes from '(.*)'")]
-        public DateTimeOffset GetTime(int minutes,
-                                      string baseDate)
+        [When(@"I set the current date/time for this test to (.*)")]
+        public void SetNowToThisTime(DateTimeOffset date)
         {
-            if (baseDate != "now")
-            {
-                var error = string.Format("Don't understand from '{0}', only 'now' is currently understood",
-                                          baseDate);
-                throw new NotSupportedException(error);
-            }
-            var useThisForNow = ContextStatic.NowSnapshot ?? (ContextStatic.NowSnapshot = DateTimeOffset.Now);
-            return useThisForNow.Value.AddMinutes(minutes);
+            throw new NotImplementedException();
         }
     }
 }

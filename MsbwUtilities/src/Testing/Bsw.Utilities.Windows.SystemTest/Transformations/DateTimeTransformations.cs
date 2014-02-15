@@ -14,14 +14,8 @@ namespace Bsw.Utilities.Windows.SystemTest.Transformations
         public DateTimeOffset GetTime(int minutes,
                                       string baseDate)
         {
-            if (baseDate != "now")
-            {
-                var error = string.Format("Don't understand from '{0}', only 'now' is currently understood",
-                                          baseDate);
-                throw new NotSupportedException(error);
-            }
-            var useThisForNow = ContextStatic.NowSnapshot ?? (ContextStatic.NowSnapshot = DateTimeOffset.Now);
-            return useThisForNow.Value.AddMinutes(minutes);
+            var typed = DateTimeOffset.Parse(baseDate);
+            return typed.AddMinutes(minutes);
         } 
     }
 }
