@@ -13,17 +13,23 @@ namespace Bsw.Utilities.Windows.SystemTest.Transformations
         [StepArgumentTransformation(@"'(.*)'")]
         public DateTimeOffset GetTimeFrom(string exactDate)
         {
-            return exactDate == "now"
-                       ? DateTimeOffset.Now
-                       : DateTimeOffset.Parse(exactDate);
+            if (exactDate == "now")
+            {
+                var context = ScenarioContext.Current;
+                return context.ContainsKey(SCENARIO_CONTEXT_NOW_SNAPSHOT)
+                           ? context.Get<DateTimeOffset>(SCENARIO_CONTEXT_NOW_SNAPSHOT)
+                           : DateTimeOffset.Now;
+            }
+            return DateTimeOffset.Parse(exactDate);
         }
 
         [StepArgumentTransformation(@"(\d+) minutes from (.*)")]
         public DateTimeOffset GetTime(int minutes,
                                       DateTimeOffset typed)
         {
-            //var typed = DateTimeOffset.Parse(baseDate);
             return typed.AddMinutes(minutes);
-        } 
+        }
+
+        internal const string SCENARIO_CONTEXT_NOW_SNAPSHOT = "NowSnapshot";
     }
 }

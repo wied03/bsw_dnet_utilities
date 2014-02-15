@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Bsw.Utilities.Windows.SystemTest.Transformations;
 using NUnit.Framework;
 using FluentAssertions;
 using TechTalk.SpecFlow;
@@ -21,7 +22,7 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.StepDefinitions.Util
 
             // act
             Runner.When("I set the current date/time for this test to 'now'");
-            var result = ScenarioContext.Current.Get<DateTimeOffset>("NowSnapshot");
+            var result = ScenarioContext.Current.Get<DateTimeOffset>(DateTimeTransformations.SCENARIO_CONTEXT_NOW_SNAPSHOT);
 
             // assert
             result
@@ -38,7 +39,7 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.StepDefinitions.Util
 
             // act
             Runner.When("I set the current date/time for this test to '2/14/2014 1:40 PM'");
-            var result = ScenarioContext.Current.Get<DateTimeOffset>("NowSnapshot");
+            var result = ScenarioContext.Current.Get<DateTimeOffset>(DateTimeTransformations.SCENARIO_CONTEXT_NOW_SNAPSHOT);
 
             // assert
             result
@@ -53,7 +54,7 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.StepDefinitions.Util
 
             // act
             Runner.When("I set the current date/time for this test to 5 minutes from 'now'");
-            var result = ScenarioContext.Current.Get<DateTimeOffset>("NowSnapshot");
+            var result = ScenarioContext.Current.Get<DateTimeOffset>(DateTimeTransformations.SCENARIO_CONTEXT_NOW_SNAPSHOT);
 
             // assert
             result
@@ -70,7 +71,7 @@ namespace Bsw.Utilities.Windows.SystemTest_Test.StepDefinitions.Util
 
             // act
             Runner.When("I set the current date/time for this test to 5 minutes from '2/5/2013 1:05 PM'");
-            var result = ScenarioContext.Current.Get<DateTimeOffset>("NowSnapshot");
+            var result = ScenarioContext.Current.Get<DateTimeOffset>(DateTimeTransformations.SCENARIO_CONTEXT_NOW_SNAPSHOT);
 
             // assert
             result
