@@ -9,7 +9,7 @@ using TestStack.White.WindowsAPI;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
-    public class KeySteps : WpfBaseSteps
+    public class KeySteps : DefaultWpfSteps
     {
         [When(@"I press tab to get the focus to change")]
         public void WhenIPressTabToGetTheFocusToChange()

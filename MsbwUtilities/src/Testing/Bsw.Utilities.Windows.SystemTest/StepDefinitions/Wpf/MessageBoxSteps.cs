@@ -12,7 +12,7 @@ using TestStack.White.UIItems.Actions;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
-    public class MessageBoxSteps : WpfBaseSteps
+    public class MessageBoxSteps : DefaultWpfSteps
     {
         const string AUTOMATION_ID_XCEED_MESSAGEBOX_TEXT = "MessageText";
         const string AUTOMATION_ID_XCEED_MESSAGEBOX_TITLE = "TitleText";

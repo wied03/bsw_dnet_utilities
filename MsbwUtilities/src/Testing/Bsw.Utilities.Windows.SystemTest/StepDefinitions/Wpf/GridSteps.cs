@@ -24,7 +24,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
     [UsedImplicitly]
-    public class GridSteps : WpfBaseSteps
+    public class GridSteps : DefaultWpfSteps
     {
         [Then(@"there is a grid under the label '(.*)'")]
         public void ThenThereIsAGridUnderTheLabel(string labelText)

@@ -11,7 +11,7 @@ using TestStack.White.UIItems.Finders;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
-    public class LabelSteps : WpfBaseSteps
+    public class LabelSteps : DefaultWpfSteps
     {
         public static string GetThenThereIsALabelThatSays(string labelText)
         {

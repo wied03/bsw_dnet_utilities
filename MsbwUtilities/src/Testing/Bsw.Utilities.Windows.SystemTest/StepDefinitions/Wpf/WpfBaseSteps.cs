@@ -12,7 +12,8 @@ using TestStack.White.Utility;
 
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
-    public abstract class WpfBaseSteps : BaseSteps<WpfScenarioContext>
+    public abstract class WpfBaseSteps<TScenarioContextType> : BaseSteps<TScenarioContextType>
+        where TScenarioContextType : WpfScenarioContext, new()
     {
         protected TUiType RetryLocate<TUiType>(Func<TUiType> retryAction,
                                                string itemLookingFor = null) where TUiType : UIItem

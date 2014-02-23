@@ -8,7 +8,7 @@ using TechTalk.SpecFlow;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
-    public class ComboBoxSteps : WpfBaseSteps
+    public class ComboBoxSteps : DefaultWpfSteps
     {
         [Then(@"that combobox has options (.*)")]
         public void ThenThatComboboxHasOptions(IEnumerable<string> groups)

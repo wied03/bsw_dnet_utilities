@@ -9,7 +9,7 @@ using TechTalk.SpecFlow;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
-    public class WindowSteps : WpfBaseSteps
+    public class WindowSteps : DefaultWpfSteps
     {
         [Then(@"A window titled '(.*)' appears")]
         public void ThenAWindowTitledAppears(string windowText)

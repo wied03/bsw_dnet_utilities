@@ -7,7 +7,7 @@ using TestStack.White.UIItems.Finders;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
-    public class CheckboxSteps : WpfBaseSteps
+    public class CheckboxSteps : DefaultWpfSteps
     {
         [When(@"I tick the checkbox next to '(.*)'")]
         public void WhenITickTheCheckboxNextTo(string labelText)

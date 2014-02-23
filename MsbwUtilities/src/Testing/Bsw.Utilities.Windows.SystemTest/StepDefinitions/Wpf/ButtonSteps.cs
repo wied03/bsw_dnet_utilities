@@ -10,7 +10,7 @@ using TestStack.White.Utility;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
-    public class ButtonSteps : WpfBaseSteps
+    public class ButtonSteps : DefaultWpfSteps
     {
         Window Window
         {

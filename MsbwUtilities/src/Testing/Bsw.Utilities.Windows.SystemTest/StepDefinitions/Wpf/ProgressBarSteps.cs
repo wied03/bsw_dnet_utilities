@@ -15,7 +15,7 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
     [UsedImplicitly]
-    public class ProgressBarSteps : WpfBaseSteps
+    public class ProgressBarSteps : DefaultWpfSteps
     {
         Window Window
         {

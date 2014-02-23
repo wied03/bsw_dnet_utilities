@@ -13,7 +13,7 @@ using TestStack.White.WindowsAPI;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
     [Binding]
-    public class TextBoxSteps : WpfBaseSteps
+    public class TextBoxSteps : DefaultWpfSteps
     {
         [Then(@"there is a textbox (.*) label '(.*)'")]
         public void ThenThereIsATextboxToTheRightOf(ThatIs direction,

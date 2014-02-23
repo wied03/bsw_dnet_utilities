@@ -15,7 +15,7 @@ using TestStack.White.Utility;
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
 {
     [Binding]
-    public class ProcessSteps : WpfBaseSteps
+    public class ProcessSteps : DefaultWpfSteps
     {
         [Then(@"process '(.*)' runs and window '(.*)' appears")]
         public void ThenProcessRunsAndWindowAppears(string processPath,
