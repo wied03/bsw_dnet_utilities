@@ -7,6 +7,12 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Util
     [Binding]
     public class TimeSteps : BaseSteps<GeneralScenarioContext>
     {
+        [Given(@"I wait for (.*) seconds")]
+        public void GivenIWaitForSeconds(int seconds)
+        {
+            WaitFor(seconds);
+        }
+
         [When(@"I wait for (.*) seconds")]
         public void WhenIWaitForSeconds(int seconds)
         {

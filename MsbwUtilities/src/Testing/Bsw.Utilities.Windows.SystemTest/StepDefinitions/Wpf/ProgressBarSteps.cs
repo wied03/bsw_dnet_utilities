@@ -47,5 +47,13 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             Retry.For(getMethod: () => !progressBar.Visible,
                       retryFor: 10.Seconds());
         }
+
+        [When(@"I wait (.*) seconds for the progress bar to finish")]
+        public void WhenIWaitSecondsForTheProgressBarToFinish(int timeoutSeconds)
+        {
+            Retry.For(getMethod: () => Context.Window.Get<ProgressBar>(SearchCriteria.Indexed(0)),
+                      shouldRetry: p => p.Visible,
+                      retryFor: TimeSpan.FromSeconds(timeoutSeconds));
+        }
     }
 }
