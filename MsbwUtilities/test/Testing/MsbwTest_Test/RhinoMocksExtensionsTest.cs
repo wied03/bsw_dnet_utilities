@@ -97,10 +97,18 @@ namespace MsbwTest_Test
             Task NoReturnParam2(string stuff,
                                 int otherStuff);
 
+            Task NoReturnParam3(string stuff,
+                                int otherStuff,
+                                double third);
+
             Task<string> ReturnWithParam1(int stuff);
 
             Task<string> ReturnWithParam2(int stuff,
                                           string otherStuff);
+
+            Task<string> ReturnWithParam3(int stuff,
+                                          string otherStuff,
+                                          double third);
         }
 
         static ITestDoAndReturn Mock
@@ -213,7 +221,45 @@ namespace MsbwTest_Test
         }
 
         [Test]
-        public async Task Stub_async_void_with_params()
+        public async Task Do_async_void_3_params()
+        {
+            // arrange
+            var mock = Mock;
+            string capturedStr = null;
+            int? capturedVal = null;
+            double? capturedDouble = null;
+            mock.Stub(m => m.NoReturnParam3(null,
+                                            5,
+                                            99))
+                .IgnoreArguments()
+                .DoAsyncVoid<string, int, double>((s,
+                                                   i,
+                                                   dbl) =>
+                                                  {
+                                                      capturedStr = s;
+                                                      capturedVal = i;
+                                                      capturedDouble = dbl;
+                                                  });
+
+            // act
+            await mock.NoReturnParam3("foo",
+                                      99,
+                                      204.4);
+
+            // assert
+            capturedStr
+                .Should()
+                .Be("foo");
+            capturedVal
+                .Should()
+                .Be(99);
+            capturedDouble
+                .Should()
+                .Be(204.4);
+        }
+
+        [Test]
+        public async Task Stub_async_void_with_1_param()
         {
             // arrange
             var mock = Mock;
@@ -419,6 +465,100 @@ namespace MsbwTest_Test
             invokedWithString
                 .Should()
                 .Be("hi there");
+        }
+
+        [Test]
+        public async Task Do_async_return_value_3_parameters()
+        {
+            // arrange
+            var mock = Mock;
+            int? invokedWithNumber = null;
+            string invokedWithString = null;
+            double? invokedWithDouble = null;
+
+            // act
+            mock.Stub(m => m.ReturnWithParam3(55,
+                                              null,
+                                              55.55))
+                .IgnoreArguments()
+                .DoAsync<int, string, double, string>((num,
+                                                       str,
+                                                       dbl) =>
+                                                      {
+                                                          invokedWithNumber = num;
+                                                          invokedWithString = str;
+                                                          invokedWithDouble = dbl;
+                                                          return "foobar";
+                                                      });
+            var result = await mock.ReturnWithParam3(95,
+                                                     "hi there",
+                                                     82.22);
+
+            // assert
+            result
+                .Should()
+                .Be("foobar");
+            invokedWithNumber
+                .Should()
+                .Be(95);
+            invokedWithString
+                .Should()
+                .Be("hi there");
+            invokedWithDouble
+                .Should()
+                .Be(82.22);
+        }
+
+        [Test]
+        public async Task Do_async_return_value_3_parameters_timed()
+        {
+            // arrange
+            var mock = Mock;
+            int? invokedWithNumber = null;
+            string invokedWithString = null;
+            double? invokedWithDouble = null;
+            var sw = new Stopwatch();
+
+            // act
+            mock.Stub(m => m.ReturnWithParam3(55,
+                                              null,
+                                              55.55))
+                .IgnoreArguments()
+                .DoAsync<int, string, double, string>((num,
+                                                       str,
+                                                       dbl) =>
+                                                      {
+                                                          invokedWithNumber = num;
+                                                          invokedWithString = str;
+                                                          invokedWithDouble = dbl;
+                                                          return "foobar";
+                                                      },
+                                                      3.Seconds());
+            sw.Start();
+            var result = await mock.ReturnWithParam3(95,
+                                                     "hi there",
+                                                     933.33);
+            sw.Stop();
+
+            // assert
+            sw.Elapsed
+              .Should()
+              .BeGreaterOrEqualTo(3.Seconds())
+              .And
+              .BeLessOrEqualTo(4.Seconds())
+                ;
+            result
+                .Should()
+                .Be("foobar");
+            invokedWithNumber
+                .Should()
+                .Be(95);
+            invokedWithString
+                .Should()
+                .Be("hi there");
+            invokedWithDouble
+                .Should()
+                .Be(933.33);
         }
 
         #endregion

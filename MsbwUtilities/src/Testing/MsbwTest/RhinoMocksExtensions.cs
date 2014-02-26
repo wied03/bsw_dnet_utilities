@@ -134,6 +134,14 @@ namespace MsbwTest
             return methodOptions.Do(executor);
         }
 
+        public static IMethodOptions<Task<TReturnType>> DoAsync<TParam1, TParam2, TParam3, TReturnType>(
+            this IMethodOptions<Task<TReturnType>> methodOptions,
+            Func<TParam1, TParam2, TParam3, TReturnType> action,
+            TimeSpan? delayBeforeYourAction = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public static IMethodOptions<Task> DoAsyncVoid<T>(this IMethodOptions<Task> methodOptions,
                                                           Action<T> action,
                                                           TimeSpan? delayBeforeYourAction = null)
@@ -164,6 +172,13 @@ namespace MsbwTest
                                                            o2);
                                                 };
             return methodOptions.Do(executor);
+        }
+
+        public static IMethodOptions<Task> DoAsyncVoid<T1, T2, T3>(this IMethodOptions<Task> methodOptions,
+                                                                   Action<T1, T2, T3> action,
+                                                                   TimeSpan? delayBeforeYourAction = null)
+        {
+            throw new NotImplementedException();
         }
     }
 }
