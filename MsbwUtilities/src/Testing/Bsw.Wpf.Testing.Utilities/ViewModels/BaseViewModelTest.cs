@@ -19,6 +19,7 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
     public abstract class BaseViewModelTest
     {
         Dictionary<string, ValidationAttribute[]> _validators;
+        protected List<string> AllBusyIndicatorMessagesShown { get; private set; }
         protected IDisplayMessageBox MessageBoxMock { get; private set; }
         protected IControlBusyIndicator ControlBusyMock { get; private set; }
         protected ICloseCurrentWindow CloseCurrentWindowMock { get; private set; }
@@ -73,11 +74,13 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
 
         void SetupBusyIndicatorMock()
         {
+            AllBusyIndicatorMessagesShown = new List<string>();
             ControlBusyMock.Stub(c => c.Show(null))
                            .IgnoreArguments()
                            .Do(new Func<string,IControlBusyIndicator>(msg =>
                                                                       {
                                                                           BusyIndicatorStack.Push(msg);
+                                                                          AllBusyIndicatorMessagesShown.Add(msg);
                                                                           return ControlBusyMock;
                                                                       }));
             ControlBusyMock.Stub(c => c.Dispose())
