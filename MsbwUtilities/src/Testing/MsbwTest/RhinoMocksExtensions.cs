@@ -139,7 +139,23 @@ namespace MsbwTest
             Func<TParam1, TParam2, TParam3, TReturnType> action,
             TimeSpan? delayBeforeYourAction = null)
         {
-            throw new NotImplementedException();
+            Func<TParam1, TParam2, TParam3, Task<TReturnType>> executor =
+                async (p1,
+                       p2,
+                       p3) =>
+                      {
+                          if (delayBeforeYourAction != null)
+                          {
+                              await
+                                  Task.Delay(
+                                             delayBeforeYourAction
+                                                 .Value);
+                          }
+                          return action(p1,
+                                        p2,
+                                        p3);
+                      };
+            return methodOptions.Do(executor);
         }
 
         public static IMethodOptions<Task> DoAsyncVoid<T>(this IMethodOptions<Task> methodOptions,
@@ -178,7 +194,19 @@ namespace MsbwTest
                                                                    Action<T1, T2, T3> action,
                                                                    TimeSpan? delayBeforeYourAction = null)
         {
-            throw new NotImplementedException();
+            Func<T1, T2, T3, Task> executor = async (o1,
+                                                     o2,
+                                                     o3) =>
+                                                    {
+                                                        if (delayBeforeYourAction != null)
+                                                        {
+                                                            await Task.Delay(delayBeforeYourAction.Value);
+                                                        }
+                                                        action(o1,
+                                                               o2,
+                                                               o3);
+                                                    };
+            return methodOptions.Do(executor);
         }
     }
 }
