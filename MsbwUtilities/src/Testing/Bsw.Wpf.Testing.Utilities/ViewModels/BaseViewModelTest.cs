@@ -75,7 +75,11 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
         {
             ControlBusyMock.Stub(c => c.Show(null))
                            .IgnoreArguments()
-                           .Do(new Action<string>(msg => BusyIndicatorStack.Push(msg)));
+                           .Do(new Func<string,IControlBusyIndicator>(msg =>
+                                                                      {
+                                                                          BusyIndicatorStack.Push(msg);
+                                                                          return ControlBusyMock;
+                                                                      }));
             ControlBusyMock.Stub(c => c.Dispose())
                            .Do(new Action(() =>
                                           {
