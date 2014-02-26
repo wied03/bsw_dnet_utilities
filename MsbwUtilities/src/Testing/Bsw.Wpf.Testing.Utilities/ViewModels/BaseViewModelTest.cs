@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -26,7 +27,7 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
         protected IDisplayViewAsDialog ViewAsDialogMock { get; private set; }
         protected Tuple<string, DialogType?> DisplayedMessage { get; private set; }
         protected Exception DisplayedErrorMessage { get; private set; }
-        Stack<string> BusyIndicatorStack { get; set; }
+        bool? _busyIndicatorLeftOpen;
         protected IEventAggregator EventAggregator { get; private set; }
         protected int NumWindowsClosed { get; private set; }
 
@@ -34,7 +35,7 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
         public virtual void SetUp()
         {
             EventAggregator = new EventAggregator();
-            BusyIndicatorStack = new Stack<string>();
+            _busyIndicatorLeftOpen = null;
             InstantiateMocks();
             SetupMessageBoxMock();
             SetupBusyIndicatorMock();
@@ -77,35 +78,34 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
             AllBusyIndicatorMessagesShown = new List<string>();
             ControlBusyMock.Stub(c => c.Show(null))
                            .IgnoreArguments()
-                           .Do(new Func<string,IControlBusyIndicator>(msg =>
-                                                                      {
-                                                                          BusyIndicatorStack.Push(msg);
-                                                                          AllBusyIndicatorMessagesShown.Add(msg);
-                                                                          return ControlBusyMock;
-                                                                      }));
+                           .Do(new Func<string, IControlBusyIndicator>(msg =>
+                                                                       {
+                                                                           _busyIndicatorLeftOpen = true;
+                                                                           AllBusyIndicatorMessagesShown.Add(msg);
+                                                                           return ControlBusyMock;
+                                                                       }));
             ControlBusyMock.Stub(c => c.Dispose())
                            .Do(new Action(() =>
                                           {
-                                              try
-                                              {
-                                                  BusyIndicatorStack.Pop();
-                                              }
-                                              catch (InvalidOperationException)
+                                              if (!_busyIndicatorLeftOpen.HasValue)
                                               {
                                                   Assert.Fail(
                                                               "Tried to hide busy indicator but it wasn't shown in the first place");
                                               }
+                                              _busyIndicatorLeftOpen = false;
                                           }));
         }
 
         protected void AssertBusyIndicatorShownAndHidden()
         {
-            BusyIndicatorStack
+            _busyIndicatorLeftOpen
                 .Should()
-                .NotBeNull("We expected usage of the busy indicator, but it was not used");
-            if (!BusyIndicatorStack.Any()) return;
-            var danglingMessages = BusyIndicatorStack.Aggregate((m1,
-                                                                 m2) => m1 + ", " + m2);
+                .HaveValue("We expected usage of the busy indicator, but it was not used");
+            Debug.Assert(_busyIndicatorLeftOpen != null,
+                         "_busyIndicatorLeftOpen != null");
+            if (!_busyIndicatorLeftOpen.Value) return;
+            var danglingMessages = AllBusyIndicatorMessagesShown.Aggregate((m1,
+                                                                            m2) => m1 + ", " + m2);
             Assert.Fail(
                         "Expected a clean busy indicator stack, but the following messages were shown and not hidden: {0}",
                         danglingMessages);
