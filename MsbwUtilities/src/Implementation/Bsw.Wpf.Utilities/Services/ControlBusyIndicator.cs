@@ -46,8 +46,15 @@ namespace Bsw.Wpf.Utilities.Services
             Indicator.IsBusy = true;
         }
 
-        public void Hide()
+        public void Dispose()
         {
+            Dispose(true);
+        }
+
+        // provides a convenient way to scope the busy indicator
+        void Dispose(bool managedAlso)
+        {
+            if (!managedAlso) return;
             Indicator.IsBusy = false;
         }
     }
