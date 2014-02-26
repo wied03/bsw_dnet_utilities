@@ -51,8 +51,11 @@ namespace Bsw.BaseEntities.Test.Entity
             var entity1 = new TestEntityClass();
 
             // act
+            // this is on purpose
+            // ReSharper disable EqualExpressionComparison
             var result = entity1.Equals(entity1);
             var result2 = entity1 == entity1;
+            // ReSharper restore EqualExpressionComparison
             var hashCode = entity1.GetHashCode();
 
             // assert
