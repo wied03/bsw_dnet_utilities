@@ -40,10 +40,11 @@ namespace Bsw.Wpf.Utilities.Services
             throw new Exception("Unable to find a BusyIndicator in your XAML window");
         }
 
-        public void Show(string text = "Loading...")
+        public IControlBusyIndicator Show(string text = "Loading...")
         {
             Indicator.BusyContent = text;
             Indicator.IsBusy = true;
+            return this;
         }
 
         public void Dispose()
