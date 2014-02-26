@@ -33,7 +33,7 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
         public virtual void SetUp()
         {
             EventAggregator = new EventAggregator();
-            BusyIndicatorStack = null;
+            BusyIndicatorStack = new Stack<string>();
             InstantiateMocks();
             SetupMessageBoxMock();
             SetupBusyIndicatorMock();
@@ -73,16 +73,15 @@ namespace Bsw.Wpf.Testing.Utilities.ViewModels
 
         void SetupBusyIndicatorMock()
         {
-            Func<Stack<string>> stackFetcher = () => BusyIndicatorStack ?? (BusyIndicatorStack = new Stack<string>());
             ControlBusyMock.Stub(c => c.Show(null))
                            .IgnoreArguments()
-                           .Do(new Action<string>(msg => stackFetcher().Push(msg)));
-            ControlBusyMock.Stub(c => c.Hide())
+                           .Do(new Action<string>(msg => BusyIndicatorStack.Push(msg)));
+            ControlBusyMock.Stub(c => c.Dispose())
                            .Do(new Action(() =>
                                           {
                                               try
                                               {
-                                                  stackFetcher().Pop();
+                                                  BusyIndicatorStack.Pop();
                                               }
                                               catch (InvalidOperationException)
                                               {
