@@ -90,7 +90,7 @@ with (".nuget/nuget.exe") do |ngetpath|
 				nugetpush pushTask => packTask do |n|
 					n.command = ngetpath
 					n.package = "#{proj_path_and_name}.#{VERSION}.nupkg"
-					n.apikey = apikey						
+					n.apikey = ENV['api_key']						
 				end										
 				
 				task :version => asmTask
@@ -124,11 +124,7 @@ with (".nuget/nuget.exe") do |ngetpath|
 			define_project.call :project_path => "src/Testing/MsbwTest",
 				 :project_title => 'Msbw Test Assembly',
 				 :project_description => "Used as a utility assembly for UNIT TESTING ONLY",
-				:dependencies => [:id => 'MsbwUtility', :version => VERSION]
-			
-			define_project.call :project_path => "src/Implementation/MsBwUtility",
-				 :project_title => 'Msbw Utility Assembly',
-				 :project_description => "Used as a utility assembly for implementations"
+				:dependencies => [:id => 'MsbwUtility', :version => VERSION]	
 			
 			define_project.call :project_path => "src/Implementation/Bsw.Wpf.Utilities",
 				 :project_title => 'BSW WPF Base Utilities',
