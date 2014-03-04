@@ -81,7 +81,8 @@ with (".nuget/nuget.exe") do |ngetpath|
 					n.command = ngetpath
 					n.nuspec = "#{proj_path_and_name}.csproj"
 					n.base_folder = project_path
-					n.output = project_path						
+					n.output = project_path			
+					n.properties = {:Configuration => BUILD_CONFIG } if BUILD_CONFIG					
 				end					
 				
 				pushTask = "push_#{project_name}"
