@@ -1,14 +1,13 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Net.Sockets;
-using System.Threading;
-using FluentAssertions;
+using Bsw.RubyExecution.Properties;
 
 #endregion
 
@@ -18,7 +17,7 @@ namespace Bsw.RubyExecution
     {
         public Process RubyProc { get; private set; }
         public string WorkingDirectory { get; private set; }
-        private static readonly string ThisBinPath = Path.GetFullPath(@".");
+        static readonly string ThisBinPath = Path.GetFullPath(@".");
 
         public RubyProcess(string workingDirectory)
         {
@@ -28,9 +27,9 @@ namespace Bsw.RubyExecution
         static RubyProcess()
         {
             File.WriteAllText("bundle_install.bat",
-                              Properties.Resources.bundle_install);
+                              Resources.bundle_install);
             File.WriteAllText("run_ruby.bat",
-                              Properties.Resources.run_ruby);
+                              Resources.run_ruby);
         }
 
         protected static string RubyIrbPath
@@ -71,9 +70,9 @@ namespace Bsw.RubyExecution
                             };
             RubyProc = new Process {StartInfo = procStart};
             RubyProc.OutputDataReceived += (sender,
-                                                eventArgs) => Console.WriteLine(eventArgs.Data);
+                                            eventArgs) => Console.WriteLine(eventArgs.Data);
             RubyProc.ErrorDataReceived += (sender,
-                                               eventArgs) => Console.WriteLine(eventArgs.Data);
+                                           eventArgs) => Console.WriteLine(eventArgs.Data);
             RubyProc.Start();
             RubyProc.BeginOutputReadLine();
             RubyProc.BeginErrorReadLine();

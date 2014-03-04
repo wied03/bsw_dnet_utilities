@@ -43,7 +43,7 @@ namespace Bsw.RubyExecution.Test
         {
             // arrange
             FullPathToCommandExecuted = Path.GetFullPath(Path.Combine(".",
-                                                                       COMMAND_EXECUTED_TXT));
+                                                                      COMMAND_EXECUTED_TXT));
 
             // act
             RubyProcess.InstallBundlerDependencies();
@@ -60,7 +60,7 @@ namespace Bsw.RubyExecution.Test
             // arrange
             const string workingDirectory = @"..\..\workingdir";
             FullPathToCommandExecuted = Path.GetFullPath(Path.Combine(workingDirectory,
-                                                                       COMMAND_EXECUTED_TXT));
+                                                                      COMMAND_EXECUTED_TXT));
             var process = new RubyProcess(workingDirectory: workingDirectory);
 
             // act

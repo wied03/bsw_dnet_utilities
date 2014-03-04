@@ -1,5 +1,6 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Bsw.NHibernateUtils.Web
 {
     public class NHibernateModule : IHttpModule
     {
-        private IUnitOfWork _unitOfWork;
+        ILazySessionFetcher _lazySessionFetcher;
 
         public void Init(HttpApplication context)
         {
@@ -22,25 +23,25 @@ namespace Bsw.NHibernateUtils.Web
             context.EndRequest += ContextEndRequest;
         }
 
-        private void ContextBeginRequest(object sender,
-                                         EventArgs e)
+        void ContextBeginRequest(object sender,
+                                 EventArgs e)
         {
-            _unitOfWork = ObjectFactory.GetInstance<IUnitOfWork>();
+            _lazySessionFetcher = ObjectFactory.GetInstance<ILazySessionFetcher>();
         }
 
-        private void ContextEndRequest(object sender,
-                                       EventArgs e)
+        void ContextEndRequest(object sender,
+                               EventArgs e)
         {
             Dispose();
         }
 
         public void Dispose()
         {
-            if (_unitOfWork == null)
+            if (_lazySessionFetcher == null)
                 return;
 
-            _unitOfWork.Dispose();
-            _unitOfWork = null;
+            _lazySessionFetcher.Dispose();
+            _lazySessionFetcher = null;
         }
     }
 }

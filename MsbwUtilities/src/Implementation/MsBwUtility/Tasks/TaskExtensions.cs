@@ -1,5 +1,6 @@
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+
+#region
 
 using System;
 using System.Linq;
@@ -20,6 +21,45 @@ namespace MsBw.MsBwUtility.Tasks
 
     public static class TaskExtensions
     {
+        public static async Task<TResult> WithTimeout<TResult>(this Task<TResult> obj,
+                                                               TimeSpan timeout)
+        {
+            return await obj.WithTimeout(o => o,
+                                         timeout);
+        }
+
+        public static async Task WithTimeout(this Task task,
+                                             TimeSpan timeout)
+        {
+            var timeoutTask = await Timeout(task,
+                                            timeout);
+            if (timeoutTask == Result.Normal)
+            {
+                return;
+            }
+
+            throw new TimeoutException(string.Format("Timed out at {0} milliseconds waiting for task to complete",
+                                                     timeout.TotalMilliseconds));
+        }
+
+
+        public static async Task WithTimeout(this Func<Task> action,
+                                             TimeSpan timeout)
+        {
+            var task = action();
+            var timeoutTask = await Timeout(task,
+                                            timeout);
+            if (timeoutTask != Result.Normal)
+            {
+                throw new TimeoutException(string.Format("Timed out at {0} milliseconds waiting for task to complete",
+                                                         timeout.TotalMilliseconds));
+            }
+            if (task.Exception != null)
+            {
+                throw task.Exception;
+            }
+        }
+
         public static async Task<TResult> WithTimeout<TResult, TObject>(this TObject obj,
                                                                         Func<TObject, Task<TResult>> action,
                                                                         TimeSpan timeout)
@@ -63,6 +103,11 @@ namespace MsBw.MsBwUtility.Tasks
                 return Result.Canceled;
             }
             return Result.Timeout;
+        }
+
+        public static Task<T> ToTaskResult<T>(this T someValue)
+        {
+            return Task.FromResult(someValue);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace MsbwTest.CustomAssertions
 {
     public class CustomCollectionAssertions<T>
     {
-        private readonly GenericCollectionAssertions<T> _assertions;
+        readonly GenericCollectionAssertions<T> _assertions;
 
         public CustomCollectionAssertions(GenericCollectionAssertions<T> assertions)
         {
@@ -46,8 +46,8 @@ namespace MsbwTest.CustomAssertions
             if (ReferenceEquals(actual,
                                 null))
             {
-                Execute.Assertion.BecauseOf(reason,
-                                            reasonArgs)
+                Execute.Verification.BecauseOf(reason,
+                                               reasonArgs)
                        .FailWith("Expected {context:collection} to contain {0}{reason}, but found <null>.",
                                  new object[]
                                  {

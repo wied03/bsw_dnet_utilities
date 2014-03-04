@@ -1,5 +1,6 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Bsw.NHibernateUtils.Test
 {
     public abstract class BaseDbDrivenTest : BaseTest
     {
-        private static SessionFactoryFetcher _sessionFactoryFetcher;
+        static SessionFactoryFetcher _sessionFactoryFetcher;
         protected static ISessionFactory SessionFactory { get; private set; }
 
         [SetUp]
@@ -45,7 +46,7 @@ namespace Bsw.NHibernateUtils.Test
             _sessionFactoryFetcher.Connection.Dispose();
         }
 
-        private static void SetupTestMappings(FluentConfiguration config)
+        static void SetupTestMappings(FluentConfiguration config)
         {
             config.Mappings(map =>
                             map.AutoMappings.Add(AutoMap.AssemblyOf<BaseTest>()

@@ -34,15 +34,13 @@
     <Reference Include="FluentAssertions">
       <HintPath>..\..\..\..\nuget_pkg_lnk\FluentAssertions.2.0.1\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\..\..\..\nuget_pkg_lnk\NLog.2.0.1.2\lib\net45\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\..\nuget_pkg_lnk\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\nuget_pkg_lnk\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,19 +49,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
+    <Compile Include="Config\BaseConfigTest.cs" />
+    <Compile Include="Config\CryptoHelperTest.cs" />
     <Compile Include="Enum\StringValueAttributeTest.cs" />
+    <Compile Include="Enum\StringValueExtensionsTest.cs" />
     <Compile Include="ExtensionMethodsTest.cs" />
-    <Compile Include="Net\DummyRequest.cs" />
-    <Compile Include="Net\VariableDelimiterTcpClientPlaintextTest.cs" />
+    <Compile Include="LambdaExtensionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TargetForTesting.cs" />
     <Compile Include="Tasks\TaskExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
+    <None Include="the.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Utility\socat-1.7.2.1\BUGREPORTS" />
     <None Include="Utility\socat-1.7.2.1\CHANGES" />
     <None Include="Utility\socat-1.7.2.1\COPYING" />

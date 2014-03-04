@@ -1,9 +1,9 @@
 ﻿#region
 
+using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using FluentAssertions;
 
 #region
 
@@ -36,7 +36,7 @@ namespace Bsw.RubyExecution
                                                "shutdown.txt");
         }
 
-        private void WaitForServerToStart()
+        void WaitForServerToStart()
         {
             var up = false;
             for (var i = 0; i < 10; i++)
@@ -46,7 +46,7 @@ namespace Bsw.RubyExecution
                     var tcpClient = new TcpClient();
                     var result = tcpClient.ConnectAsync("localhost",
                                                         ThinPort);
-                    var noTimeout = result.Wait(3.Seconds());
+                    var noTimeout = result.Wait(TimeSpan.FromSeconds(3));
                     if (!noTimeout) continue;
                     tcpClient.Close();
                     up = true;
@@ -54,7 +54,7 @@ namespace Bsw.RubyExecution
                 }
                 catch (Exception)
                 {
-                    Thread.Sleep(50.Milliseconds());
+                    Thread.Sleep(TimeSpan.FromMilliseconds(50));
                 }
             }
             if (!up)
@@ -83,12 +83,16 @@ namespace Bsw.RubyExecution
             Started = true;
         }
 
-        private static string ThinPath
+        static string ThinPath
         {
             get
             {
                 var irbPath = RubyIrbPath;
-                var thinPath = Path.Combine(Path.GetDirectoryName(irbPath),
+                var irbDirectory = Path.GetDirectoryName(irbPath);
+                Debug.Assert(irbDirectory != null,
+                             "irbDirectory != null");
+                // thin is in the same location as IRB
+                var thinPath = Path.Combine(irbDirectory,
                                             "thin");
                 return thinPath;
             }

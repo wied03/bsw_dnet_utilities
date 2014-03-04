@@ -23,8 +23,8 @@ namespace Bsw.NHibernate.Testing.SqlLite
 {
     public class SessionFactoryFetcher
     {
-        private SchemaExport _schemaExport;
-        private const string CONNECTION_STRING = "FullUri=file:memorydb.db?mode=memory&cache=shared";
+        SchemaExport _schemaExport;
+        const string CONNECTION_STRING = "FullUri=file:memorydb.db?mode=memory&cache=shared";
 
         public IDbConnection Connection { get; private set; }
 

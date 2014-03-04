@@ -1,5 +1,6 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Linq;
@@ -23,10 +24,42 @@ namespace MsBwUtilityTest.Tasks
             base.SetUp();
         }
 
-        private async Task<int> DelayFor(TimeSpan time)
+        static async Task<int> DelayFor(TimeSpan time)
         {
             await Task.Delay(time);
             return 5;
+        }
+
+        static async Task DelayForVoid(TimeSpan time)
+        {
+            await Task.Delay(time);
+        }
+
+        [Test]
+        public async Task With_timeout_nolambda_finishes()
+        {
+            // arrange
+            var task = DelayFor(500.Milliseconds());
+
+            // act
+            var result = await task.WithTimeout(5.Seconds());
+
+            // assert
+            result
+                .Should()
+                .Be(5);
+        }
+
+        [Test]
+        public void With_timeout_nolambda_timesout()
+        {
+            // arrange
+            var task = DelayFor(1.Seconds());
+
+            // act + assert
+            task.Invoking(t => t.WithTimeout(200.Milliseconds()).Wait())
+                .ShouldThrow<AggregateException>()
+                .WithInnerException<TimeoutException>();
         }
 
         [Test]
@@ -44,7 +77,7 @@ namespace MsBwUtilityTest.Tasks
         public void With_timeout_task_times_out()
         {
             // arrange + act + assert
-            this.Invoking(t => t.WithTimeout(ta => ta.DelayFor(1.Seconds()),
+            this.Invoking(t => t.WithTimeout(ta => DelayFor(1.Seconds()),
                                              200.Milliseconds()).Wait())
                 .ShouldThrow<AggregateException>()
                 .WithInnerException<TimeoutException>()
@@ -106,6 +139,41 @@ namespace MsBwUtilityTest.Tasks
             result
                 .Should()
                 .Be(Result.Canceled);
+        }
+
+        [Test]
+        public async Task With_void_task_timeout_doesnt_timeout()
+        {
+            // arrange
+            var task = DelayForVoid(500.Milliseconds());
+
+            // act
+            await task.WithTimeout(5.Seconds());
+        }
+
+        [Test]
+        public async Task With_void_task_timeout_times_out()
+        {
+            var task = DelayForVoid(1.Seconds());
+
+            // act + assert
+            task.Invoking(t => t.WithTimeout(200.Milliseconds()).Wait())
+                .ShouldThrow<AggregateException>()
+                .WithInnerException<TimeoutException>();
+        }
+
+        [Test]
+        public async Task Task_from_result()
+        {
+            // arrange
+            Func<Task<bool>> tester = () => true.ToTaskResult();
+
+            // act
+            var result = await tester();
+
+            // assert
+            result.Should()
+                  .BeTrue();
         }
     }
 }

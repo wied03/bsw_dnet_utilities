@@ -1,5 +1,6 @@
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+
+#region
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Collections;
 using MsbwTest.CustomAssertions;
+using Nito.AsyncEx;
 
 #endregion
 
@@ -28,6 +30,55 @@ namespace MsbwTest
             var str = new string(Enumerable.Repeat(character,
                                                    count).ToArray());
             return str;
+        }
+
+        public static async Task<TResult> ShouldCompleteWithin<TResult>(this TaskCompletionSource<TResult> tcs,
+                                                                        TimeSpan time,
+                                                                        string reason = "",
+                                                                        params object[] reasonArgs)
+        {
+            return await tcs.Task.ShouldCompleteWithin(time,
+                                                       reason,
+                                                       reasonArgs);
+        }
+
+        public static async Task ShouldCompleteWithin(this TaskCompletionSource tcs,
+                                                      TimeSpan time,
+                                                      string reason = "",
+                                                      params object[] reasonArgs)
+        {
+            await tcs.Task.ShouldCompleteWithin(time,
+                                                reason,
+                                                reasonArgs);
+        }
+
+        public static async Task<TResult> ShouldCompleteWithin<TResult>(this Task<TResult> task,
+                                                                        TimeSpan time,
+                                                                        string reason = "",
+                                                                        params object[] reasonArgs)
+        {
+            return await task.InvokingAsync(t => t)
+                             .ShouldCompleteWithin(time,
+                                                   reason,
+                                                   reasonArgs);
+        }
+
+        public static async Task ShouldCompleteWithin(this Task task,
+                                                      TimeSpan time,
+                                                      string reason = "",
+                                                      params object[] reasonArgs)
+        {
+            var assertions = new AsyncActionAssertions(() => task);
+            await assertions.ShouldCompleteWithin(time,
+                                                  reason,
+                                                  reasonArgs);
+        }
+
+        public static AsyncActionAssertionsWithResult<TResult> InvokingAsync<T, TResult>(this T subject,
+                                                                                         Func<T, Task<TResult>>
+                                                                                             asyncAction)
+        {
+            return new AsyncActionAssertionsWithResult<TResult>(() => asyncAction(subject));
         }
 
         public static AsyncActionAssertions InvokingAsync<T>(this T subject,

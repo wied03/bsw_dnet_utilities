@@ -1,4 +1,5 @@
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
 #region
 
 using System;
@@ -17,9 +18,9 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
     [Binding]
     public class CustomCollectionStepDef
     {
-        private IEnumerable<object> _actualItems;
-        private IEnumerable<object> _expectedItems;
-        private Exception _exception;
+        IEnumerable<object> _actualItems;
+        IEnumerable<object> _expectedItems;
+        Exception _exception;
 
         public class TestObject
         {
@@ -130,7 +131,9 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
         }
 
         [Then(@"the test should throw (.*) : (.*)")]
-        public void ThenTheTestShouldThrowSystem_NullReferenceExceptionCannotVerifyContainmentAgainstACollection(string type,string message)
+        public void ThenTheTestShouldThrowSystem_NullReferenceExceptionCannotVerifyContainmentAgainstACollection(
+            string type,
+            string message)
         {
             var expectedExceptionType = Type.GetType(type);
             _exception

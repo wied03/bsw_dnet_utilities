@@ -1,5 +1,6 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,8 @@ namespace Bsw.NHibernateUtils.Test.Mapping
     [TestFixture]
     public class ExtensionMethodsTest : BaseTest
     {
-        private AutoPersistenceModel _persistenceModel;
-        private IIdentityInstance _mockIdInstance;
+        AutoPersistenceModel _persistenceModel;
+        IIdentityInstance _mockIdInstance;
 
         #region Setup/Teardown
 
@@ -36,7 +37,7 @@ namespace Bsw.NHibernateUtils.Test.Mapping
 
         #region Utility Methods
 
-        private List<IIdConvention> ActualIdConventions
+        List<IIdConvention> ActualIdConventions
         {
             get
             {
@@ -47,7 +48,7 @@ namespace Bsw.NHibernateUtils.Test.Mapping
             }
         }
 
-        private IGeneratorInstance GeneratorMock
+        IGeneratorInstance GeneratorMock
         {
             get
             {

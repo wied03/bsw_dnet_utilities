@@ -1,5 +1,6 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Linq;
@@ -17,6 +18,11 @@ namespace MsBwUtilityTest.Enum
         [StringValue("foo")] Value,
         [StringValue("bar")] Value2,
         Value3
+    }
+
+    public enum TestEnum2
+    {
+        [StringValue("bar-2")] Value2,
     }
 
     [TestFixture]
@@ -97,6 +103,32 @@ namespace MsBwUtilityTest.Enum
             result
                 .Should()
                 .Be("Value3");
+        }
+
+        [Test]
+        public void No_collision_between_types()
+        {
+            // arrange
+            const TestEnum test = TestEnum.Value2;
+            const TestEnum2 test2 = TestEnum2.Value2;
+
+            // act
+            var result1 = test.StringValue();
+            var result2 = test2.StringValue();
+
+            // assert
+            result1
+                .Should()
+                .Be("bar");
+            result2
+                .Should()
+                .Be("bar-2");
+            "bar".EnumValue<TestEnum>()
+                 .Should()
+                 .Be(TestEnum.Value2);
+            "bar-2".EnumValue<TestEnum2>()
+                   .Should()
+                   .Be(TestEnum2.Value2);
         }
     }
 }

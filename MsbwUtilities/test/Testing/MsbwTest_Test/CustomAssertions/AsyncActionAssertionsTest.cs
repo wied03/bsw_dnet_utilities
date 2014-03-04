@@ -1,34 +1,50 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
 
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using FluentAssertions;
+using MsbwTest;
 using MsbwTest.CustomAssertions;
 using NUnit.Framework;
-using FluentAssertions;
-
-#endregion
 
 namespace MsbwTest_Test.CustomAssertions
 {
     [TestFixture]
     public class AsyncActionAssertionsTest : BaseTest
     {
+        #region Setup/Teardown
+
         [SetUp]
         public override void SetUp()
         {
             base.SetUp();
         }
 
-        private async Task<int> Tester(bool throwException)
+        async Task Tester(bool throwException)
+        {
+            if (throwException)
+            {
+                throw new ArgumentException("foobar");
+            }
+            await Task.Delay(100.Milliseconds());
+        }
+
+
+        async Task ThrowException()
         {
             await Task.Delay(100.Milliseconds());
-            if (throwException)
-                throw new ArgumentException("foobar");
-            return 5;
+            throw new ArgumentException("foobar");
         }
+
+        #endregion
+
+        #region Utility Methods
+
+        #endregion
+
+        #region Tests
 
         [Test]
         public void Expected_exception_does_not_happen()
@@ -39,7 +55,8 @@ namespace MsbwTest_Test.CustomAssertions
             // act + assert
             asyncAssertions
                 .Invoking(a => a.ShouldThrow<ArgumentException>().Wait())
-                .ShouldThrow<AssertionException>()
+                .ShouldThrow<AggregateException>()
+                .WithInnerException<AssertionException>()
                 ;
         }
 
@@ -52,5 +69,39 @@ namespace MsbwTest_Test.CustomAssertions
             // act + assert (no exception = pass)
             await asyncAssertions.ShouldThrow<ArgumentException>();
         }
+
+        [Test]
+        public async Task Should_complete_within_finishes()
+        {
+            // arrange
+            var asyncAssertions = new AsyncActionAssertions(() => Tester(false));
+
+            // act + assert
+            await asyncAssertions.ShouldCompleteWithin(200.Milliseconds());
+        }
+
+        [Test]
+        public async Task Should_complete_within_doesntfinish()
+        {
+            // arrange
+            var asyncAssertions = new AsyncActionAssertions(() => Tester(false));
+
+            // act + assert
+            await asyncAssertions.InvokingAsync(a => a.ShouldCompleteWithin(50.Milliseconds()))
+                                 .ShouldThrow<AssertionException>();
+        }
+
+        [Test]
+        public async Task Should_complete_within_finishes_throws_exception()
+        {
+            // arrange
+            var asyncAssertions = new AsyncActionAssertions(ThrowException);
+
+            // act + assert
+            await asyncAssertions.InvokingAsync(a => a.ShouldCompleteWithin(200.Milliseconds()))
+                                 .ShouldThrow<ArgumentException>();
+        }
+
+        #endregion
     }
 }

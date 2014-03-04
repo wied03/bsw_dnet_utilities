@@ -31,18 +31,35 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+    <Reference Include="FluentAssertions, Version=2.0.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\nuget_pkg_lnk\FluentAssertions.2.1.0.0\lib\net45\FluentAssertions.dll</HintPath>
+      <HintPath>..\..\..\..\nuget_pkg_lnk\FluentAssertions.2.0.1\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\nuget_pkg_lnk\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\..\nuget_pkg_lnk\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    <Reference Include="Nito.AsyncEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=09d695329ca273b7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\nuget_pkg_lnk\Nito.AsyncEx.2.0.0\lib\net45\Nito.AsyncEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Concurrent, Version=2.0.0.0, Culture=neutral, PublicKeyToken=09d695329ca273b7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\nuget_pkg_lnk\Nito.AsyncEx.2.0.0\lib\net45\Nito.AsyncEx.Concurrent.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Enlightenment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=09d695329ca273b7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\nuget_pkg_lnk\Nito.AsyncEx.2.0.0\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\nuget_pkg_lnk\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\..\..\..\nuget_pkg_lnk\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,14 +71,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomAssertions\AsyncActionAssertions.cs" />
+    <Compile Include="CustomAssertions\AsyncActionAssertionsWithResult.cs" />
     <Compile Include="CustomAssertions\CustomCollectionAssertions.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RhinoMocksExtensions.cs" />
     <Compile Include="Specflow\Transforms.cs" />
+    <Compile Include="TestingSecureStringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="MsbwTest.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

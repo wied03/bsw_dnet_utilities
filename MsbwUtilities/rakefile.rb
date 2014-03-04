@@ -11,45 +11,16 @@ with('MsbwUtilities.sln') do |sln|
 		clean.solution = sln
 	end
 
-	BradyW::MSBuild.new :build do |build|
+	BradyW::MSBuild.new :build => :version do |build|
 		build.solution = sln
 	end
 end
 
-task :ci => [:clean, :build, :test]
+task :ci => [:clean, :build, :test, :package]
 task :clean => [:cleandnet, :cleanpackages]
 task :test => [:codetest]
-# Version here because our re-build below with forcebuildforpackages will not execute for each package
-task :package => [:clean, :version, :pack]
 
-task :version => [:versionbswutil,
-				  :versionbswtest,
-				  :versionbaseentities,
-				  :versionnhibutils,
-				  :versionrubyexecution,
-				  :versionnhibtest]
-
-# Our re-build below with forcebuildforpackages will not execute for each package
-task :push => [:package,
-				:pushbswutil,
-				  :pushbswtest,
-				  :pushbaseentities,
-				  :pushnhibutils,
-				  :pushrubyexecution,
-				  :pushnhibtest]				  
-				  
-# We might have already done this in this build cycle, but we update the source with versions
-# so need to do force a build
-task :forcebuildforpackages do
-	Rake::Task["build"].execute
-end
-				  
-task :pack => [:packbswutil,
-			   :packbswtest,
-			   :packbaseentities,
-			   :packnhibutils,
-			   :packrubyexecution,
-			   :packnhibtest]
+task :push => [:package]
 
 with ('test') do |t|	
 	BradyW::Nunit.new :codetest => :build do |test|
@@ -63,172 +34,116 @@ end
 
 with (".nuget/nuget.exe") do |ngetpath|
 	with (ENV['nuget_apikey']) do |apikey|
-		with (ENV['version_number']) do |ver|
-			with("BSW Technology Consulting") do |companyName|
-
-				with ('src/Implementation/Bsw.NHibernateUtils') do |projPath|
-					with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|
-						assemblyinfo :versionnhibutils do |asm|
-							puts "Putting version number #{ver} on assembly"
-							asm.version = ver
-							asm.file_version = ver
-							asm.company_name = companyName
-							asm.product_name = "BSW NHibernate Utilities"
-							asm.output_file = asminfo
-							asm.input_file = asminfo
-						end			
+		with (ENV['version_number'] || '1.0.0.0') do |ver|
+			with("BSW Technology Consulting") do |companyName|			
+			define_project = lambda do |options|					
+					project_path = options[:project_path]
+					# derive the project name from the path (convention over config)
+					project_name = File.basename(project_path)					
+					project_title = options[:project_title]
+					proj_path_and_name = "#{project_path}/#{project_name}"
+					specTask = "spec_#{project_name}"
+					desc "Builds nuspec for #{project_name}"
+					nuspec specTask do |n|
+						n.id = project_name
+						n.title = project_title
+						n.version = ver
+						n.output_file = "#{proj_path_and_name}.nuspec"
+						n.authors = companyName
+						n.owners = n.authors
+						n.require_license_acceptance = "false"
+						n.description = options[:project_description]
+						n.projectUrl= "https://github.com/wied03/bsw_dnet_utilities"
+						n.copyright = "Copyright #{Date.today.year}"
+						if options.has_key?(:dependencies)
+							options[:dependencies].each {|d|  n.dependency d[:id], d[:version]}
+						end
 					end
-					
-					nugetpack :packnhibutils => [:versionnhibutils,:forcebuildforpackages] do |n|
-							n.command = ngetpath
-							n.nuspec = "#{projPath}/Bsw.NHibernateUtils.csproj"
-							n.base_folder = projPath
-							n.output = projPath
-					end
-
-					nugetpush :pushnhibutils => :packnhibutils do |n|
-						n.command = ngetpath
-						n.package = "#{projPath}/Bsw.NHibernateUtils.#{ver}.nupkg"
-						n.apikey = apikey						
-					end
-				end
 				
-				with ('src/Testing/Bsw.NHibernate.Testing') do |projPath|
-					with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|
-						assemblyinfo :versionnhibtest do |asm|
+					asmTask = "asm_#{project_name}"
+					desc "Updates assembly info for #{project_name}"
+					with ("#{project_path}/Properties/AssemblyInfo.cs") do |asminfo|			
+						assemblyinfo asmTask do |asm|
 							puts "Putting version number #{ver} on assembly"
 							asm.version = ver
 							asm.file_version = ver
 							asm.company_name = companyName
-							asm.product_name = "BSW NHibernate Testing"
+							asm.product_name = project_title
 							asm.output_file = asminfo
 							asm.input_file = asminfo
-						end			
+						end
 					end
 					
-					nugetpack :packnhibtest => [:versionnhibtest,:forcebuildforpackages] do |n|
-							n.command = ngetpath
-							n.nuspec = "#{projPath}/Bsw.NHibernate.Testing.csproj"
-							n.base_folder = projPath
-							n.output = projPath
-					end
-
-					nugetpush :pushnhibtest => :packnhibtest do |n|
+					packTask = "pack_#{project_name}"
+					desc "Creates a nupkg file for #{project_name}"
+					nugetpack packTask => [specTask,:build] do |n|
+						#n.log_level = :verbose
 						n.command = ngetpath
-						n.package = "#{projPath}/Bsw.NHibernate.Testing.#{ver}.nupkg"
-						n.apikey = apikey						
+						n.nuspec = "#{proj_path_and_name}.csproj"
+						n.base_folder = project_path
+						n.output = project_path						
 					end					
-				end
+					
+					pushTask = "push_#{project_name}"
+					desc "Pushes the nuget package to nuget.org for #{project_name}"
+					nugetpush pushTask => packTask do |n|
+						n.command = ngetpath
+						n.package = "#{proj_path_and_name}.#{ver}.nupkg"
+						n.apikey = apikey						
+					end										
+					
+					task :version => asmTask
+					task :package => packTask
+					task :push => pushTask								
+			end
 			
-				with ('src/Implementation/Bsw.BaseEntities') do |projPath|
-					with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|
-						assemblyinfo :versionbaseentities do |asm|
-							puts "Putting version number #{ver} on assembly"
-							asm.version = ver
-							asm.file_version = ver
-							asm.company_name = companyName
-							asm.product_name = "BSW Base NHibernate Entities"
-							asm.output_file = asminfo
-							asm.input_file = asminfo
-						end			
-					end
-					
-					nugetpack :packbaseentities => [:versionbaseentities,:forcebuildforpackages] do |n|
-							n.command = ngetpath
-							n.nuspec = "#{projPath}/Bsw.BaseEntities.csproj"
-							n.base_folder = projPath
-							n.output = projPath
-					end
+				define_project.call  :project_path => 'src/Testing/Bsw.NUnit.Traceability.Addin',
+					 :project_title => 'NUnit Traceability Addin',
+					 :project_description => "Lists all NUnit categories when running each test"
+			
+				define_project.call  :project_path => 'src/Implementation/Bsw.NHibernateUtils',
+					 :project_title => 'BSW NHibernate Utilities',
+					 :project_description => "Provides unit of work, StructureMap dependency injection base registry, and base repository for building a data layer"							
+				define_project.call  :project_path => "src/Testing/Bsw.NHibernate.Testing",
+					 :project_title => 'BSW NHibernate Testing Utility',
+					 :project_description => "Provides convenience code for doing SQLite in memory unit testing with NHibernate"				
 
-					nugetpush :pushbaseentities => :packbaseentities do |n|
-						n.command = ngetpath
-						n.package = "#{projPath}/Bsw.BaseEntities.#{ver}.nupkg"
-						n.apikey = apikey						
-					end							
-				end
+				define_project.call  :project_path => "src/Implementation/Bsw.BaseEntities",
+					 :project_title => 'BSW Base Entities',
+					 :project_description => "Provides base NHibernate entity classes that take care of equality, etc."
 				
-				with ('src/Testing/Bsw.RubyExecution') do |projPath|
-					with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|
-						assemblyinfo :versionrubyexecution do |asm|
-							puts "Putting version number #{ver} on assembly"
-							asm.version = ver
-							asm.file_version = ver
-							asm.company_name = companyName
-							asm.product_name = "BSW Ruby Execution"
-							asm.output_file = asminfo
-							asm.input_file = asminfo
-						end			
-					end
-					
-					nugetpack :packrubyexecution => [:versionrubyexecution,:forcebuildforpackages] do |n|
-							n.command = ngetpath
-							n.nuspec = "#{projPath}/Bsw.RubyExecution.csproj"
-							n.base_folder = projPath
-							n.output = projPath
-					end
-
-					nugetpush :pushrubyexecution => :packrubyexecution do |n|
-						n.command = ngetpath
-						n.package = "#{projPath}/Bsw.RubyExecution.#{ver}.nupkg"
-						n.apikey = apikey						
-					end							
-					
-				end
+				define_project.call  :project_path => "src/Testing/Bsw.RubyExecution",
+					 :project_title => 'BSW Ruby Execution Utility',
+					 :project_description => "Starts/stops a Ruby process (with bundler install support) for use in NUnit tests"
 				
-				with ('src/Testing/MsbwTest') do |projPath|
-					with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|			
-						assemblyinfo :versionbswtest do |asm|
-							puts "Putting version number #{ver} on assembly"
-							asm.version = ver
-							asm.file_version = ver
-							asm.company_name = companyName
-							asm.product_name = "MSBW Test Assembly"
-							asm.output_file = asminfo
-							asm.input_file = asminfo
-						end
-					end
-					
-					nugetpack :packbswtest => [:versionbswtest,:forcebuildforpackages] do |n|
-						n.command = ngetpath
-						n.nuspec = "#{projPath}/MsbwTest.csproj"
-						n.base_folder = projPath
-						n.output = projPath
-					end
+				define_project.call  :project_path => "src/Implementation/MsBwUtility",
+					 :project_title => 'Msbw Utility Assembly',
+					 :project_description => "Used as a utility assembly for implementations"				
 
-					nugetpush :pushbswtest => :packbswtest do |n|
-						n.command = ngetpath
-						n.package = "#{projPath}/MsbwTest.#{ver}.nupkg"
-						n.apikey = apikey						
-					end							
-					
-				end
-
-				with ('src/Implementation/MsBwUtility') do |projPath|
-					with ("#{projPath}/Properties/AssemblyInfo.cs") do |asminfo|			
-						assemblyinfo :versionbswutil do |asm|
-							puts "Putting version number #{ver} on assembly"
-							asm.version = ver
-							asm.file_version = ver
-							asm.company_name = companyName
-							asm.product_name = "MSBW Utility Assembly"
-							asm.output_file = asminfo
-							asm.input_file = asminfo
-						end
-					end
-					
-					nugetpack :packbswutil => [:versionbswutil,:forcebuildforpackages] do |n|
-						n.command = ngetpath
-						n.nuspec = "#{projPath}/MsBwUtility.csproj"
-						n.base_folder = projPath
-						n.output = projPath
-					end
-					
-					nugetpush :pushbswutil => :packbswutil do |n|
-						n.command = ngetpath
-						n.package = "#{projPath}/MsBwUtility.#{ver}.nupkg"
-						n.apikey = apikey						
-					end					
-				end
+				define_project.call :project_path => "src/Testing/MsbwTest",
+					 :project_title => 'Msbw Test Assembly',
+					 :project_description => "Used as a utility assembly for UNIT TESTING ONLY",
+					:dependencies => [:id => 'MsbwUtility', :version => ver]
+				
+				define_project.call :project_path => "src/Implementation/MsBwUtility",
+					 :project_title => 'Msbw Utility Assembly',
+					 :project_description => "Used as a utility assembly for implementations"
+				
+				define_project.call :project_path => "src/Implementation/Bsw.Wpf.Utilities",
+					 :project_title => 'BSW WPF Base Utilities',
+					 :project_description => "Provides WPF extensions to Prism and services that can be injected into view models"
+					 
+				define_project.call :project_path => "src/Testing/Bsw.Wpf.Testing.Utilities",
+					 :project_title => 'BSW WPF Testing Utilities',
+					 :project_description => "Classes to support unit testing WPF applications, in particular those built with Bsw.Wpf.Utilities",
+					 :dependencies => [{:id => 'Bsw.Wpf.Utilities', :version => ver},
+												 {:id => 'MsbwUtility', :version => ver}]
+												 
+				 define_project.call :project_path => "src/Testing/Bsw.Utilities.Windows.SystemTest",
+					 :project_title => 'BSW WPF System Testing Utilities',
+					 :project_description => "Specflow step definitions to support system testing WPF applications with the White framework",
+					 :dependencies => [{:id => 'MsbwTest', :version => ver},
+												 {:id => 'MsbwUtility', :version => ver}]
 			end
 		end
 	end

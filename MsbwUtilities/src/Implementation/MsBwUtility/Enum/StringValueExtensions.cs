@@ -1,7 +1,9 @@
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+
+#region
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -13,16 +15,17 @@ namespace MsBw.MsBwUtility.Enum
 {
     public static class StringValueExtensions
     {
-        private static readonly IDictionary<string, object> CachedEnumValues = new Dictionary<string, object>();
+        static readonly IDictionary<string, object> CachedEnumValues = new Dictionary<string, object>();
+
         public static TEnum EnumValue<TEnum>(this string theStringVal)
         {
-            var type = typeof(TEnum);
+            var type = typeof (TEnum);
             var key = String.Format("{0}_{1}",
-                                    type.Name,
+                                    type.FullName,
                                     theStringVal);
             if (CachedEnumValues.ContainsKey(key))
             {
-                return (TEnum)CachedEnumValues[key];
+                return (TEnum) CachedEnumValues[key];
             }
 
             var stringVals =
@@ -35,30 +38,32 @@ namespace MsBw.MsBwUtility.Enum
                                                 type,
                                                 stringVals);
             }
-            var enumIndex = (int)stringVals[theStringVal].GetValue(type);
-            var enumValue = (TEnum)System.Enum.ToObject(type,
+            var enumIndex = (int) stringVals[theStringVal].GetValue(type);
+            var enumValue = (TEnum) System.Enum.ToObject(type,
                                                          enumIndex);
             CachedEnumValues[key] = enumValue;
             return enumValue;
         }
 
-        private static string GetStringValForField(FieldInfo field)
+        static string GetStringValForField(FieldInfo field)
         {
             var stringValueAttribute = field.StringValAttr();
-            return stringValueAttribute != null ? stringValueAttribute.Value : field.Name;
+            return stringValueAttribute != null
+                       ? stringValueAttribute.Value
+                       : field.Name;
         }
 
-        private static StringValueAttribute StringValAttr(this FieldInfo field)
+        static StringValueAttribute StringValAttr(this FieldInfo field)
         {
-            var attrs = field.GetCustomAttributes(typeof(StringValueAttribute),
+            var attrs = field.GetCustomAttributes(typeof (StringValueAttribute),
                                                   true);
             return attrs
                        .Any()
-                       ? (StringValueAttribute)attrs[0]
+                       ? (StringValueAttribute) attrs[0]
                        : null;
         }
 
-        private static readonly IDictionary<System.Enum, string> StringValues = new Dictionary<System.Enum, string>();
+        static readonly IDictionary<System.Enum, string> StringValues = new Dictionary<System.Enum, string>();
 
         public static string StringValue(this System.Enum theEnum)
         {
@@ -75,5 +80,55 @@ namespace MsBw.MsBwUtility.Enum
             return stringValue;
         }
 
+        public static void ThrowException<TEnumType, TKeyValue>(this Dictionary<TKeyValue, TEnumType> mapping,
+                                                                object value)
+        {
+            var dict = (IDictionary) mapping;
+            throw new EnumNotFoundException(value,
+                                            typeof (TEnumType),
+                                            (dict));
+        }
+
+        public static TEnumType ToMappedEnumValue<TEnumType, TKeyValue>(this Dictionary<TKeyValue, TEnumType> mapping,
+                                                                        TKeyValue value)
+        {
+            if (!mapping.ContainsKey(value))
+            {
+                ThrowException(mapping,
+                               value);
+            }
+            return mapping[value];
+        }
+
+        static readonly Dictionary<Type, Dictionary<object, object>> ReverseMapping =
+            new Dictionary<Type, Dictionary<object, object>>();
+
+        static void AddReverseMapping<TEnumType, TKeyValue>(Dictionary<TKeyValue, TEnumType> mapping)
+        {
+            var reverse = new Dictionary<object, object>();
+            ReverseMapping[typeof (TEnumType)] = reverse;
+            foreach (var kv in mapping)
+            {
+                reverse[kv.Value] = kv.Key;
+            }
+        }
+
+        public static TKeyValue FromMappedEnumValue<TEnumType, TKeyValue>(this Dictionary<TKeyValue, TEnumType> mapping,
+                                                                          TEnumType value)
+        {
+            var type = typeof (TEnumType);
+            if (!ReverseMapping.ContainsKey(type))
+            {
+                AddReverseMapping(mapping);
+            }
+            var reverse = ReverseMapping[type];
+            var asEnum = (object) value;
+            if (!reverse.ContainsKey(asEnum))
+            {
+                ThrowException(mapping,
+                               value);
+            }
+            return (TKeyValue) reverse[asEnum];
+        }
     }
 }

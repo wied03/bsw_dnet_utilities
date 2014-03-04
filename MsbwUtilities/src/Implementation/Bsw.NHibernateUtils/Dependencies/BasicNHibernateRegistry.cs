@@ -1,10 +1,12 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using Bsw.NHibernateUtils.Repository;
+using FluentNHibernate.Cfg;
 using NHibernate;
 using StructureMap.Configuration.DSL;
 
@@ -27,9 +29,18 @@ namespace Bsw.NHibernateUtils.Dependencies
 
         protected void SetupUnitOfWork()
         {
-            For<IUnitOfWork>()
+            For<ILazySessionFetcher>()
                 .HybridHttpOrThreadLocalScoped()
-                .Use<UnitOfWork>();
+                .Use<LazySessionFetcher>();
+        }
+
+        protected static void SetupMappingExport(MappingConfiguration mappingConfiguration)
+        {
+#if DEBUG
+            const string mappingPath = ".";
+            mappingConfiguration.AutoMappings.ExportTo(mappingPath);
+            mappingConfiguration.FluentMappings.ExportTo(mappingPath);
+#endif
         }
     }
 }

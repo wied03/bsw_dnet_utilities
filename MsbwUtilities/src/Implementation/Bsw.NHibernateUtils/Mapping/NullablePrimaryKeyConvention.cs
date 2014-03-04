@@ -1,5 +1,6 @@
-// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
-﻿#region
+﻿// Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
+
+#region
 
 using System;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Bsw.NHibernateUtils.Mapping
 {
     public class NullablePrimaryKeyConvention : IIdConvention
     {
-        private readonly Action<IGeneratorInstance> _generateStyle;
+        readonly Action<IGeneratorInstance> _generateStyle;
 
         public NullablePrimaryKeyConvention(Action<IGeneratorInstance> generateStyle)
         {
