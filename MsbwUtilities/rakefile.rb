@@ -3,7 +3,8 @@ require 'rakedotnet'
 require "albacore"
 
 BUILD_CONFIG = ENV['build_config'] || 'Debug'
-VERSION = ENV['version_number'] || '1.0.0.0'
+VERSION = ENV['version_number'] || '1.0.0'
+NUGET_VERSION = BUILD_CONFIG == 'Debug' ? "#{VERSION}-beta" : VERSION
 
 with('MsbwUtilities.sln') do |sln|
 	BradyW::MSBuild.new :cleandnet do |clean|
@@ -13,7 +14,7 @@ with('MsbwUtilities.sln') do |sln|
 
 	BradyW::MSBuild.new :build => :version do |build|
 		build.solution = sln
-		build.build_config = BUILD_CONFIG if BUILD_CONFIG
+		build.build_config = BUILD_CONFIG
 	end
 end
 
@@ -47,7 +48,8 @@ with (".nuget/nuget.exe") do |ngetpath|
 				nuspec specTask do |n|
 					n.id = project_name
 					n.title = project_title
-					n.version = VERSION
+					# Would prefer to just have assembly provide the version, but albacore nuspec requires this
+					n.version = NUGET_VERSION
 					n.output_file = "#{proj_path_and_name}.nuspec"
 					n.authors = companyName
 					n.owners = n.authors
@@ -67,17 +69,17 @@ with (".nuget/nuget.exe") do |ngetpath|
 						puts "Putting version number #{VERSION} on assembly"
 						asm.version = VERSION
 						asm.file_version = VERSION
+						asm.informational_version = NUGET_VERSION
 						asm.company_name = companyName
 						asm.product_name = project_title
 						asm.output_file = asminfo
-						asm.input_file = asminfo
+						asm.input_file = asminfo						
 					end
 				end
 				
 				packTask = "pack_#{project_name}"
 				desc "Creates a nupkg file for #{project_name}"
-				nugetpack packTask => [specTask,:build] do |n|
-					#n.log_level = :verbose
+				nugetpack packTask => [specTask,:build] do |n|					
 					n.command = ngetpath
 					n.nuspec = "#{proj_path_and_name}.csproj"
 					n.base_folder = project_path
@@ -89,7 +91,7 @@ with (".nuget/nuget.exe") do |ngetpath|
 				desc "Pushes the nuget package to nuget.org for #{project_name}"
 				nugetpush pushTask => packTask do |n|
 					n.command = ngetpath
-					n.package = "#{proj_path_and_name}.#{VERSION}.nupkg"
+					n.package = "#{proj_path_and_name}.#{NUGET_VERSION}.nupkg"
 					n.apikey = ENV['api_key']						
 				end										
 				
@@ -124,7 +126,7 @@ with (".nuget/nuget.exe") do |ngetpath|
 			define_project.call :project_path => "src/Testing/MsbwTest",
 				 :project_title => 'Msbw Test Assembly',
 				 :project_description => "Used as a utility assembly for UNIT TESTING ONLY",
-				:dependencies => [:id => 'MsbwUtility', :version => VERSION]	
+				:dependencies => [:id => 'MsbwUtility', :version => NUGET_VERSION]	
 			
 			define_project.call :project_path => "src/Implementation/Bsw.Wpf.Utilities",
 				 :project_title => 'BSW WPF Base Utilities',
@@ -133,14 +135,14 @@ with (".nuget/nuget.exe") do |ngetpath|
 			define_project.call :project_path => "src/Testing/Bsw.Wpf.Testing.Utilities",
 				 :project_title => 'BSW WPF Testing Utilities',
 				 :project_description => "Classes to support unit testing WPF applications, in particular those built with Bsw.Wpf.Utilities",
-				 :dependencies => [{:id => 'Bsw.Wpf.Utilities', :version => VERSION},
-											 {:id => 'MsbwUtility', :version => VERSION}]
+				 :dependencies => [{:id => 'Bsw.Wpf.Utilities', :version => NUGET_VERSION},
+											 {:id => 'MsbwUtility', :version => NUGET_VERSION}]
 											 
 			 define_project.call :project_path => "src/Testing/Bsw.Utilities.Windows.SystemTest",
 				 :project_title => 'BSW WPF System Testing Utilities',
 				 :project_description => "Specflow step definitions to support system testing WPF applications with the White framework",
-				 :dependencies => [{:id => 'MsbwTest', :version => VERSION},
-											 {:id => 'MsbwUtility', :version => VERSION}]			
+				 :dependencies => [{:id => 'MsbwTest', :version => NUGET_VERSION},
+											 {:id => 'MsbwUtility', :version => NUGET_VERSION}]			
 		end
 	end
 end
