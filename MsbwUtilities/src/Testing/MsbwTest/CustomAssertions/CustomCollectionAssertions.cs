@@ -2,6 +2,8 @@
 
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
 
+using NUnit.Framework;
+
 #region
 
 using System;
@@ -46,14 +48,7 @@ namespace MsbwTest.CustomAssertions
             if (ReferenceEquals(actual,
                                 null))
             {
-                Execute.Verification.BecauseOf(reason,
-                                               reasonArgs)
-                       .FailWith("Expected {context:collection} to not contain {0}{reason}, but found <null>.",
-                                 new object[]
-                                 {
-                                     expected
-                                 });
-                // not needed but keep resharper happy
+                // Null collection, so can never contain what we are asserting
                 return continuation;
             }
 
