@@ -89,6 +89,21 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
             _expectedItems = items;
         }
 
+        [When(@"I test NotContainEquivalent")]
+        public void WhenITestNotContainEquivalent()
+        {
+            try
+            {
+                _actualItems
+                    .Should()
+                    .NotContainEquivalent(_expectedItems);
+            }
+            catch (Exception e)
+            {
+                _exception = e;
+            }
+        }
+
         [When(@"I test ContainEquivalent")]
         public void WhenITestContainEquivalent()
         {
@@ -107,6 +122,12 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
         [Then(@"the test should pass")]
         public void ThenTheTestShouldPass()
         {
+            if (_exception != null)
+            {
+                _exception
+                    .Should()
+                    .BeOfType<AssertionException>();
+            }
             var assertException = _exception as AssertionException;
             var failureMessage = assertException == null
                                      ? string.Empty
@@ -120,6 +141,12 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
         [Then(@"the test should fail with message (.*)")]
         public void ThenTheTestShouldFail(string expectedMessage)
         {
+            if (_exception != null)
+            {
+                _exception
+                    .Should()
+                    .BeOfType<AssertionException>();
+            }
             var assertException = _exception as AssertionException;
             assertException
                 .Should()

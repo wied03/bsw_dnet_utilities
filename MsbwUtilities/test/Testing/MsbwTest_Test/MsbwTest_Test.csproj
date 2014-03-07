@@ -76,6 +76,11 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="CustomAssertions\SelfTest\CustomCollectionStepDef.cs" />
+    <Compile Include="CustomAssertions\SelfTest\Not Contain Equivalent.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Not Contain Equivalent.feature</DependentUpon>
+    </Compile>
     <Compile Include="ExtensionMethods.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -91,6 +96,10 @@
     <None Include="CustomAssertions\SelfTest\CustomCollectionAssertions.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CustomCollectionAssertions.feature.cs</LastGenOutput>
+    </None>
+    <None Include="CustomAssertions\SelfTest\Not Contain Equivalent.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Not Contain Equivalent.feature.cs</LastGenOutput>
     </None>
     <None Include="ExtensionMethods.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -28,6 +28,46 @@ namespace MsbwTest.CustomAssertions
             _assertions = assertions;
         }
 
+        public AndConstraint<GenericCollectionAssertions<T>> NotContainEquivalent(IEnumerable<T> expected)
+        {
+            var actual = _assertions.Subject;
+            var reason = string.Empty;
+            var reasonArgs = new object[0];
+            if (expected == null)
+            {
+                throw new NullReferenceException("Cannot verify containment against a <null> collection");
+            }
+            var expectedList = expected as IList<T> ?? expected.ToList();
+            if (!expectedList.Any())
+            {
+                throw new ArgumentException("Cannot verify containment against an empty collection");
+            }
+            var continuation = new AndConstraint<GenericCollectionAssertions<T>>(_assertions);
+            if (ReferenceEquals(actual,
+                                null))
+            {
+                Execute.Verification.BecauseOf(reason,
+                                               reasonArgs)
+                       .FailWith("Expected {context:collection} to contain {0}{reason}, but found <null>.",
+                                 new object[]
+                                 {
+                                     expected
+                                 });
+                // not needed but keep resharper happy
+                return continuation;
+            }
+
+            var expectedJson = expectedList
+                .Select(expObj => JsonConvert.SerializeObject(expObj));
+            var actualJson = actual
+                .Select(actObj => JsonConvert.SerializeObject(actObj));
+            actualJson
+                .Should()
+                .NotContain(expectedJson);
+
+            return continuation;
+        }
+
         public AndConstraint<GenericCollectionAssertions<T>> ContainEquivalent(IEnumerable<T> expected)
         {
             var actual = _assertions.Subject;

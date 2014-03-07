@@ -19,20 +19,20 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.9.0.77")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Contain Equivalent")]
-    public partial class ContainEquivalentFeature
+    [NUnit.Framework.DescriptionAttribute("Not Contain Equivalent")]
+    public partial class NotContainEquivalentFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "CustomCollectionAssertions.feature"
+#line 1 "Not Contain Equivalent.feature"
 #line hidden
         
         [NUnit.Framework.TestFixtureSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Contain Equivalent", "Making sure these work OK", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Not Contain Equivalent", "", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -69,15 +69,15 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
         public virtual void _2EmptyCollectionsOfStrings()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("2 empty collections of strings", ((string[])(null)));
-#line 4
+#line 3
 this.ScenarioSetup(scenarioInfo);
-#line 5
+#line 4
  testRunner.Given("Actual collection having strings []", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 6
+#line 5
  testRunner.And("Expected collection having strings []", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 6
+ testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 7
- testRunner.When("I test ContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 8
  testRunner.Then("the test should pass", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -88,16 +88,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ExpectedStringExistsInLargerActualCollection()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Expected string exists in larger actual collection", ((string[])(null)));
-#line 10
+#line 9
 this.ScenarioSetup(scenarioInfo);
-#line 11
+#line 10
  testRunner.Given("Actual collection having strings [\'foo\',\'bar\']", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 12
+#line 11
  testRunner.And("Expected collection having strings [\'foo\']", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 12
+ testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 13
- testRunner.When("I test ContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 14
- testRunner.Then("the test should pass", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the test should fail with message Expected collection {\"\\\"foo\\\"\", \"\\\"bar\\\"\"} to n" +
+                    "ot contain \"\\\"foo2\\\"\".", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -107,17 +108,16 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ExpectedStringDoesNotExistInLargerActualCollection()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Expected string does not exist in larger actual collection", ((string[])(null)));
-#line 16
+#line 15
 this.ScenarioSetup(scenarioInfo);
-#line 17
+#line 16
  testRunner.Given("Actual collection having strings [\'foo\',\'bar\']", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 18
+#line 17
  testRunner.And("Expected collection having strings [\'foo2\']", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 18
+ testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 19
- testRunner.When("I test ContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 20
- testRunner.Then("the test should fail with message Expected collection {\"\\\"foo\\\"\", \"\\\"bar\\\"\"} to c" +
-                    "ontain \"\\\"foo2\\\"\".", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the test should pass", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -127,16 +127,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ExpectedObjectExistsInLargerActualCollection()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Expected object exists in larger actual collection", ((string[])(null)));
-#line 22
+#line 21
 this.ScenarioSetup(scenarioInfo);
-#line 23
+#line 22
  testRunner.Given("Actual collection having objects [foo,bar]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 24
+#line 23
  testRunner.And("Expected collection having objects [foo]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 24
+ testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 25
- testRunner.When("I test ContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 26
- testRunner.Then("the test should pass", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the test should fail with message Expected collection {\"{{\\\"SomeValue\\\":\\\"foo\\\"}}" +
+                    "\", \"{{\\\"SomeValue\\\":\\\"bar\\\"}}\"} to not contain \"{{\\\"SomeValue\\\":\\\"foo2\\\"}}\".", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -146,17 +147,16 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ExpectedObjectDoesNotExistInLargerActualCollection()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Expected object does not exist in larger actual collection", ((string[])(null)));
-#line 28
+#line 27
 this.ScenarioSetup(scenarioInfo);
-#line 29
+#line 28
  testRunner.Given("Actual collection having objects [foo,bar]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 30
+#line 29
  testRunner.And("Expected collection having objects [foo2]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 30
+ testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 31
- testRunner.When("I test ContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 32
- testRunner.Then("the test should fail with message Expected collection {\"{{\\\"SomeValue\\\":\\\"foo\\\"}}" +
-                    "\", \"{{\\\"SomeValue\\\":\\\"bar\\\"}}\"} to contain \"{{\\\"SomeValue\\\":\\\"foo2\\\"}}\".", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the test should pass", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -166,15 +166,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void _2EmptyCollectionsOfObjects()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("2 empty collections of objects", ((string[])(null)));
-#line 34
+#line 33
 this.ScenarioSetup(scenarioInfo);
-#line 35
+#line 34
  testRunner.Given("Actual collection having objects []", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 36
+#line 35
  testRunner.And("Expected collection having objects []", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 36
+ testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 37
- testRunner.When("I test ContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 38
  testRunner.Then("the test should pass", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -185,17 +185,16 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NullActual()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Null actual", ((string[])(null)));
-#line 40
+#line 39
 this.ScenarioSetup(scenarioInfo);
-#line 41
+#line 40
  testRunner.Given("Actual collection is null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 42
+#line 41
  testRunner.And("Expected collection having objects [hi2]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 42
+ testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 43
- testRunner.When("I test ContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 44
- testRunner.Then("the test should fail with message Expected collection to contain {TestObject hi2}" +
-                    ", but found <null>.", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the test should pass", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -205,15 +204,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NullExpected()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Null expected", ((string[])(null)));
-#line 46
+#line 45
 this.ScenarioSetup(scenarioInfo);
-#line 47
+#line 46
  testRunner.Given("Actual collection having objects [hi,joe]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 48
+#line 47
  testRunner.And("Expected collection is null", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 48
+ testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 49
- testRunner.When("I test ContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 50
  testRunner.Then("the test should throw System.NullReferenceException : Cannot verify containment a" +
                     "gainst a <null> collection", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden

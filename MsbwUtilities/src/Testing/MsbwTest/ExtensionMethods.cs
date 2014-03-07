@@ -24,6 +24,13 @@ namespace MsbwTest
             return new CustomCollectionAssertions<T>(assertions).ContainEquivalent(expectedItemsList);
         }
 
+        public static AndConstraint<GenericCollectionAssertions<T>> NotContainEquivalent<T>(
+            this GenericCollectionAssertions<T> assertions,
+            IEnumerable<T> expectedItemsList)
+        {
+            return new CustomCollectionAssertions<T>(assertions).NotContainEquivalent(expectedItemsList);
+        }
+
         public static string ToStringWithCount(this char character,
                                                int count)
         {
