@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bsw.Utilities.Windows.SystemTest.Transformations;
 using FluentAssertions;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TestStack.White.UIItems.ListBoxItems;
 
 namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
 {
@@ -48,6 +50,35 @@ namespace Bsw.Utilities.Windows.SystemTest.StepDefinitions.Wpf
             Context.ComboBox.SelectedItemText
                    .Should()
                    .Be(itemText);
+        }
+
+        [Then(@"there is a combobox (.*) label '(.*)'")]
+        public void ThenThereIsAComboboxToTheRightOfLabel(ThatIs direction,
+                                                          string labelText)
+        {
+            FindComboBox(direction,
+                         labelText);
+            Context.ComboBox
+                   .Should()
+                   .NotBeNull();
+        }
+
+        [When(@"I use the combobox (.*) label '(.*)'")]
+        public void WhenIUseTheComboboxNearLabel(ThatIs direction,
+                                                 string labelText)
+        {
+            FindComboBox(direction,
+                         labelText);
+            Context.ComboBox
+                   .Should()
+                   .NotBeNull();
+        }
+
+        void FindComboBox(ThatIs direction,
+                          string labelText)
+        {
+            Context.ComboBox = RetryLocate(() => LocateClosestElementOfType<WPFComboBox>(labelText: labelText,
+                                                                                         direction: direction));
         }
     }
 }
