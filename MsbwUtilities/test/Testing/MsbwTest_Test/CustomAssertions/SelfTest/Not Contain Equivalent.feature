@@ -10,7 +10,7 @@ Scenario: Expected string exists in larger actual collection
 	Given Actual collection having strings ['foo','bar']
 	And Expected collection having strings ['foo']
 	When I test NotContainEquivalent
-	Then the test should fail with message Expected collection {"\"foo\"", "\"bar\""} to not contain "\"foo2\"".
+	Then the test should fail with message Expected collection {"foo", "bar"} to not contain {"foo"}
 
 Scenario: Expected string does not exist in larger actual collection
 	Given Actual collection having strings ['foo','bar']
@@ -34,7 +34,7 @@ Scenario: 2 empty collections of objects
 	Given Actual collection having objects []
 	And Expected collection having objects []
 	When I test NotContainEquivalent
-	Then the test should pass
+	Then the test should throw System.ArgumentException : Cannot verify containment against an empty collection
 
 Scenario: Null actual
 	Given Actual collection is null

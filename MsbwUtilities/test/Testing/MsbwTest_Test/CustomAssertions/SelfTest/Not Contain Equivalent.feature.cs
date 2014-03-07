@@ -97,8 +97,8 @@ this.ScenarioSetup(scenarioInfo);
 #line 12
  testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 13
- testRunner.Then("the test should fail with message Expected collection {\"\\\"foo\\\"\", \"\\\"bar\\\"\"} to n" +
-                    "ot contain \"\\\"foo2\\\"\".", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the test should fail with message Expected collection {\"foo\", \"bar\"} to not conta" +
+                    "in {\"foo\"}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -175,7 +175,8 @@ this.ScenarioSetup(scenarioInfo);
 #line 36
  testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 37
- testRunner.Then("the test should pass", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the test should throw System.ArgumentException : Cannot verify containment agains" +
+                    "t an empty collection", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

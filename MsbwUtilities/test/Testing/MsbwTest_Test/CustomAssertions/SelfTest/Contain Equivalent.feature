@@ -35,7 +35,7 @@ Scenario: 2 empty collections of objects
 	Given Actual collection having objects []
 	And Expected collection having objects []
 	When I test ContainEquivalent
-	Then the test should pass
+	Then the test should throw System.ArgumentException : Cannot verify containment against an empty collection
 
 Scenario: Null actual
 	Given Actual collection is null

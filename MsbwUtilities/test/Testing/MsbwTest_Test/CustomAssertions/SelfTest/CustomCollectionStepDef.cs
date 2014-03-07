@@ -48,7 +48,8 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
         [UsedImplicitly]
         public IEnumerable<TestObject> JsonObjectTransform(string csvItems)
         {
-            return csvItems.Split(',')
+            return csvItems.Split(separator: new[] {','},
+                                  options: StringSplitOptions.RemoveEmptyEntries)
                            .Select(str => new TestObject(str));
         }
 
@@ -158,9 +159,8 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
         }
 
         [Then(@"the test should throw (.*) : (.*)")]
-        public void ThenTheTestShouldThrowSystem_NullReferenceExceptionCannotVerifyContainmentAgainstACollection(
-            string type,
-            string message)
+        public void ThenTheTestShouldThrow(string type,
+                                           string message)
         {
             var expectedExceptionType = Type.GetType(type);
             _exception

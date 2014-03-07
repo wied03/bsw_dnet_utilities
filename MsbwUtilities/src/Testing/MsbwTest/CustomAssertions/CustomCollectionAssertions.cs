@@ -48,7 +48,7 @@ namespace MsbwTest.CustomAssertions
             {
                 Execute.Verification.BecauseOf(reason,
                                                reasonArgs)
-                       .FailWith("Expected {context:collection} to contain {0}{reason}, but found <null>.",
+                       .FailWith("Expected {context:collection} to not contain {0}{reason}, but found <null>.",
                                  new object[]
                                  {
                                      expected
@@ -57,14 +57,31 @@ namespace MsbwTest.CustomAssertions
                 return continuation;
             }
 
-            var expectedJson = expectedList
-                .Select(expObj => JsonConvert.SerializeObject(expObj));
-            var actualJson = actual
+            var expectedJsonList = expectedList
+                .Select(expObj => JsonConvert.SerializeObject(expObj))
+                .ToList()
+                ;
+            var actualJsonList = actual
                 .Select(actObj => JsonConvert.SerializeObject(actObj));
-            actualJson
-                .Should()
-                .NotContain(expectedJson);
-
+            foreach (var actualJson in actualJsonList)
+            {
+                foreach (var expectedJson in expectedJsonList)
+                {
+                    if (actualJson.Equals(expectedJson))
+                    {
+                        Execute
+                            .Verification
+                            .BecauseOf(reason,
+                                       reasonArgs)
+                            .FailWith("Expected collection {0} to not contain {1}{reason}",
+                                      new object[]
+                                      {
+                                          actualJsonList,
+                                          expectedJsonList
+                                      });
+                    }
+                }
+            }
             return continuation;
         }
 
