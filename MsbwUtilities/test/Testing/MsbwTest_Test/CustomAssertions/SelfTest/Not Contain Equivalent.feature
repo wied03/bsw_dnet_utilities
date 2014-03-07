@@ -4,7 +4,7 @@ Scenario: 2 empty collections of strings
 	Given Actual collection having strings []
 	And Expected collection having strings []
 	When I test NotContainEquivalent
-	Then the test should fail with message Expected collection {"\"\""} to not contain {"\"\""}
+	Then the test should fail with message Expected collection {""} to not contain {""}
 	
 Scenario: Expected string exists in larger actual collection
 	Given Actual collection having strings ['foo','bar']
@@ -22,7 +22,7 @@ Scenario: Expected object exists in larger actual collection
 	Given Actual collection having objects [foo,bar]
 	And Expected collection having objects [foo]
 	When I test NotContainEquivalent
-	Then the test should fail with message Expected collection {"{{\"SomeValue\":\"foo\"}}", "{{\"SomeValue\":\"bar\"}}"} to not contain "{{\"SomeValue\":\"foo2\"}}".
+	Then the test should fail with message Expected collection {"{{SomeValue:foo}}", "{{SomeValue:bar}}"} to not contain {"{{SomeValue:foo}}"}
 
 Scenario: Expected object does not exist in larger actual collection
 	Given Actual collection having objects [foo,bar]

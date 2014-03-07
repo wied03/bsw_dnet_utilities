@@ -2,8 +2,6 @@
 
 // Copyright 2013 BSW Technology Consulting, released under the BSD license - see LICENSING.txt at the top of this repository for details
 
-using NUnit.Framework;
-
 #region
 
 using System;
@@ -30,6 +28,12 @@ namespace MsbwTest.CustomAssertions
             _assertions = assertions;
         }
 
+        static IEnumerable<string> RemoveExtraQuotes(IEnumerable<string> list)
+        {
+            return list.Select(i => i.Replace("\"",
+                                              string.Empty));
+        }
+
         public AndConstraint<GenericCollectionAssertions<T>> NotContainEquivalent(IEnumerable<T> expected)
         {
             var actual = _assertions.Subject;
@@ -51,33 +55,43 @@ namespace MsbwTest.CustomAssertions
                 // Null collection, so can never contain what we are asserting
                 return continuation;
             }
+            Action<object[]> failWith = args => Execute.Verification.BecauseOf(reason,
+                                                                               reasonArgs)
+                                                       .FailWith("Expected collection {0} to not contain {1}{reason}",
+                                                                 args);
+            RunTest(expectedList,
+                    actual,
+                    failWith);
+            return continuation;
+        }
 
+        static void RunTest(IEnumerable<T> expectedList,
+                            IEnumerable<T> actual,
+                            Action<object[]> failWith)
+        {
             var expectedJsonList = expectedList
                 .Select(expObj => JsonConvert.SerializeObject(expObj))
                 .ToList()
                 ;
             var actualJsonList = actual
-                .Select(actObj => JsonConvert.SerializeObject(actObj));
+                .Select(actObj => JsonConvert.SerializeObject(actObj))
+                .ToList()
+                ;
             foreach (var actualJson in actualJsonList)
             {
                 foreach (var expectedJson in expectedJsonList)
                 {
                     if (actualJson.Equals(expectedJson))
                     {
-                        Execute
-                            .Verification
-                            .BecauseOf(reason,
-                                       reasonArgs)
-                            .FailWith("Expected collection {0} to not contain {1}{reason}",
-                                      new object[]
-                                      {
-                                          actualJsonList,
-                                          expectedJsonList
-                                      });
+                        failWith(new object[]
+                                 {
+                                     // reduce cluttered failure message
+                                     RemoveExtraQuotes(actualJsonList),
+                                     RemoveExtraQuotes(expectedJsonList)
+                                 });
                     }
                 }
             }
-            return continuation;
         }
 
         public AndConstraint<GenericCollectionAssertions<T>> ContainEquivalent(IEnumerable<T> expected)

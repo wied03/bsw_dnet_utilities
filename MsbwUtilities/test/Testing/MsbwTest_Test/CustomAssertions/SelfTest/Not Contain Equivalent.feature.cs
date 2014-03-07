@@ -78,8 +78,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 6
  testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 7
- testRunner.Then("the test should fail with message Expected collection {\"\\\"\\\"\"} to not contain {\"\\" +
-                    "\"\\\"\"}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the test should fail with message Expected collection {\"\"} to not contain {\"\"}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -137,8 +136,8 @@ this.ScenarioSetup(scenarioInfo);
 #line 24
  testRunner.When("I test NotContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 25
- testRunner.Then("the test should fail with message Expected collection {\"{{\\\"SomeValue\\\":\\\"foo\\\"}}" +
-                    "\", \"{{\\\"SomeValue\\\":\\\"bar\\\"}}\"} to not contain \"{{\\\"SomeValue\\\":\\\"foo2\\\"}}\".", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the test should fail with message Expected collection {\"{{SomeValue:foo}}\", \"{{So" +
+                    "meValue:bar}}\"} to not contain {\"{{SomeValue:foo}}\"}", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -152,8 +152,10 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
             assertException
                 .Should()
                 .NotBeNull("Expected the test to fail");
-            assertException
-                .Message
+            var message = assertException.Message;
+            Console.WriteLine("Checking message {0}",
+                              message);
+            message
                 .Should()
                 .Be(expectedMessage);
         }

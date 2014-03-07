@@ -17,7 +17,7 @@ Scenario: Expected string does not exist in larger actual collection
 	Given Actual collection having strings ['foo','bar']
 	And Expected collection having strings ['foo2']
 	When I test ContainEquivalent
-	Then the test should fail with message Expected collection {"\"foo\"", "\"bar\""} to contain "\"foo2\"".
+	Then the test should fail with message Expected collection {"foo", "bar"} to contain "foo2".
 
 Scenario: Expected object exists in larger actual collection
 	Given Actual collection having objects [foo,bar]

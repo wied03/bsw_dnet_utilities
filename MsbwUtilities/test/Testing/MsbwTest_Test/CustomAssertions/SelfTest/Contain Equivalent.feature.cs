@@ -116,8 +116,8 @@ this.ScenarioSetup(scenarioInfo);
 #line 19
  testRunner.When("I test ContainEquivalent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 20
- testRunner.Then("the test should fail with message Expected collection {\"\\\"foo\\\"\", \"\\\"bar\\\"\"} to c" +
-                    "ontain \"\\\"foo2\\\"\".", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the test should fail with message Expected collection {\"foo\", \"bar\"} to contain \"" +
+                    "foo2\".", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
