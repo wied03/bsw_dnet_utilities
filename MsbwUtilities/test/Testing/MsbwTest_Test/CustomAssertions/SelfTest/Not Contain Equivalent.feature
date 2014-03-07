@@ -4,7 +4,7 @@ Scenario: 2 empty collections of strings
 	Given Actual collection having strings []
 	And Expected collection having strings []
 	When I test NotContainEquivalent
-	Then the test should pass
+	Then the test should fail with message Expected collection {"\"\""} to not contain {"\"\""}
 	
 Scenario: Expected string exists in larger actual collection
 	Given Actual collection having strings ['foo','bar']
