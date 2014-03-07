@@ -25,7 +25,7 @@ namespace MsbwTest_Test.CustomAssertions.SelfTest
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "CustomCollectionAssertions.feature"
+#line 1 "Contain Equivalent.feature"
 #line hidden
         
         [NUnit.Framework.TestFixtureSetUpAttribute()]
