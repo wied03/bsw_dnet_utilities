@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using Bsw.BaseEntities.Entity;
+using FluentAssertions;
 using NUnit.Framework;
 
 #endregion

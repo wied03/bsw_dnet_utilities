@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
+using FluentAssertions;
 using NUnit.Framework;
 
 #endregion

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Bsw.NHibernateUtils.Repository;
 using Bsw.NHibernateUtils.Test.TestEntities;
+using FluentAssertions;
 using NHibernate.Linq;
 using NUnit.Framework;
 
