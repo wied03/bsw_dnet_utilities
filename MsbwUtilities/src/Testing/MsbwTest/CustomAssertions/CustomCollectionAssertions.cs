@@ -55,20 +55,6 @@ namespace MsbwTest.CustomAssertions
                 // Null collection, so can never contain what we are asserting
                 return continuation;
             }
-            Action<object[]> failWith = args => Execute.Verification.BecauseOf(reason,
-                                                                               reasonArgs)
-                                                       .FailWith("Expected collection {0} to not contain {1}{reason}",
-                                                                 args);
-            RunTest(expectedList,
-                    actual,
-                    failWith);
-            return continuation;
-        }
-
-        static void RunTest(IEnumerable<T> expectedList,
-                            IEnumerable<T> actual,
-                            Action<object[]> failWith)
-        {
             var expectedJsonList = expectedList
                 .Select(expObj => JsonConvert.SerializeObject(expObj))
                 .ToList()
@@ -83,15 +69,19 @@ namespace MsbwTest.CustomAssertions
                 {
                     if (actualJson.Equals(expectedJson))
                     {
-                        failWith(new object[]
-                                 {
-                                     // reduce cluttered failure message
-                                     RemoveExtraQuotes(actualJsonList),
-                                     RemoveExtraQuotes(expectedJsonList)
-                                 });
+                        Execute.Verification.BecauseOf(reason,
+                                                       reasonArgs)
+                               .FailWith("Expected collection {0} to not contain {1}{reason}",
+                                         new object[]
+                                         {
+                                             // reduce cluttered failure message
+                                             RemoveExtraQuotes(actualJsonList),
+                                             RemoveExtraQuotes(expectedJsonList)
+                                         });
                     }
                 }
             }
+            return continuation;
         }
 
         public AndConstraint<GenericCollectionAssertions<T>> ContainEquivalent(IEnumerable<T> expected)
@@ -123,14 +113,33 @@ namespace MsbwTest.CustomAssertions
                 return continuation;
             }
 
-            var expectedJson = expectedList
-                .Select(expObj => JsonConvert.SerializeObject(expObj));
-            var actualJson = actual
-                .Select(actObj => JsonConvert.SerializeObject(actObj));
-            actualJson
-                .Should()
-                .Contain(expectedJson);
-
+            var expectedJsonList = expectedList
+                .Select(expObj => JsonConvert.SerializeObject(expObj))
+                .ToList()
+                ;
+            var actualJsonList = actual
+                .Select(actObj => JsonConvert.SerializeObject(actObj))
+                .ToList()
+                ;
+            foreach (var actualJson in actualJsonList)
+            {
+                foreach (var expectedJson in expectedJsonList)
+                {
+                    if (actualJson.Equals(expectedJson))
+                    {
+                        return continuation;
+                    }
+                }
+            }
+            Execute.Verification.BecauseOf(reason,
+                                           reasonArgs)
+                   .FailWith("Expected collection {0} to contain {1}{reason}",
+                             new object[]
+                             {
+                                 // reduce cluttered failure message
+                                 RemoveExtraQuotes(actualJsonList),
+                                 RemoveExtraQuotes(expectedJsonList)
+                             });
             return continuation;
         }
     }
